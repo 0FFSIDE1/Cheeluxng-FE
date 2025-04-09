@@ -1,0 +1,15 @@
+<template>
+  <div class="min-h-screen w-100 bg-gray-500 text-gray-800">
+    <Navbar />
+    <main class="p-4">
+      <slot />
+    </main>
+    
+  </div>
+  <Footer />
+</template>
+
+<script setup>
+import Navbar from '../components/Navbar.vue'
+import Footer from '../components/Footer.vue'
+</script>
