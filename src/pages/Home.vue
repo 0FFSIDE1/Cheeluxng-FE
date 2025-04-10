@@ -32,22 +32,45 @@
   <!-- <-- end of new arrival section -->
  
   <!-- <-- fast selling section -->
-  <section  class="my-12 mx-1 h-[1000px] flex items-center flex-col  gap-10 border-2 border-gray-950">
-    
-    <h2 class="text-gray-900">FAST SELLING</h2>
-    <div class="flex w-2/4 border-2 border-gray-950">
-      hi
-    </div>
+  <ProductShowcase
+    title="FAST SELLING"
+    :mainProduct="products[0]"
+    :secondaryProduct="products[1]"
+  />
+  <!-- <-- end of fast selling section -->
 
+  <!-- <-- POPULAR selling section -->
+  <section class="mt-12 mx-1 h-full bg-slate-300">
+    <div class="flex flex-col ml-9 gap-6">
+      <div>
+        <h2 class="text-gray-900">POPULAR SELLING</h2>
+      </div>
+      <div>
+        <div class="flex gap-4">
+         
+          <button class="bg-gray-900 text-gray-200 p-3  rounded-full shadow-md w-50">Women</button>
+          <button class="bg-gray-900 text-gray-50 p-3 w-50 rounded-full shadow-md hover:bg-slate-50 hover:text-gray-950">Men</button>
+        </div>
+      </div>
+    </div>
+      <Slider
+    :items="products"
+    :visibleItems="4"
+  />
+      
   </section>
+
+
 </template>
 
 <script>
 import Slider from "../components/Slider.vue";
+import ProductShowcase from "../components/ProductShowcase.vue";
 
 export default {
   components: {
     Slider,
+    ProductShowcase,
   },
   data() {
     return {
