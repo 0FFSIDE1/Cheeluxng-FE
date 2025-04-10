@@ -12,7 +12,7 @@
     </div>
 
     <div class="flex items-center mr-12">
-      <div class="flex items-center">Search</div>
+      <div class="flex items-center">🔍</div>
       <div class="flex items-center cursor-pointer" @click="toggleCart">🛒</div>
     </div>
   
