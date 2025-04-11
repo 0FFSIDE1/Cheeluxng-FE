@@ -37,6 +37,7 @@
             </div>
           </div>
         </div>
+        <button class="bg-slate-950 shadow-lg p-4 rounded-full text-xs  text-gray-50 hover:text-gray-950 hover:bg-slate-50 " type="button">VIEW COLLECTION</button>
       </div>
     </section>
   </template>

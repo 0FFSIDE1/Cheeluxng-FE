@@ -40,25 +40,27 @@
   <!-- <-- end of fast selling section -->
 
   <!-- <-- POPULAR selling section -->
-  <section class="mt-12 mx-1 h-full bg-slate-300">
-    <div class="flex flex-col ml-9 gap-6">
-      <div>
-        <h2 class="text-gray-900">POPULAR SELLING</h2>
+  <section class="mt-12 h-full bg-slate-300">
+    <div class="flex flex-col ml-9  gap-6 w-1/3">
+      <div class="mt-12">
+        <h2 class="text-gray-900 text-balance text-justify text-3xl">POPULAR SELLING</h2>
       </div>
       <div>
         <div class="flex gap-4">
          
-          <button class="bg-gray-900 text-gray-200 p-3  rounded-full shadow-md w-50">Women</button>
-          <button class="bg-gray-900 text-gray-50 p-3 w-50 rounded-full shadow-md hover:bg-slate-50 hover:text-gray-950">Men</button>
+          <button class="bg-slate-950 text-gray-50 flex justify-center items-center p-5 w-50 rounded-full shadow-md h-10">Women</button>
+          <button class="bg-slate-50 flex justify-center items-center p-5 h-10  text-gray-950 w-50 rounded-full shadow-md hover:bg-slate-950 hover:text-gray-50">Men</button>
         </div>
       </div>
     </div>
       <Slider
     :items="products"
     :visibleItems="4"
+    
   />
-      
-  </section>
+  <div class="my-5 h-6">
+  </div>
+</section>
 
 
 </template>
