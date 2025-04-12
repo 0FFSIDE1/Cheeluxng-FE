@@ -1,6 +1,6 @@
 <!-- filepath: c:\Users\USER\vue-tailwind-boilerplate\src\components\Slider.vue -->
 <template>
-    <div class="my-12 mx-1 h-full text-center">
+    <div class="my-12 mx-12 h-full text-center">
       <h2 class="text-gray-900">{{ title }}</h2>
       <div class="relative">
         <!-- Back Button -->
