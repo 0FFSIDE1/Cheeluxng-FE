@@ -1,7 +1,7 @@
 <template>
     <section class="my-14 mx-1 h-full">
       <div class="flex justify-center items-center flex-col gap-10 relative">
-        <h2 class="text-gray-900">{{ title }}</h2>
+        <h2 class="text-gray-900 text-3xl">{{ title }}</h2>
         <!-- Main image container -->
         <div class="relative">
           <img
@@ -40,7 +40,7 @@
         <button class="bg-slate-950 shadow-lg p-4 rounded-full text-xs  text-gray-50 hover:text-gray-950 hover:bg-slate-50 " type="button">VIEW COLLECTION</button>
       </div>
     </section>
-  </template>
+</template>
   
   <script>
   export default {
@@ -60,7 +60,3 @@
     },
   };
   </script>
-  
-  <style scoped>
-  /* Add any specific styles here if needed */
-  </style>
