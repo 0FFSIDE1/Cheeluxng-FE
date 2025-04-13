@@ -8,3 +8,9 @@
         @apply text-lg font-bold text-gray-900 dark:text-gray-100;
     }
 }
+
+@layer components {
+    .cartBtn {
+        @apply bg-white text-black rounded-lg mt-3 p-2 w-24 hover:bg-slate-950 hover:text-gray-50;
+    }
+}

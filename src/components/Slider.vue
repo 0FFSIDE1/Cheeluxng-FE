@@ -46,7 +46,7 @@
                   :class="`rounded-full w-4 h-3 ${color}`"
                 ></li>
               </ul>
-              <button class="bg-white text-black rounded-lg mt-4 p-2">+</button>
+              <button class="cartBtn">+</button>
             </div>
           </div>
         </div>
