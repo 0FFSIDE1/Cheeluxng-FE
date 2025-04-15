@@ -1,29 +1,57 @@
 <template>
-  <nav class="bg-white shadow p-4 h-32 w-full flex justify-between items-center">
-    <div class="flex items-center gap-8 h-24 min-w-300 ml-12">
-      <img class="object-cover w-full h-72" src="../assets/blacklogo.png" alt="logo" >
+  <nav class="bg-white shadow p-4 h-32 w-full flex justify-between gap-4 items-center border-b-2 border-gray-900">
+     <!-- Hamburger for mobile -->
+    <div class="md:hidden">
+      <button @click="menuOpen = !menuOpen" class="text-gray-900 focus:outline-none">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            v-if="!menuOpen"
+            stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M4 6h16M4 12h16M4 18h16"
+          />
+          <path
+            v-else
+            stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
+    </div>
+    <div class="flex items-center gap-8 h-24 md:min-w-300">
+      <img class="object-contain w-full h-72 md:w-full" src="../assets/blacklogo.png" alt="logo" >
       <div class="hidden md:block space-x-4">
-        <router-link to="/" class="text-blue-500 hover:underline">Home</router-link>
-        <router-link to="/about" class="text-blue-500 hover:underline">About</router-link>
-        <router-link to="/contact" class="text-blue-500 hover:underline">Contact</router-link>
-        <router-link to="/services" class="text-blue-500 hover:underline">Services</router-link>
-        <router-link to="/blog" class="text-blue-500 hover:underline">Blog</router-link>
+        <router-link to="/" class="text-gray-900 hover:underline">MEN</router-link>
+        <router-link to="/about" class="text-gray-900 hover:underline">WOMEN</router-link>
+        <router-link to="/contact" class="text-gray-900 hover:underline">ACCESSORIES</router-link>
+        <router-link to="/services" class="text-gray-900 hover:underline">EXPLORE</router-link>
       </div>
     </div>
 
-    <div class="flex items-center mr-12">
-      <div class="flex items-center">🔍</div>
-      <div class="flex items-center cursor-pointer" @click="toggleCart">🛒</div>
+    <div class="flex items-center gap-5 md:mr-12 ">
+      <div class="hidden md:flex items-center w-96"><input type="text" class=" outline outline-gray-100 rounded-full p-3 w-full shadow-xl text-gray-950" placeholder="What are you looking for?"></div>
+      <div class="flex items-center cursor-pointer" @click="toggleCart"><img src="../assets/cheeluxCartLogo.png" alt="" class="w-full h-10"></div>
     </div>
-  
-    <CartSidebar v-model="cartOpen" />
+
+
+    <!-- Mobile dropdown menu -->
+    <div
+      v-if="menuOpen"
+      class="absolute top-28 left-0 w-full bg-white z-50 flex flex-col p-4 shadow-md md:hidden"
+    >
+      <router-link to="/" class="py-2 text-gray-900 hover:underline">MEN</router-link>
+      <router-link to="/about" class="py-2 text-gray-900 hover:underline">WOMEN</router-link>
+      <router-link to="/contact" class="py-2 text-gray-900 hover:underline">ACCESSORIES</router-link>
+      <router-link to="/services" class="py-2 text-gray-900 hover:underline">EXPLORE</router-link>
+    </div>
   </nav>
+  <CartSidebar v-model="cartOpen" />
 </template>
 <script setup>
 import { ref } from 'vue'
 import CartSidebar from './CartSideBar.vue'
 
 const cartOpen = ref(false)
+const menuOpen = ref(false)
 
 const toggleCart = () => {
   cartOpen.value = !cartOpen.value

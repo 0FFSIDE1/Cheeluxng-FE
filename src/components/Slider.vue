@@ -1,6 +1,6 @@
 <!-- filepath: c:\Users\USER\vue-tailwind-boilerplate\src\components\Slider.vue -->
 <template>
-    <div class="my-12 mx-12 h-full text-center">
+    <div class="my-12 md:mx-12 h-full text-center ">
       <h2 class="text-gray-900">{{ title }}</h2>
       <div class="relative">
         <!-- Back Button -->
@@ -27,7 +27,7 @@
           <div
             v-for="(item, index) in items"
             :key="index"
-            class="h-full w-72 flex-shrink-0"
+            class="h-full w-52 md:w-72 flex-shrink-0"
           >
             <div class="down-content flex flex-col justify-center items-center h-full">
               <img
@@ -46,7 +46,7 @@
                   :class="`rounded-full w-4 h-3 ${color}`"
                 ></li>
               </ul>
-              <button class="cartBtn">+</button>
+              <button class=" bg-white text-black rounded-lg mt-3 w-10 hover:bg-slate-950 hover:text-gray-50 md:cartBtn">+</button>
             </div>
           </div>
         </div>
@@ -60,6 +60,9 @@
           &#8594;
         </button>
       </div>
+      <div class="flex justify-center items-center mt-12">
+      <button class="md:w-1/6 bg-slate-950 shadow-xl shadow-red-100 p-4 rounded-full text-xs  text-gray-50 hover:text-gray-950 hover:bg-slate-50 " type="button">VIEW MORE</button>
+</div>
     </div>
   </template>
   
@@ -76,7 +79,7 @@
       },
       visibleItems: {
         type: Number,
-        default: 4, // Default number of visible items
+        default: 3, // Default number of visible items
       },
     },
     data() {
