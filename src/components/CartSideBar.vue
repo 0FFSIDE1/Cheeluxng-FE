@@ -1,10 +1,10 @@
 <template>
     <Teleport to="body">
       <transition name="slide">
-        <div v-if="model" class="fixed w-full top-0 right-0 md:w-[700px] h-full bg-white shadow-lg z-[1000]">
-          <div class="p-4 border-b flex justify-between items-center">
-            <h2 class="text-lg font-bold">Your Cart</h2>
-            <button @click="model = false" class="text-gray-500 hover:text-black">✕</button>
+        <div v-if="model" class="fixed w-72 top-0 right-0 md:w-[700px] h-full bg-white shadow-lg z-[1000]">
+          <div class="p-4 border-b flex justify-between items-center mx-3">
+            <h2 class="text-lg font-bold text-gray-950">Your Cart</h2>
+            <button @click="model = false" class="text-gray-950 hover:text-black">✕</button>
           </div>
           <div class="p-4">
             <!-- Replace with real cart content later -->
