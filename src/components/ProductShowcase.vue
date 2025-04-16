@@ -1,27 +1,27 @@
 <template>
     <section class="my-14 mx-1 h-full">
       <div class="flex justify-center items-center flex-col gap-10 relative">
-        <h2 class="text-gray-900 text-3xl">{{ title }}</h2>
+        <h2 class="text-gray-900 text-3xl text-center">{{ title }}</h2>
         <!-- Main image container -->
-        <div class="relative">
+        <div class="relative flex justify-center">
           <img
             :src="mainProduct.image"
             :alt="mainProduct.name"
-            class="object-cover rounded-lg h-[750px] w-[700px]"
+            class="object-cover rounded-lg h-auto max-h-[750px] w-full max-w-[700px]"
           />
   
           <div
             v-if="secondaryProduct"
-            class="hidden md:block absolute bottom-0 right-[-110px] h-[450px] w-[300px] bg-slate-200 rounded-lg p-4 shadow-md"
+            class="hidden md:block absolute bottom-0 right-0 md:right-[-110px] h-auto max-h-[450px] w-full max-w-[300px] bg-slate-200 rounded-lg p-4 shadow-md"
           >
             <img
               :src="secondaryProduct.image"
               :alt="secondaryProduct.name"
-              class="object-cover rounded-lg"
+              class="object-cover rounded-lg w-full"
             />
             <div>
-              <h3 class="text-gray-900">{{ secondaryProduct.name }}</h3>
-              <p class="text-gray-900">{{ secondaryProduct.price }}</p>
+              <h3 class="text-gray-900 text-center md:text-left">{{ secondaryProduct.name }}</h3>
+              <p class="text-gray-900 text-center md:text-left">{{ secondaryProduct.price }}</p>
               <div class="flex justify-between items-center">
                 <ul class="flex gap-4">
                   <li
@@ -37,7 +37,7 @@
             </div>
           </div>
         </div>
-        <button class="bg-slate-950 shadow-lg p-4 rounded-full text-xs  text-gray-50 hover:text-gray-950 hover:bg-slate-50 " type="button">VIEW COLLECTION</button>
+        <button class="bg-slate-950 shadow-lg p-4 rounded-full text-xs text-gray-50 hover:text-gray-950 hover:bg-slate-50" type="button">VIEW COLLECTION</button>
       </div>
     </section>
 </template>
