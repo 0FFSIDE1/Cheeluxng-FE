@@ -1,6 +1,6 @@
 <template>
-  <nav class="bg-white shadow p-4 h-32 w-full flex justify-between gap-4 items-center border-b-2 border-gray-900">
-     <!-- Hamburger for mobile -->
+  <nav class="bg-white shadow p-4 h-32 flex justify-between gap-4 items-center">
+    <!-- Hamburger for mobile -->
     <div class="md:hidden">
       <button @click="menuOpen = !menuOpen" class="text-gray-900 focus:outline-none">
         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -18,8 +18,8 @@
       </button>
     </div>
     <div class="flex items-center gap-8 h-24 md:min-w-300">
-      <img class="object-contain w-full h-72 md:w-full" src="../assets/blacklogo.png" alt="logo" >
-      <div class="hidden md:block space-x-4">
+      <img class="object-cover h-32 md:w-full" src="../assets/blacklogo.png" alt="logo" >
+      <div class="hidden lg:block space-x-4">
         <router-link to="/" class="text-gray-900 hover:underline">MEN</router-link>
         <router-link to="/about" class="text-gray-900 hover:underline">WOMEN</router-link>
         <router-link to="/contact" class="text-gray-900 hover:underline">ACCESSORIES</router-link>
@@ -28,8 +28,8 @@
     </div>
 
     <div class="flex items-center gap-5 md:mr-12 ">
-      <div class="hidden md:flex items-center w-96"><input type="text" class=" outline outline-gray-100 rounded-full p-3 w-full shadow-xl text-gray-950" placeholder="What are you looking for?"></div>
-      <div class="flex items-center cursor-pointer" @click="toggleCart"><img src="../assets/cheeluxCartLogo.png" alt="" class="w-full h-10"></div>
+      <div class="hidden md:flex  items-center w-96"><input type="text" class=" outline outline-gray-100 rounded-full p-3 w-full shadow-xl text-gray-950" placeholder="What are you looking for?"></div>
+      <div class="flex items-center cursor-pointer" @click="toggleCart"><img src="../assets/cheeluxCartLogo.png" alt="" class="w-4 h-4"></div>
     </div>
 
 

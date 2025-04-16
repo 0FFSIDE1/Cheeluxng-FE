@@ -1,5 +1,5 @@
 <template>
-    <div class="flex text-white bg-black w-full min-h-64 justify-between items-center p-4 pl-12">
+    <div class="flex text-white bg-black min-h-64 justify-between items-center p-4 pl-12">
         <div>
             <h2>Stay Connected</h2>
             <ul>
