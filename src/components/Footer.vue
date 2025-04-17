@@ -1,7 +1,7 @@
 <template>
     
     <div class="flex flex-col md:flex-col text-white bg-black min-h-64 justify-between items-center p-4">
-        <div> <img src="../assets/whitelogo.png" class="object-fit w-full h-72" alt="logo"></div>
+        <div><img src="../assets/whitelogo.png" class="object-fit w-full h-72" alt="logo"></div>
 
         <div class=" bg-black min-h-64 flex flex-col gap-12 md:flex-row justify-between lg:gap-96  text-white">
         <div class="flex flex-col gap-4 items-center">
