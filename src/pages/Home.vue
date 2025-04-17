@@ -1,3 +1,10 @@
+<script setup>
+import Slider from "../components/Slider.vue";
+import ProductShowcase from "../components/ProductShowcase.vue";
+import { useProductStore } from '../store/productStore';
+const productStore = useProductStore();
+productStore.loadAllProducts();
+</script>
 
 <template>
   <!-- HERO SECTION -->
@@ -20,7 +27,7 @@
 
 <!-- NEW ARRIVALS SECTION -->
 <Slider title="NEW ARRIVALS ✨" details="Fresh styles are here! Explore our latest collection of activewear and loungewear, designed to keep you comfortable and stylish. From gym days to chill days, these new arrivals are perfect for every mood. Don’t wait—grab your favorites before they’re gone!
-" :items="products" :visibleItems="2" />
+" :items="productStore.men" :visibleItems="2" />
 
   
 
@@ -38,18 +45,18 @@
       </div>
     </div>
     <div class="mt-8">
-      <Slider :items="products" :visibleItems="4" />
+      <Slider :items="productStore.women" :visibleItems="4" />
     </div>
   </section>
   
-  <!-- FAST SELLING SECTION -->
-  <ProductShowcase title="FAST SELLING" :mainProduct="products[0]" :secondaryProduct="products[1]" />
+  <!-- FAST SELLING SECTION
+  <ProductShowcase title="FAST SELLING" :mainProduct="products[0]" :secondaryProduct="products[1]" /> -->
 
   <!-- ACCESSORIES SECTION -->
   <section class="bg-pink-100 py-14">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-12">
       <h2 class="text-center text-2xl sm:text-3xl font-semibold text-gray-900 mb-8">ACCESSORIES</h2>
-      <p class="text-lg mb-10 text-gray-700">Shop our newest collection of fashion-forward accessories, designed to complement your activewear and loungewear looks. Don’t miss out—explore our new arrivals and upgrade your style today!</p>
+      <p class="text-lg mb-10 text-gray-700 text-balance text-center">Don’t miss out—explore our new accessories arrivals and upgrade your style today!</p>
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         <template v-for="(item, index) in 3" :key="index">
           <div class="relative group bg-slate-100 rounded-3xl shadow-xl shadow-orange-200 overflow-hidden">
@@ -68,7 +75,7 @@
   <section class="bg-fuchsia-100 py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-12">
       <h2 class="text-3xl font-semibold text-center mb-4 text-gray-950">CHICKY SETS 🌟</h2>
-      <p class="text-lg mb-10 text-gray-700">
+      <p class="text-lg mb-10 text-gray-700 text-balance text-center">
         From high-performance workouts to relaxing weekends at home, CHEELUXNG’s women's activewear collection blends comfort, versatility, and modern style. Whether you're hitting the gym, running errands, or lounging in style, our trend-forward designs empower you to look confident and feel your best—anywhere, anytime.</p>
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
         <template v-for="i in 5" :key="i">
@@ -120,7 +127,7 @@
         <button class="bg-slate-950 text-white px-4 py-2 rounded-full shadow-md">SHORTS</button>
         <button class="bg-white text-slate-950 px-4 py-2 rounded-full shadow-md hover:bg-slate-950 hover:text-white">SETS</button>
       </div>
-      <Slider :items="products" :visibleItems="5" />
+      <Slider :items="productStore.women" :visibleItems="5" />
     </div>
   </section>
 
@@ -132,32 +139,37 @@
         <button class="bg-slate-950 text-white px-4 py-2 rounded-full shadow-md">SHORTS</button>
         <button class="bg-white text-slate-950 px-4 py-2 rounded-full shadow-md hover:bg-slate-950 hover:text-white">SETS</button>
       </div>
-      <Slider :items="products" :visibleItems="5" />
+      <Slider :items="productStore.women" :visibleItems="5" />
     </div>
   </section>
 </template>
 
-<script>
-import Slider from "../components/Slider.vue";
-import ProductShowcase from "../components/ProductShowcase.vue";
+<!-- <script>
+
+import { fetchAllProducts } from "../services/product/Products.js";
+import { useProductStore } from "../store/productStore.js";
 
 export default {
   components: {
     Slider,
     ProductShowcase,
   },
-  data() {
+  setup() {
+    const productStore = useProductStore();
+    productStore.loadAllProducts();
     return {
-      products: [
-        { image: "/images/product/product2.jpeg", name: "Product 2", price: "$89.99", colors: ["bg-black", "bg-red-600"] },
-        { image: "/images/product/product3.jpeg", name: "Product 3", price: "$99.99", colors: ["bg-green-800", "bg-yellow-400"] },
-        { image: "/images/product/product5.jpeg", name: "Product 5", price: "$99.99", colors: ["bg-black", "bg-yellow-600"] },
-        { image: "/images/product/product1.jpeg", name: "Product 5", price: "$99.99", colors: ["bg-black", "bg-red-600"] },
-        { image: "/images/product/product3.jpeg", name: "Product 7", price: "$99.99", colors: ["bg-black", "bg-blue-600"] },
-        { image: "/images/product/product2.jpeg", name: "Product 8", price: "$99.99", colors: ["bg-black", "bg-green-600"] },
-        { image: "/images/product/product1.jpeg", name: "Product 9", price: "$99.99", colors: ["bg-black", "bg-brown-600"] },
-      ],
+      menProducts: productStore.men,
+      womenProducts: productStore.women,
+      accessories: productStore.accessories,
     };
   },
+  // async mounted() {
+  //   const response = await fetchAllProducts();
+  //   if (response.data.success){
+  //     this.products = response.data.data;
+  //   }
+    
+  
+  // },
 };
-</script>
+</script> -->
