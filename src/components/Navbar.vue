@@ -20,10 +20,11 @@
     <div class="flex items-center gap-8 h-24 md:min-w-300">
       <img class="object-cover h-32 md:w-full" src="../assets/blacklogo.png" alt="logo" >
       <div class="hidden lg:block space-x-4">
-        <router-link to="/" class="text-gray-900 hover:underline">MEN</router-link>
-        <router-link to="/about" class="text-gray-900 hover:underline">WOMEN</router-link>
-        <router-link to="/contact" class="text-gray-900 hover:underline">ACCESSORIES</router-link>
-        <router-link to="/services" class="text-gray-900 hover:underline">EXPLORE</router-link>
+        <router-link to="/" class="text-gray-900 hover:underline">HOME</router-link>
+        <router-link to="/men" class="text-gray-900 hover:underline">MEN</router-link>
+        <router-link to="/women" class="text-gray-900 hover:underline">WOMEN</router-link>
+        <router-link to="/accessories" class="text-gray-900 hover:underline">ACCESSORIES</router-link>
+        <router-link to="/explore" class="text-gray-900 hover:underline">EXPLORE</router-link>
       </div>
     </div>
 
