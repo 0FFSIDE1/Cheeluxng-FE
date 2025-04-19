@@ -2,8 +2,12 @@
 import Slider from "../components/Slider.vue";
 import ProductShowcase from "../components/ProductShowcase.vue";
 import { useProductStore } from '../store/productStore';
+import { onMounted } from "vue";
 const productStore = useProductStore();
-productStore.loadAllProducts();
+onMounted(() => {
+  productStore.loadAllProducts();
+})
+
 </script>
 
 <template>
@@ -27,7 +31,7 @@ productStore.loadAllProducts();
 
 <!-- NEW ARRIVALS SECTION -->
 <Slider title="NEW ARRIVALS ✨" details="Fresh styles are here! Explore our latest collection of activewear and loungewear, designed to keep you comfortable and stylish. From gym days to chill days, these new arrivals are perfect for every mood. Don’t wait—grab your favorites before they’re gone!
-" :items="productStore.men" :visibleItems="2" />
+" :items="productStore.sections.newArrivals" :visibleItems="2" />
 
   
 
@@ -45,31 +49,55 @@ productStore.loadAllProducts();
       </div>
     </div>
     <div class="mt-8">
-      <Slider :items="productStore.women" :visibleItems="4" />
+      <Slider :items="productStore.sections.bestSellers" :visibleItems="4" />
     </div>
   </section>
   
-  <!-- FAST SELLING SECTION
-  <ProductShowcase title="FAST SELLING" :mainProduct="products[0]" :secondaryProduct="products[1]" /> -->
+  <!-- FAST SELLING SECTION -->
+
+<ProductShowcase title="FAST SELLING" :mainProduct="productStore.sections.bestSellers[0]" :secondaryProduct="productStore.sections.bestSellers[0]" />
 
   <!-- ACCESSORIES SECTION -->
+  <!-- accessories section -->
   <section class="bg-pink-100 py-14">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-12">
-      <h2 class="text-center text-2xl sm:text-3xl font-semibold text-gray-900 mb-8">ACCESSORIES</h2>
-      <p class="text-lg mb-10 text-gray-700 text-balance text-center">Don’t miss out—explore our new accessories arrivals and upgrade your style today!</p>
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        <template v-for="(item, index) in 3" :key="index">
-          <div class="relative group bg-slate-100 rounded-3xl shadow-xl shadow-orange-200 overflow-hidden">
-            <img :src="`/images/product/0S1A25${89 + index * 33}-Edit.jpeg`" class="object-cover h-full w-full rounded-3xl transition-transform duration-500 group-hover:scale-105" alt="">
-            <div class="absolute inset-0 bg-black bg-opacity-60 flex flex-col items-center justify-center text-white text-center p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl">
-              <p class="text-lg font-semibold mb-2">Accessory {{ index + 1 }}</p>
-              <button class="mt-2 px-4 py-2 bg-white text-black rounded-full hover:bg-orange-300 transition">View</button>
-            </div>
+    <div class="h-full mx-4 md:mx-12 flex flex-col p-8">
+      <h2 class="text-gray-800 text-balance flex justify-center text-3xl md:text-3xl mb-8">ACCESSORIES</h2>
+
+      <div class="accessoriesdiv grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 mt-6">
+        <!-- Accessory Card -->
+        <div class="relative group bg-slate-100 rounded-3xl shadow-xl shadow-orange-200 overflow-hidden">
+          <img src="/images/product/0S1A2589-Edit.jpeg" class="object-cover h-full w-full rounded-3xl transition-transform duration-500 group-hover:scale-105" alt="">
+
+          <!-- Overlay -->
+          <div class="absolute inset-0 bg-black bg-opacity-60 flex flex-col items-center justify-center text-white text-center p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl">
+            <p class="text-lg font-semibold mb-2">Classic Hats</p>
+            <button class="mt-2 px-4 py-2 bg-white text-black rounded-full hover:bg-orange-300 transition">View</button>
           </div>
-        </template>
+        </div>
+
+        <!-- Duplicate for other products -->
+        <div class="relative group bg-slate-100 rounded-3xl shadow-xl shadow-orange-200 overflow-hidden">
+          <img src="/images/product/0S1A2556-Edit.jpeg" class="object-cover h-full w-full rounded-3xl transition-transform duration-500 group-hover:scale-105" alt="">
+
+          <div class="absolute inset-0 bg-black bg-opacity-60 flex flex-col items-center justify-center text-white text-center p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl">
+            <p class="text-lg font-semibold mb-2">Stylish Bags and Others</p>
+            <button class="mt-2 px-4 py-2 bg-white text-black rounded-full hover:bg-orange-300 transition">View</button>
+          </div>
+        </div>
+
+        <div class="relative group bg-slate-100 rounded-3xl shadow-xl shadow-orange-200 overflow-hidden">
+          <img src="/images/product/0S1A2650-Edit.jpeg" class="object-cover h-full w-full rounded-3xl transition-transform duration-500 group-hover:scale-105" alt="">
+
+          <div class="absolute inset-0 bg-black bg-opacity-60 flex flex-col items-center justify-center text-white text-center p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl">
+            <p class="text-lg font-semibold mb-2">Bottles</p>
+            <button class="mt-2 px-4 py-2 bg-white text-black rounded-full hover:bg-orange-300 transition">View</button>
+          </div>
+        </div>
       </div>
     </div>
   </section>
+
+
 
   <!-- CHICKY SETS SECTION -->
   <section class="bg-fuchsia-100 py-12">
@@ -78,12 +106,12 @@ productStore.loadAllProducts();
       <p class="text-lg mb-10 text-gray-700 text-balance text-center">
         From high-performance workouts to relaxing weekends at home, CHEELUXNG’s women's activewear collection blends comfort, versatility, and modern style. Whether you're hitting the gym, running errands, or lounging in style, our trend-forward designs empower you to look confident and feel your best—anywhere, anytime.</p>
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-        <template v-for="i in 5" :key="i">
+        <template v-for="i in productStore.categories.womenSet" :key="i">
           <div class="bg-slate-200 rounded-3xl shadow-md p-2 flex flex-col items-center">
-            <img :src="`/images/product/image0000${i}.jpeg`" class="object-cover w-full h-48 rounded-xl" alt="">
+            <img :src="i.cover_image" class="object-cover w-full h-48 rounded-xl" alt="">
             <div class="bg-pink-200 rounded p-4 mt-4 w-full text-center">
-              <h3 class="text-lg font-semibold">Product {{ i }}</h3>
-              <p>$99.99</p>
+              <h3 class="text-lg font-semibold">{{ i.name }}</h3>
+              <p>$ {{ i.price }}</p>
               <button class="cartBtn mt-2">+</button>
             </div>
           </div>
@@ -127,7 +155,7 @@ productStore.loadAllProducts();
         <button class="bg-slate-950 text-white px-4 py-2 rounded-full shadow-md">SHORTS</button>
         <button class="bg-white text-slate-950 px-4 py-2 rounded-full shadow-md hover:bg-slate-950 hover:text-white">SETS</button>
       </div>
-      <Slider :items="productStore.women" :visibleItems="5" />
+      <Slider :items="productStore.categories.women" :visibleItems="5" />
     </div>
   </section>
 
@@ -139,37 +167,8 @@ productStore.loadAllProducts();
         <button class="bg-slate-950 text-white px-4 py-2 rounded-full shadow-md">SHORTS</button>
         <button class="bg-white text-slate-950 px-4 py-2 rounded-full shadow-md hover:bg-slate-950 hover:text-white">SETS</button>
       </div>
-      <Slider :items="productStore.women" :visibleItems="5" />
+      <Slider :items="productStore.categories.men" :visibleItems="5" />
     </div>
   </section>
 </template>
 
-<!-- <script>
-
-import { fetchAllProducts } from "../services/product/Products.js";
-import { useProductStore } from "../store/productStore.js";
-
-export default {
-  components: {
-    Slider,
-    ProductShowcase,
-  },
-  setup() {
-    const productStore = useProductStore();
-    productStore.loadAllProducts();
-    return {
-      menProducts: productStore.men,
-      womenProducts: productStore.women,
-      accessories: productStore.accessories,
-    };
-  },
-  // async mounted() {
-  //   const response = await fetchAllProducts();
-  //   if (response.data.success){
-  //     this.products = response.data.data;
-  //   }
-    
-  
-  // },
-};
-</script> -->
