@@ -4,8 +4,8 @@ import vue from '@vitejs/plugin-vue'
 export default defineConfig({
   plugins: [vue()],
   server: {
-    port: 3000,
-    allowedHosts: ['http://localhost:3000'],
+    allowedHosts: ['https://f10a-105-112-203-218.ngrok-free.app'],
     host: true,
-  }
+  },
+  
 })
