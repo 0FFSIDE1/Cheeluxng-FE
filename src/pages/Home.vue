@@ -1,15 +1,3 @@
-<script setup>
-import Slider from "../components/Slider.vue";
-import ProductShowcase from "../components/ProductShowcase.vue";
-import { useProductStore } from '../store/productStore';
-import { onMounted } from "vue";
-const productStore = useProductStore();
-onMounted(() => {
-  productStore.loadAllProducts();
-})
-
-</script>
-
 <template>
   <!-- HERO SECTION -->
   <section
@@ -31,7 +19,7 @@ onMounted(() => {
 
 <!-- NEW ARRIVALS SECTION -->
 <Slider title="NEW ARRIVALS ✨" details="Fresh styles are here! Explore our latest collection of activewear and loungewear, designed to keep you comfortable and stylish. From gym days to chill days, these new arrivals are perfect for every mood. Don’t wait—grab your favorites before they’re gone!
-" :items="productStore.sections.newArrivals" :visibleItems="2" />
+" :items="productStore.sections.newArrivals" :visibleItems="2" @add-to-cart="handleCartAdd"/>
 
   
 
@@ -49,7 +37,7 @@ onMounted(() => {
       </div>
     </div>
     <div class="mt-8">
-      <Slider :items="productStore.sections.bestSellers" :visibleItems="4" />
+      <Slider :items="productStore.sections.bestSellers" :visibleItems="4" @add-to-cart="handleCartAdd"/>
     </div>
   </section>
   
@@ -155,7 +143,7 @@ onMounted(() => {
         <button class="bg-slate-950 text-white px-4 py-2 rounded-full shadow-md">SHORTS</button>
         <button class="bg-white text-slate-950 px-4 py-2 rounded-full shadow-md hover:bg-slate-950 hover:text-white">SETS</button>
       </div>
-      <Slider :items="productStore.categories.women" :visibleItems="5" />
+      <Slider :items="productStore.categories.women" :visibleItems="5" @add-to-cart="handleCartAdd"/>
     </div>
   </section>
 
@@ -167,8 +155,41 @@ onMounted(() => {
         <button class="bg-slate-950 text-white px-4 py-2 rounded-full shadow-md">SHORTS</button>
         <button class="bg-white text-slate-950 px-4 py-2 rounded-full shadow-md hover:bg-slate-950 hover:text-white">SETS</button>
       </div>
-      <Slider :items="productStore.categories.men" :visibleItems="5" />
+      <Slider :items="productStore.categories.men" :visibleItems="5" @add-to-cart="handleCartAdd"/>
     </div>
   </section>
 </template>
+<script setup>
+import Slider from "../components/Slider.vue";
+import ProductShowcase from "../components/ProductShowcase.vue";
+import { useProductStore } from '../store/productStore';
+import { useCartStore } from '../store/cartStore';
+import { onMounted } from "vue";
+const productStore = useProductStore();
+const cartStore = useCartStore();
+onMounted(() => {
+  productStore.loadAllProducts();
+})
 
+function handleCartAdd(item) {
+  if (!item || !item.id || !item.size || !item.color) {
+    alert("Invalid cart item. Missing details.");
+    return;
+  }
+  const payload = {
+    id: item.id,
+    size: item.size,
+    color: item.color,
+  };
+  console.log("home payload:", payload, item.id);
+
+  try {
+    cartStore.addProductToCart(item.id, payload);
+  } catch (err) {
+    console.error("Cart store error:", err);
+  }
+
+  
+}
+
+</script>
