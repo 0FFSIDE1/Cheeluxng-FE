@@ -3,7 +3,7 @@
     <transition name="slide">
       <div v-if="model" class="fixed w-72 top-0 right-0 md:w-[700px] h-full bg-white shadow-lg z-[1000] flex flex-col">
         <div class="p-4 border-b flex justify-between items-center mx-3">
-          <h2 class="text-lg font-bold text-gray-950">My Cart</h2>
+          <h2 class="text-lg font-bold text-gray-950">Cart Summary</h2>
           <button @click="model = false" class="text-gray-950 hover:text-black">✕</button>
         </div>
 
@@ -13,25 +13,25 @@
           <div v-else>
             <div v-for="item in cartStore.cartItems" :key="item.id" class="border p-3 rounded shadow-sm space-y-2">
               <div class="flex justify-between items-center">
-                <div class="font-semibold">{{ item.product }}</div>
+                <div class="font-semibold">{{ item.product_name }}</div>
                 <button @click="removeItem(item.id)" class="text-red-500 hover:text-red-700">🗑️</button>
               </div>
 
-              <div class="text-sm text-gray-600">Price: ${{ item.price }}</div>
+              <div class="text-sm text-gray-600">Price: ${{ item.total_price }}</div>
 
               <div class="flex items-center gap-2 text-sm">
                 <label class="w-1/3">Size:</label>
-                <input v-model="item.size" type="text" class="border px-2 py-1 rounded w-2/3" @change="updateItem(item.id)" />
+                <input v-model="item.size" type="text" class="border px-2 py-1 rounded w-2/3" @change="updateItem(item.id, item)" />
               </div>
 
               <div class="flex items-center gap-2 text-sm">
                 <label class="w-1/3">Color:</label>
-                <input v-model="item.color" type="text" class="border px-2 py-1 rounded w-2/3" @change="updateItem(item.id)" />
+                <input v-model="item.color" type="text" class="border px-2 py-1 rounded w-2/3" @change="updateItem(item.id, item)" />
               </div>
 
               <div class="flex items-center gap-2 text-sm">
                 <label class="w-1/3">Quantity:</label>
-                <input v-model.number="item.quantity" type="number" min="1" class="border px-2 py-1 rounded w-2/3" @change="updateItem(item)" />
+                <input v-model.number="item.quantity" type="number" min="1" class="border px-2 py-1 rounded w-2/3" @change="updateItem(item.id, item)" />
               </div>
             </div>
 
@@ -71,12 +71,13 @@ const removeItem = async (itemId: number) => {
 };
 
 // Update cart item
-const updateItem = async (item: any) => {
+const updateItem = async (item: any, product: any) => {
   const payload = {
-    size: item.size,
-    color: item.color,
-    quantity: item.quantity,
+    size: product.size,
+    color: product.color,
+    quantity: product.quantity,
   };
+  console.log(payload)
   await cartStore.updateCartItem(item, payload);
   await cartStore.fetchCart();
 };
