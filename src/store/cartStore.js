@@ -16,8 +16,8 @@ export const useCartStore = defineStore('cartstore', {
                 const response = await getCart()
                 if (response.data.success) {
                     console.log(response.data)
-                    this.cartItems = response.data.cartitems
-                    this.totalAmount = response.data.total_amount
+                    this.cartItems = response.data.cart.items
+                    this.totalAmount = response.data.cart.total_amount
                 } else {
                     this.error = response.data.message
                 }
@@ -49,7 +49,9 @@ export const useCartStore = defineStore('cartstore', {
             this.loading = true;
             this.error = null;
             try {
+              console.log(payload)
               const response = await updateCart(itemId, payload);
+              
               if (response.data.success) {
                 await this.fetchCart(); // refresh cart
               } else {
