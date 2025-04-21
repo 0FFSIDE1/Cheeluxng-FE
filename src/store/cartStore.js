@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { getCart, deleteCartItem, updateCart } from "../services/cart/cart";
+import { getCart, deleteCartItem, updateCart, addToItemCart } from "../services/cart/cart";
 
 export const useCartStore = defineStore('cartstore', {
     state: () => ({
@@ -28,11 +28,12 @@ export const useCartStore = defineStore('cartstore', {
             }
         },
 
-        async addToCart(itemId, data) {
+        async addProductToCart(itemId, payload) {
             this.loading = true;
             this.error = null;
             try {
-              const response = await addToCart(itemId, data);
+              console.log(`cartstore: ${payload}`)
+              const response = await addToItemCart(itemId, payload);
               if (response.data.success) {
                 await this.fetchCart(); // refresh cart state
               } else {

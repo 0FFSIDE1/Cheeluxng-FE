@@ -3,9 +3,9 @@ import { fetchCsrfToken } from '../../plugins/csrf';
 
 export const getCart = () => api.get('get-cart');
 
-export const addToCart = async (itemId, data) => {
+export const addToItemCart = async (itemId, payload) => {
   await fetchCsrfToken();
-  return api.post(`${itemId}/add-to-cart`, data);
+  return api.post(`${itemId}/add-to-cart`, payload);
 };
 
 export const updateCart = async (itemId, payload) => {
