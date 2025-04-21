@@ -70,7 +70,7 @@
           ></button>
         </div>
 
-            <button class="bg-white text-black rounded-lg mt-4 w-12 h-10 hover:bg-gray-900 hover:text-white">
+            <button @click="addToCart(index)" class="bg-white text-black rounded-lg mt-4 w-12 h-10 hover:bg-gray-900 hover:text-white">
               +
             </button>
           </div>
@@ -98,6 +98,7 @@
 
 <script>
 export default {
+  
   props: {
     title: String,
     details: String,
@@ -156,18 +157,51 @@ export default {
     if (this.selectedSizes[index] === null) return;
     this.selectedColors[index] = cIndex;
   },
-  // handleSizeChange({ index, sizeIndex }) {
-  // this.selectedSizes[index] = sizeIndex;
-  // this.selectedColors[index] = null; // Reset color on size change
-  // },
-  // handleColorChange({ index, colorIndex }) {
-  // if (this.selectedSizes[index] !== null) {
-  //   this.selectedColors[index] = colorIndex;
-  // }
-  // },
+  addToCart(index) {
+  const item = this.items[index];
+  const sizeIndex = this.selectedSizes[index];
+  const colorIndex = this.selectedColors[index];
 
-},
+  // ✅ Handle missing selections (null or undefined)
+  if (sizeIndex == null || colorIndex == null) {
+    alert("Please select both a size and a color before adding to cart ❗");
+    return;
+  }
+
+  const size = item?.available_options?.[sizeIndex];
+  const color = size?.colors?.[colorIndex];
+
+  // ✅ Handle out-of-bounds or bad selections
+  if (!size) {
+    alert("The selected size is invalid. Please choose a different one.");
+    return;
+  }
+
+  if (!color) {
+    alert("The selected color is invalid. Please choose a different one.");
+    return;
+  }
+
+  if (!color.instock) {
+    alert("Selected color is out of stock ❗");
+    return;
+  }
+
+  // ✅ Construct payload safely
+  const payload = {
+    id: item.id,
+    size: size.size,
+    color: color.name,
+  };
+
+  console.log("Adding to cart:", payload);
+
+  // ✅ Emit event to parent
+  this.$emit("add-to-cart", payload);
+
+  }},
 };
+  
 </script>
 
 <style scoped>
