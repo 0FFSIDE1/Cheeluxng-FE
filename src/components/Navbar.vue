@@ -39,10 +39,11 @@
       v-if="menuOpen"
       class="absolute top-28 left-0 w-full bg-white z-50 flex flex-col p-4 shadow-md md:hidden"
     >
-      <router-link to="/" class="py-2 text-gray-900 hover:underline">MEN</router-link>
-      <router-link to="/about" class="py-2 text-gray-900 hover:underline">WOMEN</router-link>
-      <router-link to="/contact" class="py-2 text-gray-900 hover:underline">ACCESSORIES</router-link>
-      <router-link to="/services" class="py-2 text-gray-900 hover:underline">EXPLORE</router-link>
+      <router-link to="/" class="text-gray-900 hover:underline">HOME</router-link>
+      <router-link to="/men" class="py-2 text-gray-900 hover:underline">MEN</router-link>
+      <router-link to="/women" class="py-2 text-gray-900 hover:underline">WOMEN</router-link>
+      <router-link to="/accessoriest" class="py-2 text-gray-900 hover:underline">ACCESSORIES</router-link>
+      <router-link to="/explore" class="py-2 text-gray-900 hover:underline">EXPLORE</router-link>
     </div>
   </nav>
   <CartSidebar v-model="cartOpen" />
