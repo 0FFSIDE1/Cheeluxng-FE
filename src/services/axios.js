@@ -1,5 +1,4 @@
 import axios from 'axios';
-import Cookies from 'js-cookie';
 
 const baseURL = import.meta.env.VITE_API_URL;
 
@@ -11,37 +10,34 @@ const api = axios.create({
   },
 });
 
-// Interceptor to attach CSRF token to applicable requests
+// Interceptor to attach CSRF token to unsafe requests
 api.interceptors.request.use(
   (config) => {
     const method = config.method?.toLowerCase();
     const csrfToken = getCookie('csrftoken');
-    console.log(`About to send ${method} with CSRF:`, Cookies.get('csrftoken'));
-    // Set X-CSRFToken header for unsafe methods
+
     if (csrfToken && method && ['post', 'put', 'patch', 'delete'].includes(method)) {
       config.headers['X-CSRFToken'] = csrfToken;
+      console.log(`Attached CSRF token to ${method.toUpperCase()} request:`, csrfToken);
     }
-
-    // Set Referer header to match frontend origin
-    config.headers['x-csrftoken'] = window.location.origin;
 
     return config;
   },
   (error) => Promise.reject(error)
 );
 
+// Utility function to read cookie value
 function getCookie(name) {
   let cookieValue = null;
   if (document.cookie && document.cookie !== '') {
-      const cookies = document.cookie.split(';');
-      for (let i = 0; i < cookies.length; i++) {
-          const cookie = cookies[i].trim();
-          // Does this cookie string begin with the name we want?
-          if (cookie.substring(0, name.length + 1) === (name + '=')) {
-              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-              break;
-          }
+    const cookies = document.cookie.split(';');
+    for (let cookie of cookies) {
+      cookie = cookie.trim();
+      if (cookie.startsWith(name + '=')) {
+        cookieValue = decodeURIComponent(cookie.slice(name.length + 1));
+        break;
       }
+    }
   }
   return cookieValue;
 }
