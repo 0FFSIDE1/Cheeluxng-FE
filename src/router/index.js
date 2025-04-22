@@ -2,9 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
   { path: '/', component: () => import('../pages/Home.vue') },
-  { path: '/men', component: () => import('../pages/Products.vue') },
-  { path: '/women', component: () => import('../pages/Products.vue') },
-  { path: '/accessories', component: () => import('../pages/Products.vue') },
+  { path: '/:category', name:'ProductsByCategory', component: () => import('../pages/Products.vue'), props: route => ({ category: route.params.category }) },
   { path: '/explore', component: () => import('../pages/Products.vue') },
 ]
 
