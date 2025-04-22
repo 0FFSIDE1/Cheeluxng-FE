@@ -31,7 +31,7 @@
               :availableOptions="secondaryProduct.available_options"
               :selectedSize="selectedSize"
               :selectedColor="selectedColor"
-              :productIndex="0"
+              :productId="secondaryProduct.id"
               @update:size="handleSizeChange"
               @update:color="handleColorChange"
             />
