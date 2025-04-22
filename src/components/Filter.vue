@@ -23,6 +23,7 @@
           <!-- Name Input -->
           <div class="flex-1">
             <input
+              v-model="filters.name"
               type="text"
               placeholder="Name"
               class="w-full text-sm px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -32,28 +33,31 @@
           <!-- Type Dropdown -->
           <div class="flex-1">
             <select
-              name="type"
+              v-model="filters.type"
               class="w-full text-sm px-4 py-2 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              <option class="text-sm" value="Shorts">Shorts</option>
-              <option class="text-sm" value="Sleeves">Sleeves</option>
-              <option class="text-sm" value="Sets">Sets</option>
+              <option :value="null">All</option>
+              <option value="Shorts">Shorts</option>
+              <option value="Sleeves">Sleeves</option>
+              <option value="Sets">Sets</option>
             </select>
           </div>
 
-          <!-- Min Price Input -->
+          <!-- Min Price -->
           <div class="flex-1">
             <input
-              type="text"
+              v-model.number="filters.minPrice"
+              type="number"
               placeholder="Min Price"
               class="w-full text-sm px-4 py-2 border border-gray-300 rounded-lg text-center focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
-          <!-- Max Price Input -->
+          <!-- Max Price -->
           <div class="flex-1">
             <input
-              type="text"
+              v-model.number="filters.maxPrice"
+              type="number"
               placeholder="Max Price"
               class="w-full text-sm px-4 py-2 border border-gray-300 rounded-lg text-center focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
@@ -62,6 +66,7 @@
           <!-- Submit Button -->
           <div class="flex-1">
             <button
+              @click="applyFilters"
               class="w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               Apply Filters
@@ -71,52 +76,48 @@
       </div>
     </div>
 
-    <!-- Default Filter for Larger Screens -->
+    <!-- Large Screen Filters (non-modal) -->
     <div v-else-if="!isMobile" class="p-6 bg-gray-100 rounded-lg shadow-md">
       <h3 class="text-lg font-semibold mb-4 text-gray-900">Filter</h3>
       <div class="flex flex-wrap gap-4 items-center">
-        <!-- Name Input -->
         <div class="flex-1">
           <input
+            v-model="filters.name"
             type="text"
             placeholder="Name"
             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
-
-        <!-- Type Dropdown -->
         <div class="flex-1">
           <select
-            name="type"
+            v-model="filters.type"
             class="w-full text-sm px-4 py-2 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            <option class="text-sm" value="Shorts">Shorts</option>
-            <option class="text-sm" value="Sleeves">Sleeves</option>
-            <option class="text-sm" value="Sets">Sets</option>
+            <option :value="null">All</option>
+            <option value="Shorts">Shorts</option>
+            <option value="Sleeves">Sleeves</option>
+            <option value="Sets">Sets</option>
           </select>
         </div>
-
-        <!-- Min Price Input -->
         <div class="flex-1">
           <input
-            type="text"
+            v-model.number="filters.minPrice"
+            type="number"
             placeholder="Min Price"
-            class="w-full text-sm px-4 py-2 border border-gray-300 rounded-lg text-center focus:outline-none focus:ring-2 focus:ring-blue-500"
+            class="w-full text-sm px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
-
-        <!-- Max Price Input -->
         <div class="flex-1">
           <input
-            type="text"
+            v-model.number="filters.maxPrice"
+            type="number"
             placeholder="Max Price"
-            class="w-full text-sm px-4 py-2 border border-gray-300 rounded-lg text-center focus:outline-none focus:ring-2 focus:ring-blue-500"
+            class="w-full text-sm px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
-
-        <!-- Submit Button -->
         <div class="flex-1">
           <button
+            @click="applyFilters"
             class="w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             Apply Filters
@@ -130,21 +131,23 @@
 <script>
 export default {
   name: "FilterComponent",
+  emits: ['update:filters'],
   data() {
     return {
       isMobile: window.innerWidth <= 768,
       showFilterModal: false,
+      filters: {
+        name: '',
+        type: null,
+        minPrice: null,
+        maxPrice: null
+      }
     };
-  },
-  methods: {
-    toggleFilterModal() {
-      this.showFilterModal = !this.showFilterModal;
-    },
   },
   mounted() {
     window.addEventListener("resize", this.handleResize);
   },
-  beforeDestroy() {
+  beforeUnmount() {
     window.removeEventListener("resize", this.handleResize);
   },
   methods: {
@@ -154,10 +157,10 @@ export default {
     toggleFilterModal() {
       this.showFilterModal = !this.showFilterModal;
     },
-  },
+    applyFilters() {
+      this.$emit('update:filters', this.filters);
+      if (this.isMobile) this.showFilterModal = false;
+    }
+  }
 };
 </script>
-
-<style scoped>
-/* Add any additional custom styles here if needed */
-</style>
