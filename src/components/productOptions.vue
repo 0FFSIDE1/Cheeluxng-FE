@@ -10,7 +10,7 @@
             'bg-gray-900 text-white border-gray-900': selectedSize === sIndex,
             'bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200': selectedSize !== sIndex
           }"
-          @click="$emit('update:size', { index: productIndex, sizeIndex: sIndex })"
+          @click="emitSizeChange(sIndex)"
         >
           {{ size.size }}
         </span>
@@ -32,7 +32,7 @@
             transform: selectedColor === cIndex ? 'scale(1.2)' : 'scale(1)'
           }"
           :title="`${color.name}${!color.instock ? ' (Out of stock)' : ''}`"
-          @click="$emit('update:color', { index: productIndex, colorIndex: cIndex })"
+          @click="emitColorChange(cIndex)"
         ></button>
       </div>
     </div>
@@ -54,12 +54,19 @@
         type: [Number, null],
         default: null
       },
-      productIndex: {
-        type: Number,
+      productId: {
+        type: [String, Number],
         required: true
       }
     },
-    emits: ['update:size', 'update:color']
+    emits: ['update:size', 'update:color'],
+    methods: {
+      emitSizeChange(sizeIndex) {
+        this.$emit('update:size', { productId: this.productId, sizeIndex });
+      },
+      emitColorChange(colorIndex) {
+        this.$emit('update:color', { productId: this.productId, colorIndex });
+      }
+    }
   };
   </script>
-  
