@@ -17,37 +17,45 @@
         </svg>
       </button>
     </div>
+
+    <!-- Logo + Desktop Links -->
     <div class="flex items-center gap-8 h-24 md:min-w-300">
       <img class="object-cover h-32 md:w-full" src="../assets/blacklogo.png" alt="logo" >
       <div class="hidden lg:block space-x-4">
         <router-link to="/" class="text-gray-900 hover:underline">HOME</router-link>
-        <router-link to="/men" class="text-gray-900 hover:underline">MEN</router-link>
-        <router-link to="/women" class="text-gray-900 hover:underline">WOMEN</router-link>
-        <router-link to="/accessories" class="text-gray-900 hover:underline">ACCESSORIES</router-link>
+        <router-link :to="{ name: 'ProductsByCategory', params: { category: 'men' } }" class="text-gray-900 hover:underline">MEN</router-link>
+        <router-link :to="{ name: 'ProductsByCategory', params: { category: 'women' } }" class="text-gray-900 hover:underline">WOMEN</router-link>
+        <router-link :to="{ name: 'ProductsByCategory', params: { category: 'accessories' } }" class="text-gray-900 hover:underline">ACCESSORIES</router-link>
         <router-link to="/explore" class="text-gray-900 hover:underline">EXPLORE</router-link>
       </div>
     </div>
 
-    <div class="flex items-center gap-5 md:mr-12 ">
-      <div class="hidden md:flex  items-center w-96"><input type="text" class=" outline outline-gray-100 rounded-full p-3 w-full shadow-xl text-gray-950" placeholder="What are you looking for?"></div>
-      <div class="flex items-center cursor-pointer" @click="toggleCart"><img src="../assets/cheeluxCartLogo.png" alt="" class="w-4 h-4"></div>
+    <!-- Search + Cart -->
+    <div class="flex items-center gap-5 md:mr-12">
+      <div class="hidden md:flex items-center w-96">
+        <input type="text" class="outline outline-gray-100 rounded-full p-3 w-full shadow-xl text-gray-950" placeholder="What are you looking for?">
+      </div>
+      <div class="flex items-center cursor-pointer" @click="toggleCart">
+        <img src="../assets/cheeluxCartLogo.png" alt="cart" class="w-4 h-4">
+      </div>
     </div>
 
-
-    <!-- Mobile dropdown menu -->
+    <!-- Mobile dropdown -->
     <div
       v-if="menuOpen"
       class="absolute top-28 left-0 w-full bg-white z-50 flex flex-col p-4 shadow-md md:hidden"
     >
       <router-link to="/" class="text-gray-900 hover:underline">HOME</router-link>
-      <router-link to="/men" class="py-2 text-gray-900 hover:underline">MEN</router-link>
-      <router-link to="/women" class="py-2 text-gray-900 hover:underline">WOMEN</router-link>
-      <router-link to="/accessories" class="py-2 text-gray-900 hover:underline">ACCESSORIES</router-link>
+      <router-link :to="{ name: 'ProductsByCategory', params: { category: 'men' } }" class="py-2 text-gray-900 hover:underline">MEN</router-link>
+      <router-link :to="{ name: 'ProductsByCategory', params: { category: 'women' } }" class="py-2 text-gray-900 hover:underline">WOMEN</router-link>
+      <router-link :to="{ name: 'ProductsByCategory', params: { category: 'accessories' } }" class="py-2 text-gray-900 hover:underline">ACCESSORIES</router-link>
       <router-link to="/explore" class="py-2 text-gray-900 hover:underline">EXPLORE</router-link>
     </div>
   </nav>
+
   <CartSidebar v-model="cartOpen" />
 </template>
+
 <script setup>
 import { ref } from 'vue'
 import CartSidebar from './CartSideBar.vue'
