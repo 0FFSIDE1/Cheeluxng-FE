@@ -9,10 +9,16 @@
     "serve": "vue-cli-service serve"
   },
   "dependencies": {
+    "@tailwindcss/container-queries": "^0.1.1",
+    "@tailwindcss/forms": "^0.5.10",
+    "@tailwindcss/typography": "^0.5.16",
     "@vue/cli-service": "^5.0.8",
     "axios": "^1.8.4",
+    "daisyui": "^5.0.28",
     "js-cookie": "^3.0.5",
     "pinia": "^3.0.2",
+    "tailwindcss-animate": "^1.0.7",
+    "tailwindcss-elements": "^0.4.0",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0"
   },
