@@ -1,6 +1,6 @@
 <!-- views/ProductsPage.vue -->
 <template>
-  <div>
+  <div :class="categoryBgClass">
     <!-- Slideshow and other page content here -->
     <section class="text-center py-10">
       <div class="slideshow-container h-[60vh] md:h-[70vh]">
@@ -24,7 +24,7 @@
         <h2 class="text-gray-900 text-center md:hidden">Explore ✨</h2>
       </div>
       <div class="mt-8">
-        <FilterComponent v-model:filters="userFilters" />
+        <FilterComponent  v-model:filters="userFilters" />
       </div>
       <ProductGrid :selectedFilters="computedFilters" />
     </div>
@@ -36,6 +36,9 @@ import { computed, watch } from 'vue';
 import FilterComponent from '../components/Filter.vue';
 import ProductGrid from '../components/ProductGrid.vue';
 import { useRoute } from 'vue-router';
+import { useProductStore } from '../store/productStore'
+
+
 
 export default {
   name: 'ProductsPage',
@@ -81,9 +84,25 @@ export default {
     currentCategory() {
       return this.category || (this.$route.params.category || 'men');
     },
+    categoryBgClass() {
+    const map = {
+      men: 'bg-blue-100',
+      women: 'bg-rose-100',
+      accessories: 'bg-yellow-100',
+    };
+    return map[this.currentCategory.toLowerCase()] || 'bg-white';
+  },
     currentCategoryTitle() {
       return this.currentCategory.charAt(0).toUpperCase() + this.currentCategory.slice(1);
-    }
+    },
+    computedFilters() {
+  const searchQuery = this.$route.query.search || '';
+  return {
+    ...this.userFilters,
+    category: this.currentCategory.toLowerCase(),
+    name: searchQuery || this.userFilters.name
+  };
+}
   },
   setup() {
     const route = useRoute();
@@ -98,6 +117,10 @@ export default {
     }
   },
   mounted() {
+    const productStore = useProductStore();
+    if (!productStore.allProducts.lenght){
+      productStore.loadAllProducts();
+    }
     this.images.forEach(src => {
       const img = new Image();
       img.src = src;
