@@ -159,7 +159,12 @@
             <div class="bg-pink-200 rounded p-4 mt-4 w-full text-center">
               <h3 class="text-lg font-semibold">{{ i.name }}</h3>
               <p>$ {{ i.price }}</p>
-              <button class="cartBtn mt-2">+</button>
+              <AddToCartBtn
+                  :is-adding-to-cart="isAddingToCart"
+                  :is-disabled="!canAddToCart(index)"
+                  :payload="getCartPayload(index)"
+                  @add-to-cart="handleAddToCart"
+                />
             </div>
           </div>
         </template>
@@ -224,6 +229,8 @@ import { useProductStore } from '../store/productStore';
 import { useCartStore } from '../store/cartStore';
 import { onMounted, ref, computed } from "vue";
 import { useRouter } from 'vue-router';
+import AddToCartBtn from "../components/AddToCartBtn.vue";
+import ProductOptionsSelector from "../components/productOptions.vue"
 
 // Stores
 const productStore = useProductStore();
@@ -241,14 +248,26 @@ const filteredItems = computed(() => {
   );
 });
 
+// Product Showcase Data
+const mainProduct = ref(null);
+const secondaryProduct = ref(null);
+
 // Load Products
 onMounted(() => {
-  productStore.loadAllProducts();
+  productStore.loadAllProducts().then(() => {
+    console.log('Loaded bestSellers:', productStore.sections.bestSellers);
+    if (productStore.sections.bestSellers.length) {
+      mainProduct.value = productStore.sections.bestSellers[0];
+      secondaryProduct.value = productStore.sections.bestSellers[1] || null;
+    }
+  });
 });
 
 // Cart Handling
 function handleCartAdd(payload) {
+  console.log('Received add-to-cart payload:', payload);
   if (!payload || !payload.id || !payload.size || !payload.color) {
+    console.error('Invalid cart item:', payload);
     alert("Invalid cart item. Missing details.");
     return;
   }
