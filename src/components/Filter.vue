@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div  class="mb-8">
     <!-- Floating Filter Button for Mobile -->
     <button
       v-if="isMobile"
@@ -67,7 +67,7 @@
           <div class="flex-1">
             <button
               @click="applyFilters"
-              class="w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="w-full px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               Apply Filters
             </button>
@@ -118,7 +118,7 @@
         <div class="flex-1">
           <button
             @click="applyFilters"
-            class="w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            class="w-full px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             Apply Filters
           </button>
