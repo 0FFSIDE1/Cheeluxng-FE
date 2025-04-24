@@ -1,104 +1,153 @@
+<!-- src/components/Slider.vue -->
 <template>
-  <div class="my-12 h-full text-center" v-if="items.length">
-    <h2 class="text-gray-900 text-xl sm:text-2xl font-semibold">{{ title }}</h2>
-    <p class="text-gray-700 sm:text-lg mb-10">{{ details }}</p>
-
-    <div class="relative">
-      <!-- Back Button -->
-      <button
-        v-if="currentIndex > 0"
-        @click="scrollBack"
-        class="absolute left-0 top-1/3 transform -translate-y-1/2 bg-gray-950 text-white p-2 rounded-full shadow-lg z-10"
-      >
-        &#8592;
-      </button>
-
-      <!-- Slider -->
-      <div
-        class="item-container flex gap-4 overflow-x-auto scroll-smooth mx-4 sm:mx-8 my-12"
-        ref="slider"
-        @mousedown="startDrag"
-        @mousemove="onDrag"
-        @mouseup="endDrag"
-        @mouseleave="endDrag"
-        @touchstart="startDrag"
-        @touchmove="onDrag"
-        @touchend="endDrag"
-      >
-        <div
-          v-for="(item, index) in items"
-          :key="index"
-          class="flex-shrink-0 w-1/2 sm:w-1/2 md:w-1/4 lg:w-[calc(100%/visibleItems)]"
-        >
-          <div class="down-content flex flex-col items-center h-full">
-            <img :src="item.photo_1" :alt="item.name" class="object-cover w-full h-80 rounded-t-lg" />
-            <h3 class="text-gray-600 text-lg font-semibold mt-2">{{ item.name }}</h3>
-            <p class="text-gray-400">₦{{ item.price }}</p>
-
-            <!-- Size Options -->
-            <div class="mt-3 flex flex-wrap justify-center gap-2">
-              <span
-                v-for="(size, sIndex) in item.available_options"
-                :key="sIndex"
-                class="text-xs font-medium cursor-pointer px-3 py-1 rounded-full border transition duration-200"
-                :class="{
-                  'bg-gray-900 text-white border-gray-900': selectedSizes[index] === sIndex,
-                  'bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200': selectedSizes[index] !== sIndex
-                }"
-                @click="selectSize(index, sIndex)"
-              >
-                {{ size.size }}
-              </span>
-            </div>
-
-            <!-- Color Options -->
-          <div
-            v-if="selectedSizes[index] !== null && item.available_options[selectedSizes[index]]"
-            class="flex gap-2 mt-3 justify-center items-center flex-wrap">
-          <button
-            v-for="(color, cIndex) in item.available_options[selectedSizes[index]].colors"
-            :key="cIndex"
-            class="w-6 h-6 rounded-full border-4 transition-all duration-200"
-            :style="{
-              backgroundColor: color.name,
-              opacity: color.instock ? 1 : 0.1,
-              borderColor: selectedColors[index] === cIndex ? '#111827' : '#ccc',
-              transform: selectedColors[index] === cIndex ? 'scale(1.2)' : 'scale(1)'
-            }"
-            :title="`${color.name}${!color.instock ? ' (Out of stock)' : ''}`"
-            @click="selectColor(index, cIndex)"
-          ></button>
-        </div>
-
-            <button @click="addToCart(index)" class="bg-white text-black rounded-lg mt-4 w-12 h-10 hover:bg-gray-900 hover:text-white">
-              +
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Forward Button -->
-      <button
-        v-if="currentIndex < items.length - visibleItems"
-        @click="scrollForward"
-        class="absolute right-0 top-1/3 transform -translate-y-1/2 bg-gray-950 text-white p-2 rounded-full shadow-lg z-10"
-      >
-        &#8594;
-      </button>
+  <div class="my-4 h-full text-center">
+    <!-- Loading State -->
+    <div v-if="isLoading" class="flex justify-center items-center h-32">
+      <div class="animate-spin rounded-full h-10 w-10 border-t-4 border-b-4 border-primary"></div>
     </div>
 
-    <!-- View More Button -->
-    <div class="flex justify-center items-center mt-12">
-      <button class="md:w-1/6 bg-slate-950 shadow-xl p-4 rounded-full text-xs text-white hover:text-slate-950 hover:bg-white transition">
-        VIEW MORE
-      </button>
+    <!-- Empty State -->
+    <div v-else-if="!items.length" class="prose text-center text-gray-600">
+      <h2 class="text-xl font-semibold">No Products Available</h2>
+      <p>Check back soon for new arrivals!</p>
+    </div>
+
+    <!-- Slider Content -->
+    <div v-else>
+      <!-- Centered Title and Description -->
+      <div class="flex flex-col justify-center items-center min-h-[10vh] mb-6 px-4 sm:px-6 md:px-8">
+        <h2
+          class="prose prose-lg text-gray-900 text-xl sm:text-2xl md:text-3xl font-semibold max-w-prose mx-auto animate-fade-in"
+        >
+          {{ title }}
+        </h2>
+        <p
+          class="prose text-gray-700 text-base sm:text-lg md:text-xl mt-2 max-w-prose mx-auto animate-fade-in animate-delay-200"
+        >
+          {{ details }}
+        </p>
+      </div>
+
+      <div class="relative">
+        <!-- Back Button -->
+        <button
+          v-if="currentIndex > 0"
+          @click="scrollBack"
+          class="absolute left-0 top-1/3 transform -translate-y-1/2 btn btn-circle bg-gray-900 text-white shadow-lg z-10"
+          aria-label="Previous products"
+        >
+          ←
+        </button>
+
+        <!-- Slider -->
+        <div
+          class="item-container flex gap-4 snap-x snap-mandatory overflow-x-auto scroll-smooth mx-4 sm:mx-8 my-8"
+          ref="slider"
+          @mousedown="startDrag"
+          @mousemove="onDrag"
+          @mouseup="endDrag"
+          @mouseleave="endDrag"
+          @touchstart="startDrag"
+          @touchmove="onDrag"
+          @touchend="endDrag"
+        >
+          <div
+            v-for="(item, index) in items"
+            :key="index"
+            class="snap-start flex-shrink-0 @sm:w-1/2 @md:w-1/3 @lg:w-[calc(100%/visibleItems)]"
+          >
+            <div class="card shadow-xl flex flex-col items-center h-full bg-white rounded-lg animate-scale">
+              <img
+                :src="item.photo_1"
+                :alt="item.name"
+                class="object-cover w-80 h-80 rounded-t-lg hover:scale-105 transition-transform"
+                loading="lazy"
+              />
+              <div class="card-body p-4">
+                <h3 class="text-gray-600 text-base sm:text-lg font-semibold">{{ item.name }}</h3>
+                <p class="text-gray-500 text-sm sm:text-base">₦{{ item.price }}</p>
+
+                <!-- Size Options -->
+                <div class="mt-3 flex flex-wrap justify-center gap-2">
+                  <button
+                    v-for="(size, sIndex) in item.available_options"
+                    :key="sIndex"
+                    class="btn btn-sm rounded-full transition-all"
+                    :class="{
+                      'btn-primary': selectedSizes[index] === sIndex,
+                      'btn-ghost hover:bg-gray-200': selectedSizes[index] !== sIndex,
+                    }"
+                    @click="selectSize(index, sIndex)"
+                    :aria-label="`Select size ${size.size}`"
+                  >
+                    {{ size.size }}
+                  </button>
+                </div>
+
+                <!-- Color Options -->
+                <div
+                  v-if="selectedSizes[index] !== null && item.available_options[selectedSizes[index]]"
+                  class="flex gap-2 mt-3 justify-center items-center flex-wrap"
+                >
+                  <button
+                    v-for="(color, cIndex) in item.available_options[selectedSizes[index]].colors"
+                    :key="cIndex"
+                    class="w-6 h-6 rounded-full border-2 transition-all focus:ring-2 focus:ring-offset-2"
+                    :style="{ backgroundColor: color.name }"
+                    :class="{
+                      'opacity-40': !color.instock,
+                      'border-gray-900 scale-110': selectedColors[index] === cIndex,
+                      'border-gray-300': selectedColors[index] !== cIndex,
+                    }"
+                    :aria-label="`Select color ${color.name}${!color.instock ? ' (Out of stock)' : ''}`"
+                    @click="selectColor(index, cIndex)"
+                  ></button>
+                </div>
+
+                <!-- Add to Cart Button -->
+                <AddToCartBtn
+                  :is-adding-to-cart="isAddingToCart"
+                  :is-disabled="!canAddToCart(index)"
+                  :payload="getCartPayload(index)"
+                  @add-to-cart="handleAddToCart"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Forward Button -->
+        <button
+          v-if="currentIndex < items.length - visibleItems"
+          @click="scrollForward"
+          class="absolute right-0 top-1/3 transform -translate-y-1/2 btn btn-circle bg-gray-900 text-white shadow-lg z-10"
+          aria-label="Next products"
+        >
+          →
+        </button>
+      </div>
+
+      <!-- View More Button -->
+      <div class="flex justify-center items-center mt-8">
+        <button
+          class="btn btn-primary md:w-1/6 px-6 py-3 uppercase tracking-wide animate-pulse hover:scale-105 transition-transform"
+          @click="$router.push('/collections/sportswear')"
+          aria-label="View more products"
+        >
+          View More
+        </button>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import AddToCartBtn from './AddToCartBtn.vue';
+
 export default {
-  
+  components: {
+    AddToCartBtn,
+  },
   props: {
     title: String,
     details: String,
@@ -113,95 +162,133 @@ export default {
       scrollLeft: 0,
       selectedSizes: [],
       selectedColors: [],
+      isAddingToCart: false,
+      isLoading: false,
     };
   },
+  watch: {
+    items(newItems) {
+      this.selectedSizes = newItems.map(() => null);
+      this.selectedColors = newItems.map(() => null);
+      this.isLoading = false;
+    },
+  },
   mounted() {
-    this.items.forEach((_, index) => {
-      this.selectedSizes[index] = null;
-      this.selectedColors[index] = null;
-    });
+    if (this.items.length) {
+      this.selectedSizes = this.items.map(() => null);
+      this.selectedColors = this.items.map(() => null);
+    } else {
+      this.isLoading = true;
+    }
   },
   methods: {
-  scrollBack() {
-    const slider = this.$refs.slider;
-    const itemWidth = slider.children[0].offsetWidth + 16;
-    slider.scrollLeft -= itemWidth;
-    this.currentIndex = Math.max(this.currentIndex - 1, 0);
+    scrollBack() {
+      try {
+        const slider = this.$refs.slider;
+        const itemWidth = slider.children[0].offsetWidth + 16;
+        slider.scrollLeft -= itemWidth;
+        this.currentIndex = Math.max(this.currentIndex - 1, 0);
+      } catch (error) {
+        console.error('Error in scrollBack:', error);
+      }
+    },
+    scrollForward() {
+      try {
+        const slider = this.$refs.slider;
+        const itemWidth = slider.children[0].offsetWidth + 16;
+        slider.scrollLeft += itemWidth;
+        this.currentIndex = Math.min(this.currentIndex + 1, this.items.length - this.visibleItems);
+      } catch (error) {
+        console.error('Error in scrollForward:', error);
+      }
+    },
+    startDrag(event) {
+      try {
+        this.isDragging = true;
+        this.startX = event.pageX || event.touches[0].pageX;
+        this.scrollLeft = this.$refs.slider.scrollLeft;
+      } catch (error) {
+        console.error('Error in startDrag:', error);
+      }
+    },
+    onDrag(event) {
+      if (!this.isDragging) return;
+      try {
+        event.preventDefault();
+        const x = event.pageX || event.touches[0].pageX;
+        const walk = x - this.startX;
+        this.$refs.slider.scrollLeft = this.scrollLeft - walk;
+      } catch (error) {
+        console.error('Error in onDrag:', error);
+      }
+    },
+    endDrag() {
+      this.isDragging = false;
+    },
+    selectSize(index, sIndex) {
+      try {
+        this.selectedSizes[index] = sIndex;
+        this.selectedColors[index] = null;
+      } catch (error) {
+        console.error('Error in selectSize:', error);
+      }
+    },
+    selectColor(index, cIndex) {
+      try {
+        if (this.selectedSizes[index] !== null) {
+          this.selectedColors[index] = cIndex;
+        }
+      } catch (error) {
+        console.error('Error in selectColor:', error);
+      }
+    },
+    canAddToCart(index) {
+      const sizeIndex = this.selectedSizes[index];
+      const colorIndex = this.selectedColors[index];
+      if (sizeIndex == null || colorIndex == null) {
+        console.log('Slider: Cannot add to cart', { index, sizeIndex, colorIndex });
+        return false;
+      }
+      const item = this.items[index];
+      const size = item?.available_options?.[sizeIndex];
+      const color = size?.colors?.[colorIndex];
+      const isValid = size && color && color.instock;
+      console.log('Slider: Can add to cart', isValid, { item, size, color });
+      return isValid;
+    },
+    getCartPayload(index) {
+      const item = this.items[index];
+      const sizeIndex = this.selectedSizes[index];
+      const colorIndex = this.selectedColors[index];
+      const size = item?.available_options?.[sizeIndex];
+      const color = size?.colors?.[colorIndex];
+      return {
+        id: item.id,
+        size: size?.size || '',
+        color: color?.name || '',
+      };
+    },
+    handleAddToCart(payload) {
+      try {
+        this.isAddingToCart = true;
+        if (!payload.id || !payload.size || !payload.color) {
+          console.error('Slider: Invalid cart payload', payload);
+          alert('Please select a valid size and color.');
+          return;
+        }
+        console.log('Slider: Emitting add-to-cart', payload);
+        this.$emit('add-to-cart', payload);
+      } catch (error) {
+        console.error('Slider: Error in handleAddToCart', error);
+        alert('Failed to add to cart. Please try again.');
+      } finally {
+        setTimeout(() => {
+          this.isAddingToCart = false;
+        }, 500);
+      }
+    },
   },
-  scrollForward() {
-    const slider = this.$refs.slider;
-    const itemWidth = slider.children[0].offsetWidth + 16;
-    slider.scrollLeft += itemWidth;
-    this.currentIndex = Math.min(this.currentIndex + 1, this.items.length - this.visibleItems);
-  },
-  startDrag(event) {
-    this.isDragging = true;
-    this.startX = event.pageX || event.touches[0].pageX;
-    this.scrollLeft = this.$refs.slider.scrollLeft;
-  },
-  onDrag(event) {
-    if (!this.isDragging) return;
-    event.preventDefault();
-    const x = event.pageX || event.touches[0].pageX;
-    const walk = x - this.startX;
-    this.$refs.slider.scrollLeft = this.scrollLeft - walk;
-  },
-  endDrag() {
-    this.isDragging = false;
-  },
-  selectSize(index, sIndex) {
-    this.selectedSizes[index] = sIndex;
-    this.selectedColors[index] = null; // Reset color on size change
-  },
-  selectColor(index, cIndex) {
-    if (this.selectedSizes[index] === null) return;
-    this.selectedColors[index] = cIndex;
-  },
-  addToCart(index) {
-  const item = this.items[index];
-  const sizeIndex = this.selectedSizes[index];
-  const colorIndex = this.selectedColors[index];
-
-  // ✅ Handle missing selections (null or undefined)
-  if (sizeIndex == null || colorIndex == null) {
-    alert("Please select both a size and a color before adding to cart ❗");
-    return;
-  }
-
-  const size = item?.available_options?.[sizeIndex];
-  const color = size?.colors?.[colorIndex];
-
-  // ✅ Handle out-of-bounds or bad selections
-  if (!size) {
-    alert("The selected size is invalid. Please choose a different one.");
-    return;
-  }
-
-  if (!color) {
-    alert("The selected color is invalid. Please choose a different one.");
-    return;
-  }
-
-  if (!color.instock) {
-    alert("Selected color is out of stock ❗");
-    return;
-  }
-
-  // ✅ Construct payload safely
-  const payload = {
-    id: item.id,
-    size: size.size,
-    color: color.name,
-  };
-
-  console.log("Adding to cart:", payload);
-
-  // ✅ Emit event to parent
-  this.$emit("add-to-cart", payload);
-
-  }},
 };
-  
 </script>
 
 <style scoped>

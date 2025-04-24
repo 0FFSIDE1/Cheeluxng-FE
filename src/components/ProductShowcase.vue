@@ -11,7 +11,7 @@
       <!-- Main Product -->
       <div v-if="mainProduct" class="relative flex justify-center w-full max-w-[700px]">
         <img
-          :src="mainProduct.main_image"
+          :src="mainProduct.cover_image"
           :alt="mainProduct.name"
           class="object-cover rounded-lg h-auto max-h-[600px] w-full transition-transform hover:scale-[1.02]"
           loading="lazy"
@@ -48,15 +48,13 @@
             />
 
             <!-- Add to Cart Button -->
-            <button
-              class="btn btn-primary btn-sm w-full mt-3 rounded-full transition-all"
-              :disabled="isAddingToCart || !canAddToCart"
-              @click="addToCart"
-              aria-label="Add secondary product to cart"
-            >
-              <span v-if="isAddingToCart" class="animate-spin">⏳</span>
-              <span v-else>Add to Cart</span>
-            </button>
+            <AddToCartBtn
+              :is-adding-to-cart="isAddingToCart"
+              :is-disabled="!canAddToCart"
+              :payload="getCartPayload()"
+              @add-to-cart="handleAddToCart"
+              class="mt-3"
+            />
           </div>
         </div>
       </div>
@@ -80,11 +78,15 @@
 
 <script>
 import ProductOptionsSelector from './productOptions.vue';
+import AddToCartBtn from './AddToCartBtn.vue';
+import { useCartStore } from '../store/cartStore';
 
+const cartStore = useCartStore();
 export default {
   name: 'ProductShowcase',
   components: {
     ProductOptionsSelector,
+    AddToCartBtn,
   },
   props: {
     title: {
@@ -109,82 +111,93 @@ export default {
   },
   computed: {
     hasSecondary() {
-      return (
+      const isValid =
         this.secondaryProduct &&
         Object.keys(this.secondaryProduct).length > 0 &&
-        !!this.secondaryProduct.photo_2
-      );
+        !!this.secondaryProduct.photo_2 &&
+        !!this.secondaryProduct.id &&
+        !!this.secondaryProduct.available_options;
+      console.log('Showcase: hasSecondary', isValid, this.secondaryProduct);
+      return isValid;
     },
     canAddToCart() {
+      if (!this.secondaryProduct || !this.secondaryProduct.available_options) {
+        console.log('Showcase: Cannot add to cart - missing product/options', {
+          secondaryProduct: this.secondaryProduct,
+        });
+        return false;
+      }
       if (this.selectedSize == null || this.selectedColor == null) {
-        console.log('Cannot add to cart: Missing size or color', {
+        console.log('Showcase: Cannot add to cart - missing selections', {
           selectedSize: this.selectedSize,
           selectedColor: this.selectedColor,
         });
         return false;
       }
-      const size = this.secondaryProduct?.available_options?.[this.selectedSize];
+      const size = this.secondaryProduct.available_options[this.selectedSize];
       const color = size?.colors?.[this.selectedColor];
       const isValid = size && color && color.instock;
-      console.log('Can add to cart:', isValid, { size, color });
+      console.log('Showcase: Can add to cart', isValid, { size, color });
       return isValid;
     },
   },
   methods: {
     handleSizeChange({ sizeIndex }) {
-      console.log('Size changed:', { sizeIndex });
+      console.log('Showcase: Size changed', { sizeIndex });
       this.selectedSize = sizeIndex;
       this.selectedColor = null; // Reset color on size change
     },
     handleColorChange({ colorIndex }) {
-      console.log('Color changed:', { colorIndex });
+      console.log('Showcase: Color changed', { colorIndex });
       this.selectedColor = colorIndex;
     },
-    addToCart() {
+    getCartPayload() {
+      const payload = {
+        id: this.secondaryProduct?.id || '',
+        size: '',
+        color: '',
+      };
+      if (!this.secondaryProduct || !this.secondaryProduct.available_options) {
+        console.log('Showcase: Invalid payload - missing product/options', {
+          secondaryProduct: this.secondaryProduct,
+        });
+        return payload;
+      }
+      if (this.selectedSize != null) {
+        const size = this.secondaryProduct.available_options[this.selectedSize];
+        payload.size = size?.size || '';
+        if (this.selectedColor != null && size?.colors) {
+          const color = size.colors[this.selectedColor];
+          payload.color = color?.name || '';
+        }
+      }
+      console.log('Showcase: Generated payload', payload);
+      return payload;
+    },
+    handleAddToCart(payload) {
+      console.log('Showcase: handleAddToCart called with payload', payload);
       try {
         this.isAddingToCart = true;
-        if (!this.secondaryProduct || !this.secondaryProduct.available_options) {
-          console.error('Invalid secondary product:', this.secondaryProduct);
-          alert('Product data is invalid.');
+        if (!payload || !payload.id || !payload.size || !payload.color) {
+          console.error('Showcase: Invalid cart payload', payload);
+          alert('Please select a valid size and color.');
           return;
         }
-
-        const sizeIndex = this.selectedSize;
-        const colorIndex = this.selectedColor;
-
-        if (sizeIndex == null || colorIndex == null) {
-          console.log('Missing selections:', { sizeIndex, colorIndex });
-          alert('Please select both a size and a color.');
+        if (!this.canAddToCart) {
+          console.error('Showcase: Cannot add to cart - invalid state', {
+            canAddToCart: this.canAddToCart,
+          });
+          alert('Selected item is not available.');
           return;
         }
-
-        const size = this.secondaryProduct.available_options[sizeIndex];
-        const color = size?.colors?.[colorIndex];
-
-        if (!size || !color) {
-          console.error('Invalid size or color:', { size, color });
-          alert('Invalid size or color selected.');
-          return;
-        }
-
-        if (!color.instock) {
-          console.log('Color out of stock:', color);
-          alert('Selected color is out of stock ❗');
-          return;
-        }
-
-        const payload = {
-          id: this.secondaryProduct.id,
-          size: size.size,
-          color: color.name,
-        };
-
-        console.log('Emitting add-to-cart:', payload);
-        this.$emit('add-to-cart', payload);
+        console.log('Showcase: Emitting add-to-cart', payload);
+        cartStore.addProductToCart(payload.id, payload);
+        console.log('Showcase: add-to-cart emitted');
       } catch (error) {
-        console.error('Error adding to cart:', error);
+        console.error('Showcase: Error in handleAddToCart', error);
         alert('Failed to add to cart. Please try again.');
       } finally {
+        console.log('Showcase: Resetting isAddingToCart');
         this.isAddingToCart = false;
       }
     },
