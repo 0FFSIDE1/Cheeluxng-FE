@@ -15,7 +15,8 @@
     <!-- Slider Content -->
     <div v-else>
       <!-- Centered Title and Description -->
-      <div class="flex flex-col justify-center items-center min-h-[10vh] mb-6 px-4 sm:px-6 md:px-8">
+       <div v-if="title && title !== 'None'">
+        <div class="flex flex-col justify-center items-center min-h-[10vh] mb-6 px-4 sm:px-6 md:px-8">
         <h2
           class="prose prose-lg text-gray-900 text-xl sm:text-2xl md:text-3xl font-semibold max-w-prose mx-auto animate-fade-in"
         >
@@ -27,6 +28,9 @@
           {{ details }}
         </p>
       </div>
+
+       </div>
+      
 
       <div class="relative">
         <!-- Back Button -->
