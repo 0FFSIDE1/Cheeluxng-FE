@@ -1,18 +1,31 @@
 <template>
   <!-- HERO SECTION -->
   <section
-    class="relative mx-2 h-[120vh] md:h-[135vh] bg-fixed bg-center bg-no-repeat bg-cover overflow-hidden"
-    style="background-image: linear-gradient(to top, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0) 40%), url('./src/assets/hero.jpeg'); backdrop-filter: blur(12px);"
+    class="relative min-h-screen bg-center bg-no-repeat bg-cover overflow-hidden"
+    :style="{ backgroundImage: `url(${heroImage})` }"
   >
+    <!-- Gradient Overlay -->
+    <div class="absolute inset-0 bg-gradient-to-t from-white/40 to-transparent"></div>
+    
+    <!-- Content -->
     <div class="absolute inset-0 flex justify-center items-center text-white text-center z-30 px-4 sm:px-6 md:px-8">
-      <div class="flex flex-col justify-center items-center max-w-2xl w-full bg-gray-800/20 rounded-full p-6 md:p-10 shadow-2xl">
-        <h2 class="text-xs sm:text-sm md:text-base lg:text-lg leading-relaxed drop-shadow-md text-balance px-2 sm:px-4">
+      <div class="@container flex flex-col justify-center items-center w-full max-w-4xl bg-gray-800/20 rounded-full p-6 sm:p-8 md:p-12 shadow-2xl">
+        <h2
+          class="prose prose-invert text-base sm:text-lg md:text-xl lg:text-2xl leading-relaxed drop-shadow-md text-balance px-2 sm:px-4"
+        >
           Discover high-performance gym and sportswear designed to fuel your passion and elevate your workouts. Our gear is crafted for comfort, durability, and style.
         </h2>
-        <p class="mt-4 sm:mt-6 text-sm sm:text-base md:text-lg lg:text-xl drop-shadow-sm font-medium">
+        <p class="mt-4 sm:mt-6 text-base sm:text-lg md:text-xl lg:text-2xl drop-shadow-sm font-semibold">
           Gear Up, Push Limits, Conquer Goals.
         </p>
-        <button class="cartBtn mt-4 p-2 sm:p-3 text-xs sm:text-sm md:text-base" type="button">EXPLORE</button>
+        <button
+          class="btn btn-secondary mt-6 px-6 py-3 text-sm sm:text-base md:text-lg uppercase tracking-wide animate-pulse hover:scale-105 transition-transform"
+          type="button"
+          aria-label="Shop our sportswear collection"
+          @click="shopNow"
+        >
+          Shop Now
+        </button>
       </div>
     </div>
   </section>
@@ -23,23 +36,69 @@
 
   
 
-  <!-- POPULAR SELLING SECTION -->
-  <section class="w-full bg-slate-200 py-12">
-    <div class="flex flex-col gap-6 px-4 sm:px-6 max-w-7xl">
-      <div class="w-full md:w-1/2 lg:w-1/3">
-        <h2 class="text-gray-900 text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold leading-snug text-balance">
-          POPULAR SELLING
-        </h2>
+
+<!-- POPULAR SELLING SECTION -->
+<section class="w-full bg-gradient-to-b from-slate-200 to-slate-100 py-8 @container">
+      <!-- Loading State -->
+      <div v-if="productStore.loading" class="flex justify-center items-center h-32">
+        <div class="animate-spin rounded-full h-10 w-10 border-t-4 border-b-4 border-primary"></div>
       </div>
-      <div class="flex flex-wrap gap-4">
-        <button class="bg-slate-950 text-white px-4 py-2 rounded-full shadow-md hover:bg-slate-900">Women</button>
-        <button class="bg-white text-slate-950 px-4 py-2 rounded-full shadow-md hover:bg-slate-950 hover:text-white">Men</button>
+
+      <!-- Empty State -->
+      <div v-else-if="!filteredItems.length" class="prose text-center text-gray-600 mx-auto">
+        <h2 class="text-xl font-semibold">No Best Sellers Available</h2>
+        <p>Check back soon for our top picks!</p>
       </div>
-    </div>
-    <div class="mt-8">
-      <Slider :items="productStore.sections.bestSellers" :visibleItems="4" @add-to-cart="handleCartAdd"/>
-    </div>
-  </section>
+
+      <!-- Content -->
+      <div v-else class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+        <div class="flex flex-col gap-4">
+          <!-- Centered Title -->
+          <div class="w-full flex justify-center">
+            <h2
+              class="prose prose-lg text-gray-900 text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold leading-snug animate-fade-in"
+            >
+              POPULAR SELLING
+            </h2>
+          </div>
+          <!-- Filter Buttons -->
+          <div class="flex flex-wrap gap-4 justify-center">
+            <button
+              class="btn btn-sm rounded-full transition-all"
+              :class="{ 'btn-primary': activeFilter === 'All', 'btn-ghost hover:bg-gray-200': activeFilter !== 'All' }"
+              @click="activeFilter = 'All'"
+              aria-label="Show all products"
+              :aria-pressed="activeFilter === 'All'"
+            >
+              All
+            </button>
+            <button
+              class="btn btn-sm rounded-full transition-all"
+              :class="{ 'btn-primary': activeFilter === 'Women', 'btn-ghost hover:bg-gray-200': activeFilter !== 'Women' }"
+              @click="activeFilter = 'Women'"
+              aria-label="Filter by Women's products"
+              :aria-pressed="activeFilter === 'Women'"
+            >
+              Women
+            </button>
+            <button
+              class="btn btn-sm rounded-full transition-all"
+              :class="{ 'btn-primary': activeFilter === 'Men', 'btn-ghost hover:bg-gray-200': activeFilter !== 'Men' }"
+              @click="activeFilter = 'Men'"
+              aria-label="Filter by Men's products"
+              :aria-pressed="activeFilter === 'Men'"
+            >
+              Men
+            </button>
+          </div>
+        </div>
+        <!-- Slider -->
+        <div class="mt-4">
+          <Slider title="None" :items="filteredItems" :visibleItems="4" @add-to-cart="handleCartAdd" />
+        </div>
+      </div>
+    </section>
+
   
   <!-- FAST SELLING SECTION -->
 
@@ -122,7 +181,6 @@
             <img :src="`/images/product/image0000${i}.jpeg`" class="object-cover w-full h-full rounded-inherit transition-transform duration-500 group-hover:scale-105" alt="">
             <div class="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-inherit p-4">
               <div class="text-center">
-                <p class="font-semibold mb-2">Item {{ i }}</p>
                 <button class="px-4 py-2 bg-white text-black rounded-full hover:bg-pink-300 transition">View</button>
               </div>
             </div>
@@ -164,32 +222,48 @@ import Slider from "../components/Slider.vue";
 import ProductShowcase from "../components/ProductShowcase.vue";
 import { useProductStore } from '../store/productStore';
 import { useCartStore } from '../store/cartStore';
-import { onMounted } from "vue";
+import { onMounted, ref, computed } from "vue";
+import { useRouter } from 'vue-router';
+
+// Stores
 const productStore = useProductStore();
 const cartStore = useCartStore();
+
+// Hero Image
+const heroImage = ref('src/assets/hero.jpeg');
+
+// Filtering
+const activeFilter = ref('All');
+const filteredItems = computed(() => {
+  if (activeFilter.value === 'All') return productStore.sections.bestSellers;
+  return productStore.sections.bestSellers.filter(
+    (item) => item.category === activeFilter.value
+  );
+});
+
+// Load Products
 onMounted(() => {
   productStore.loadAllProducts();
-})
+});
 
-function handleCartAdd(item) {
-  if (!item || !item.id || !item.size || !item.color) {
+// Cart Handling
+function handleCartAdd(payload) {
+  if (!payload || !payload.id || !payload.size || !payload.color) {
     alert("Invalid cart item. Missing details.");
     return;
   }
-  const payload = {
-    id: item.id,
-    size: item.size,
-    color: item.color,
-  };
-  console.log("home payload:", payload, item.id);
-
   try {
-    cartStore.addProductToCart(item.id, payload);
+    cartStore.addProductToCart(payload.id, payload);
+    alert(`${payload.size} ${payload.color} item added to cart!`);
   } catch (err) {
     console.error("Cart store error:", err);
+    alert("Failed to add item to cart. Please try again.");
   }
-
-  
 }
 
+// Router for Navigation
+const router = useRouter();
+const shopNow = () => {
+  router.push('/explore');
+};
 </script>
