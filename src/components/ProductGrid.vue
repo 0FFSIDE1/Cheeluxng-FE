@@ -9,6 +9,16 @@
       <img :src="product.cover_image" :alt="product.name" class="w-full h-56 object-cover rounded-md mb-2" />
       <h3 class="text-lg font-semibold text-gray-800">{{ product.name }}</h3>
       <p class="text-gray-600">${{ product.price }}</p>
+      <!-- <ProductOptionsSelector
+              v-if="product.available_options"
+              :availableOptions="product.available_options"
+              :selectedSize="selectedSize"
+              :selectedColor="selectedColor"
+              :productId="secondaryProduct.id"
+              @update:size="handleSizeChange"
+              @update:color="handleColorChange"
+      /> -->
+
       <!-- Product Options and add to cart logic here -->
       <div class="text-center">
         <button @click="addToCart(index)" class="bg-white text-black rounded-lg mt-4 w-12 h-10 hover:bg-gray-900 hover:text-white">
@@ -23,9 +33,13 @@
 import { computed, ref } from 'vue';
 import { useProductStore } from '../store/productStore';
 import { useCartStore } from '../store/cartStore';
+import ProductOptionsSelector from './productOptions.vue'
 
 export default {
   name: 'ProductGrid',
+  components: {
+    ProductOptionsSelector,
+  },
   props: {
     selectedFilters: {
       type: Object,
