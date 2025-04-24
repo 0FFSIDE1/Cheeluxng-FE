@@ -6,7 +6,12 @@ export default {
     "./**/*.liquid"
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        montserrat: ['Montserrat', 'sans-serif'],
+        lato: ['Lato', 'sans-serif'],
+      },
+    },
     // screens: {
     //   'xs': '400px',         // custom breakpoint
     //   'sm': '896px',
