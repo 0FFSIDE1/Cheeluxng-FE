@@ -1,3 +1,4 @@
+<!-- src/views/Home.vue -->
 <template>
   <!-- HERO SECTION -->
   <section
@@ -30,82 +31,86 @@
     </div>
   </section>
 
-<!-- NEW ARRIVALS SECTION -->
-<Slider title="NEW ARRIVALS ✨" details="Fresh styles are here! Explore our latest collection of activewear and loungewear, designed to keep you comfortable and stylish. From gym days to chill days, these new arrivals are perfect for every mood. Don’t wait—grab your favorites before they’re gone!
-" :items="productStore.sections.newArrivals" :visibleItems="2" @add-to-cart="handleCartAdd"/>
+  <!-- NEW ARRIVALS SECTION -->
+  <Slider
+    title="NEW ARRIVALS ✨"
+    details="Fresh styles are here! Explore our latest collection of activewear and loungewear, designed to keep you comfortable and stylish. From gym days to chill days, these new arrivals are perfect for every mood. Don’t wait—grab your favorites before they’re gone!"
+    :items="productStore.sections.newArrivals"
+    :visibleItems="2"
+    @add-to-cart="handleCartAdd"
+  />
 
-  
+  <!-- POPULAR SELLING SECTION -->
+  <section class="w-full bg-gradient-to-b from-slate-200 to-slate-100 py-8 @container">
+    <!-- Loading State -->
+    <div v-if="productStore.loading" class="flex justify-center items-center h-32">
+      <div class="animate-spin rounded-full h-10 w-10 border-t-4 border-b-4 border-primary"></div>
+    </div>
 
+    <!-- Empty State -->
+    <div v-else-if="!filteredItems.length" class="prose text-center text-gray-600 mx-auto">
+      <h2 class="text-xl font-semibold">No Best Sellers Available</h2>
+      <p>Check back soon for our top picks!</p>
+    </div>
 
-<!-- POPULAR SELLING SECTION -->
-<section class="w-full bg-gradient-to-b from-slate-200 to-slate-100 py-8 @container">
-      <!-- Loading State -->
-      <div v-if="productStore.loading" class="flex justify-center items-center h-32">
-        <div class="animate-spin rounded-full h-10 w-10 border-t-4 border-b-4 border-primary"></div>
-      </div>
-
-      <!-- Empty State -->
-      <div v-else-if="!filteredItems.length" class="prose text-center text-gray-600 mx-auto">
-        <h2 class="text-xl font-semibold">No Best Sellers Available</h2>
-        <p>Check back soon for our top picks!</p>
-      </div>
-
-      <!-- Content -->
-      <div v-else class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-        <div class="flex flex-col gap-4">
-          <!-- Centered Title -->
-          <div class="w-full flex justify-center">
-            <h2
-              class="prose prose-lg text-gray-900 text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold leading-snug animate-fade-in"
-            >
-              POPULAR SELLING
-            </h2>
-          </div>
-          <!-- Filter Buttons -->
-          <div class="flex flex-wrap gap-4 justify-center">
-            <button
-              class="btn btn-sm rounded-full transition-all"
-              :class="{ 'btn-primary': activeFilter === 'All', 'btn-ghost hover:bg-gray-200': activeFilter !== 'All' }"
-              @click="activeFilter = 'All'"
-              aria-label="Show all products"
-              :aria-pressed="activeFilter === 'All'"
-            >
-              All
-            </button>
-            <button
-              class="btn btn-sm rounded-full transition-all"
-              :class="{ 'btn-primary': activeFilter === 'Women', 'btn-ghost hover:bg-gray-200': activeFilter !== 'Women' }"
-              @click="activeFilter = 'Women'"
-              aria-label="Filter by Women's products"
-              :aria-pressed="activeFilter === 'Women'"
-            >
-              Women
-            </button>
-            <button
-              class="btn btn-sm rounded-full transition-all"
-              :class="{ 'btn-primary': activeFilter === 'Men', 'btn-ghost hover:bg-gray-200': activeFilter !== 'Men' }"
-              @click="activeFilter = 'Men'"
-              aria-label="Filter by Men's products"
-              :aria-pressed="activeFilter === 'Men'"
-            >
-              Men
-            </button>
-          </div>
+    <!-- Content -->
+    <div v-else class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+      <div class="flex flex-col gap-4">
+        <!-- Centered Title -->
+        <div class="w-full flex justify-center">
+          <h2
+            class="prose prose-lg text-gray-900 text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold leading-snug animate-fade-in"
+          >
+            POPULAR SELLING
+          </h2>
         </div>
-        <!-- Slider -->
-        <div class="mt-4">
-          <Slider title="None" :items="filteredItems" :visibleItems="4" @add-to-cart="handleCartAdd" />
+        <!-- Filter Buttons -->
+        <div class="flex flex-wrap gap-4 justify-center">
+          <button
+            class="btn btn-sm rounded-full transition-all"
+            :class="{ 'btn-primary': activeFilter === 'All', 'btn-ghost hover:bg-gray-200': activeFilter !== 'All' }"
+            @click="activeFilter = 'All'"
+            aria-label="Show all products"
+            :aria-pressed="activeFilter === 'All'"
+          >
+            All
+          </button>
+          <button
+            class="btn btn-sm rounded-full transition-all"
+            :class="{ 'btn-primary': activeFilter === 'Women', 'btn-ghost hover:bg-gray-200': activeFilter !== 'Women' }"
+            @click="activeFilter = 'Women'"
+            aria-label="Filter by Women's products"
+            :aria-pressed="activeFilter === 'Women'"
+          >
+            Women
+          </button>
+          <button
+            class="btn btn-sm rounded-full transition-all"
+            :class="{ 'btn-primary': activeFilter === 'Men', 'btn-ghost hover:bg-gray-200': activeFilter !== 'Men' }"
+            @click="activeFilter = 'Men'"
+            aria-label="Filter by Men's products"
+            :aria-pressed="activeFilter === 'Men'"
+          >
+            Men
+          </button>
         </div>
       </div>
-    </section>
+      <!-- Slider -->
+      <div class="mt-4">
+        <Slider title="None" :items="filteredItems" :visibleItems="4" @add-to-cart="handleCartAdd" />
+      </div>
+    </div>
+  </section>
 
-  
   <!-- FAST SELLING SECTION -->
-
-<ProductShowcase title="FAST SELLING" :mainProduct="productStore.sections.bestSellers[0]" :secondaryProduct="productStore.sections.bestSellers[0]" />
+  <ProductShowcase
+    title="FAST SELLING"
+    :mainProduct="productStore.sections.bestSellers[0]"
+    :secondaryProduct="productStore.sections.bestSellers[0]"
+    @add-to-cart="handleCartAdd"
+  />
 
   <!-- ACCESSORIES SECTION -->
-  <!-- accessories section -->
   <section class="bg-pink-100 py-14">
     <div class="h-full mx-4 md:mx-12 flex flex-col p-8">
       <h2 class="text-gray-800 text-balance flex justify-center text-3xl md:text-3xl mb-8">ACCESSORIES</h2>
@@ -113,19 +118,15 @@
       <div class="accessoriesdiv grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 mt-6">
         <!-- Accessory Card -->
         <div class="relative group bg-slate-100 rounded-3xl shadow-xl shadow-orange-200 overflow-hidden">
-          <img src="/images/product/0S1A2589-Edit.jpeg" class="object-cover h-full w-full rounded-3xl transition-transform duration-500 group-hover:scale-105" alt="">
-
-          <!-- Overlay -->
+          <img src="/images/product/0S1A2589-Edit.jpeg" class="object-cover h-full w-full rounded-3xl transition-transform duration-500 group-hover:scale-105" alt="Classic Hat">
           <div class="absolute inset-0 bg-black bg-opacity-60 flex flex-col items-center justify-center text-white text-center p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl">
             <p class="text-lg font-semibold mb-2">Classic Hats</p>
             <button class="mt-2 px-4 py-2 bg-white text-black rounded-full hover:bg-orange-300 transition">View</button>
           </div>
         </div>
 
-        <!-- Duplicate for other products -->
         <div class="relative group bg-slate-100 rounded-3xl shadow-xl shadow-orange-200 overflow-hidden">
-          <img src="/images/product/0S1A2556-Edit.jpeg" class="object-cover h-full w-full rounded-3xl transition-transform duration-500 group-hover:scale-105" alt="">
-
+          <img src="/images/product/0S1A2556-Edit.jpeg" class="object-cover h-full w-full rounded-3xl transition-transform duration-500 group-hover:scale-105" alt="Stylish Bag">
           <div class="absolute inset-0 bg-black bg-opacity-60 flex flex-col items-center justify-center text-white text-center p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl">
             <p class="text-lg font-semibold mb-2">Stylish Bags and Others</p>
             <button class="mt-2 px-4 py-2 bg-white text-black rounded-full hover:bg-orange-300 transition">View</button>
@@ -133,8 +134,7 @@
         </div>
 
         <div class="relative group bg-slate-100 rounded-3xl shadow-xl shadow-orange-200 overflow-hidden">
-          <img src="/images/product/0S1A2650-Edit.jpeg" class="object-cover h-full w-full rounded-3xl transition-transform duration-500 group-hover:scale-105" alt="">
-
+          <img src="/images/product/0S1A2650-Edit.jpeg" class="object-cover h-full w-full rounded-3xl transition-transform duration-500 group-hover:scale-105" alt="Bottle">
           <div class="absolute inset-0 bg-black bg-opacity-60 flex flex-col items-center justify-center text-white text-center p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl">
             <p class="text-lg font-semibold mb-2">Bottles</p>
             <button class="mt-2 px-4 py-2 bg-white text-black rounded-full hover:bg-orange-300 transition">View</button>
@@ -144,35 +144,77 @@
     </div>
   </section>
 
-
-
   <!-- CHICKY SETS SECTION -->
   <section class="bg-fuchsia-100 py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-12">
       <h2 class="text-3xl font-semibold text-center mb-4 text-gray-950">CHICKY SETS 🌟</h2>
       <p class="text-lg mb-10 text-gray-700 text-balance text-center">
-        From high-performance workouts to relaxing weekends at home, CHEELUXNG’s women's activewear collection blends comfort, versatility, and modern style. Whether you're hitting the gym, running errands, or lounging in style, our trend-forward designs empower you to look confident and feel your best—anywhere, anytime.</p>
+        From high-performance workouts to relaxing weekends at home, CHEELUXNG’s women’s activewear collection blends comfort, versatility, and modern style. Whether you’re hitting the gym, running errands, or lounging in style, our trend-forward designs empower you to look confident and feel your best—anywhere, anytime.
+      </p>
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-        <template v-for="i in productStore.categories.womenSet" :key="i">
+        <template v-for="item in productStore.categories.womenSet" :key="item.id">
           <div class="bg-slate-200 rounded-3xl shadow-md p-2 flex flex-col items-center">
-            <img :src="i.cover_image" class="object-cover w-full h-48 rounded-xl" alt="">
+            <img
+              :src="item.cover_image"
+              :alt="item.name"
+              class="object-cover w-full h-48 rounded-xl"
+              loading="lazy"
+            />
             <div class="bg-pink-200 rounded p-4 mt-4 w-full text-center">
-              <h3 class="text-lg font-semibold">{{ i.name }}</h3>
-              <p>$ {{ i.price }}</p>
-              <AddToCartBtn
-                  :is-adding-to-cart="isAddingToCart"
-                  :is-disabled="!canAddToCart(index)"
-                  :payload="getCartPayload(index)"
-                  @add-to-cart="handleAddToCart"
+              <h3 class="text-lg font-semibold">{{ item.name }}</h3>
+              <p>₦{{ item.price }}</p>
+              <!-- Product Options Selector -->
+              <ProductOptionsSelector
+                v-if="item.available_options"
+                :available-options="item.available_options"
+                :selected-size="selectedSizes[item.id]"
+                :selected-color="selectedColors[item.id]"
+                :product-id="item.id"
+                @update:size="selectSize(item.id, $event)"
+                @update:color="selectColor(item.id, $event)"
+                class="mt-3"
+              />
+              <!-- Error Message -->
+              <p
+                v-if="errors[item.id] && !canAddToCart(item.id)"
+                class="text-red-600 text-xs mt-2"
+                role="alert"
+                :id="`error-${item.id}`"
+              >
+                Please select a size and color.
+              </p>
+              <!-- Add to Cart Button -->
+              <div class="relative group mt-3">
+                <AddToCartBtn
+                  :is-adding-to-cart="isAddingToCart[item.id] || false"
+                  :is-disabled="!canAddToCart(item.id)"
+                  :payload="getCartPayload(item.id)"
+                  @add-to-cart="handleCartAdd"
+                  class="w-full"
+                  :aria-describedby="`error-${item.id}`"
                 />
+                <span
+                  v-if="!canAddToCart(item.id)"
+                  class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2"
+                >
+                  Select size and color
+                </span>
+              </div>
             </div>
           </div>
         </template>
       </div>
       <div class="flex justify-center mt-10">
-        <button class="bg-slate-950 text-white px-6 py-3 rounded-full hover:bg-white hover:text-slate-950 transition shadow-md">VIEW MORE</button>
+        <button
+          class="bg-slate-950 text-white px-6 py-3 rounded-full hover:bg-white hover:text-slate-950 transition shadow-md"
+          @click="$router.push('/collections/womens-sets')"
+          aria-label="View more women’s sets"
+        >
+          VIEW MORE
+        </button>
       </div>
     </div>
+    
   </section>
 
   <!-- LADIES COMFORT SECTION -->
@@ -183,7 +225,7 @@
       <div class="flex flex-wrap justify-center gap-6">
         <template v-for="i in 4" :key="i">
           <div :class="['relative group bg-pink-200 shadow-md p-2 overflow-hidden transition', i % 2 === 0 ? 'rounded-3xl h-96' : 'rounded-full h-80']" style="width: 16rem;">
-            <img :src="`/images/product/image0000${i}.jpeg`" class="object-cover w-full h-full rounded-inherit transition-transform duration-500 group-hover:scale-105" alt="">
+            <img :src="`/images/product/image0000${i}.jpeg`" class="object-cover w-full h-full rounded-inherit transition-transform duration-500 group-hover:scale-105" alt="Ladies Comfort Product">
             <div class="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-inherit p-4">
               <div class="text-center">
                 <button class="px-4 py-2 bg-white text-black rounded-full hover:bg-pink-300 transition">View</button>
@@ -222,15 +264,16 @@
     </div>
   </section>
 </template>
+
 <script setup>
 import Slider from "../components/Slider.vue";
 import ProductShowcase from "../components/ProductShowcase.vue";
+import AddToCartBtn from "../components/AddToCartBtn.vue";
+import ProductOptionsSelector from "../components/productOptions.vue";
 import { useProductStore } from '../store/productStore';
 import { useCartStore } from '../store/cartStore';
 import { onMounted, ref, computed } from "vue";
 import { useRouter } from 'vue-router';
-import AddToCartBtn from "../components/AddToCartBtn.vue";
-import ProductOptionsSelector from "../components/productOptions.vue"
 
 // Stores
 const productStore = useProductStore();
@@ -239,7 +282,7 @@ const cartStore = useCartStore();
 // Hero Image
 const heroImage = ref('src/assets/hero.jpeg');
 
-// Filtering
+// Filtering for Popular Selling
 const activeFilter = ref('All');
 const filteredItems = computed(() => {
   if (activeFilter.value === 'All') return productStore.sections.bestSellers;
@@ -252,32 +295,104 @@ const filteredItems = computed(() => {
 const mainProduct = ref(null);
 const secondaryProduct = ref(null);
 
+// CHICKY SETS Data
+const selectedSizes = ref({});
+const selectedColors = ref({});
+const isAddingToCart = ref({});
+const errors = ref({});
+
+
 // Load Products
 onMounted(() => {
   productStore.loadAllProducts().then(() => {
-    console.log('Loaded bestSellers:', productStore.sections.bestSellers);
+    console.log('Home: Loaded bestSellers', productStore.sections.bestSellers);
     if (productStore.sections.bestSellers.length) {
       mainProduct.value = productStore.sections.bestSellers[0];
       secondaryProduct.value = productStore.sections.bestSellers[1] || null;
+      console.log('Home: Assigned secondaryProduct', secondaryProduct.value);
     }
   });
 });
 
 // Cart Handling
 function handleCartAdd(payload) {
-  console.log('Received add-to-cart payload:', payload);
+  console.log('Home: Received add-to-cart payload', payload);
   if (!payload || !payload.id || !payload.size || !payload.color) {
-    console.error('Invalid cart item:', payload);
-    alert("Invalid cart item. Missing details.");
+    console.error('Home: Invalid cart item', payload);
+    showToast.value = true;
+    toastMessage.value = 'Invalid cart item. Missing details.';
+    setTimeout(() => (showToast.value = false), 3000);
     return;
   }
   try {
     cartStore.addProductToCart(payload.id, payload);
-    alert(`${payload.size} ${payload.color} item added to cart!`);
+    // showToast.value = true;
+    // toastMessage.value = `${payload.size} ${payload.color} item added to cart!`;
+    // setTimeout(() => (showToast.value = false), 3000);
+    console.log('Home: Added to cart', payload);
   } catch (err) {
-    console.error("Cart store error:", err);
-    alert("Failed to add item to cart. Please try again.");
+    console.error('Home: Cart store error', err);
+    // showToast.value = true;
+    // toastMessage.value = 'Failed to add item to cart. Please try again.';
+    // setTimeout(() => (showToast.value = false), 3000);
   }
+}
+
+// CHICKY SETS Methods
+function selectSize(productId, { sizeIndex }) {
+  console.log('Home: Size selected for CHICKY SETS', { productId, sizeIndex });
+  selectedSizes.value[productId] = sizeIndex;
+  selectedColors.value[productId] = null; // Reset color
+  errors.value[productId] = false;
+}
+
+function selectColor(productId, { colorIndex }) {
+  console.log('Home: Color selected for CHICKY SETS', { productId, colorIndex });
+  selectedColors.value[productId] = colorIndex;
+  errors.value[productId] = false;
+}
+
+function canAddToCart(productId) {
+  const item = productStore.categories.womenSet.find((i) => i.id === productId);
+  if (!item || !item.available_options) {
+    console.log('Home: Cannot add to cart - missing item/options', { item });
+    return false;
+  }
+  const sizeIndex = selectedSizes.value[productId];
+  const colorIndex = selectedColors.value[productId];
+  if (sizeIndex == null || colorIndex == null) {
+    console.log('Home: Cannot add to cart - missing selections', { sizeIndex, colorIndex });
+    return false;
+  }
+  const size = item.available_options[sizeIndex];
+  const color = size?.colors?.[colorIndex];
+  const isValid = size && color && color.instock;
+  console.log('Home: Can add to cart', isValid, { item, size, color });
+  return isValid;
+}
+
+function getCartPayload(productId) {
+  const item = productStore.categories.womenSet.find((i) => i.id === productId);
+  const payload = {
+    id: item?.id || '',
+    size: '',
+    color: '',
+  };
+  if (!item || !item.available_options) {
+    console.log('Home: Invalid payload - missing item/options', { item });
+    return payload;
+  }
+  const sizeIndex = selectedSizes.value[productId];
+  if (sizeIndex != null && item.available_options[sizeIndex]) {
+    const size = item.available_options[sizeIndex];
+    payload.size = size.size || '';
+    const colorIndex = selectedColors.value[productId];
+    if (colorIndex != null && size.colors && size.colors[colorIndex]) {
+      payload.color = size.colors[colorIndex].name || '';
+    }
+  }
+  console.log('Home: Generated payload for CHICKY SETS', payload);
+  return payload;
 }
 
 // Router for Navigation
