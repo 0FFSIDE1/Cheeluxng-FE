@@ -73,14 +73,16 @@
   onMounted(async () => {
     try {
       const response = await api.get('reviews'); // Replace with your actual endpoint
-      reviews.value = response.data.reviews.map((r) => ({
+      console.log(response)
+      reviews.value = response.data.map((r) => ({
         id: r.id,
-        name: r.customer_name,
-        product: r.product_title,
+        name: r.name,
+        product: r.product,
         rating: r.rating,
-        remarks: r.comment,
+        remarks: r.remarks,
       }));
     } catch (error) {
+        console.error('Failed to fetch customer reviews:', error)
       toast.error('Failed to fetch customer reviews:', error);
     }
   });
