@@ -80,8 +80,11 @@
 import ProductOptionsSelector from './productOptions.vue';
 import AddToCartBtn from './AddToCartBtn.vue';
 import { useCartStore } from '../store/cartStore';
+import { useToast } from 'vue-toastification';
+
 
 const cartStore = useCartStore();
+const toast = useToast();
 export default {
   name: 'ProductShowcase',
   components: {
@@ -117,38 +120,27 @@ export default {
         !!this.secondaryProduct.photo_2 &&
         !!this.secondaryProduct.id &&
         !!this.secondaryProduct.available_options;
-      console.log('Showcase: hasSecondary', isValid, this.secondaryProduct);
       return isValid;
     },
     canAddToCart() {
       if (!this.secondaryProduct || !this.secondaryProduct.available_options) {
-        console.log('Showcase: Cannot add to cart - missing product/options', {
-          secondaryProduct: this.secondaryProduct,
-        });
         return false;
       }
       if (this.selectedSize == null || this.selectedColor == null) {
-        console.log('Showcase: Cannot add to cart - missing selections', {
-          selectedSize: this.selectedSize,
-          selectedColor: this.selectedColor,
-        });
         return false;
       }
       const size = this.secondaryProduct.available_options[this.selectedSize];
       const color = size?.colors?.[this.selectedColor];
       const isValid = size && color && color.instock;
-      console.log('Showcase: Can add to cart', isValid, { size, color });
       return isValid;
     },
   },
   methods: {
     handleSizeChange({ sizeIndex }) {
-      console.log('Showcase: Size changed', { sizeIndex });
       this.selectedSize = sizeIndex;
       this.selectedColor = null; // Reset color on size change
     },
     handleColorChange({ colorIndex }) {
-      console.log('Showcase: Color changed', { colorIndex });
       this.selectedColor = colorIndex;
     },
     getCartPayload() {
@@ -156,11 +148,9 @@ export default {
         id: this.secondaryProduct?.id || '',
         size: '',
         color: '',
+        name: this.secondaryProduct.name
       };
       if (!this.secondaryProduct || !this.secondaryProduct.available_options) {
-        console.log('Showcase: Invalid payload - missing product/options', {
-          secondaryProduct: this.secondaryProduct,
-        });
         return payload;
       }
       if (this.selectedSize != null) {
@@ -171,33 +161,44 @@ export default {
           payload.color = color?.name || '';
         }
       }
-      console.log('Showcase: Generated payload', payload);
       return payload;
     },
     handleAddToCart(payload) {
-      console.log('Showcase: handleAddToCart called with payload', payload);
       try {
         this.isAddingToCart = true;
         if (!payload || !payload.id || !payload.size || !payload.color) {
-          console.error('Showcase: Invalid cart payload', payload);
-          alert('Please select a valid size and color.');
+          toast.error('Please select a valid size and color.', {
+                timeout: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+            });
           return;
         }
         if (!this.canAddToCart) {
-          console.error('Showcase: Cannot add to cart - invalid state', {
-            canAddToCart: this.canAddToCart,
-          });
-          alert('Selected item is not available.');
+          toast.error('Selected item is not available.', {
+                timeout: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+            })
           return;
         }
-        console.log('Showcase: Emitting add-to-cart', payload);
         cartStore.addProductToCart(payload.id, payload);
-        console.log('Showcase: add-to-cart emitted');
+        toast.success(`${this.secondaryProduct.name} added to cart!`, {
+                timeout: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+            });
       } catch (error) {
-        console.error('Showcase: Error in handleAddToCart', error);
-        alert('Failed to add to cart. Please try again.');
+        toast.error('Failed to add to cart. Please try again.', {
+                timeout: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+            })
       } finally {
-        console.log('Showcase: Resetting isAddingToCart');
         this.isAddingToCart = false;
       }
     },
