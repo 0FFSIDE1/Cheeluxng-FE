@@ -147,6 +147,8 @@
 
 <script>
 import AddToCartBtn from './AddToCartBtn.vue';
+import { useToast } from 'vue-toastification';
+const toast = useToast();
 
 export default {
   components: {
@@ -194,6 +196,12 @@ export default {
         this.currentIndex = Math.max(this.currentIndex - 1, 0);
       } catch (error) {
         console.error('Error in scrollBack:', error);
+        toast.error('Error in scrollBack:', error, {
+                timeout: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+            })
       }
     },
     scrollForward() {
@@ -250,14 +258,12 @@ export default {
       const sizeIndex = this.selectedSizes[index];
       const colorIndex = this.selectedColors[index];
       if (sizeIndex == null || colorIndex == null) {
-        console.log('Slider: Cannot add to cart', { index, sizeIndex, colorIndex });
         return false;
       }
       const item = this.items[index];
       const size = item?.available_options?.[sizeIndex];
       const color = size?.colors?.[colorIndex];
       const isValid = size && color && color.instock;
-      console.log('Slider: Can add to cart', isValid, { item, size, color });
       return isValid;
     },
     getCartPayload(index) {
@@ -270,21 +276,29 @@ export default {
         id: item.id,
         size: size?.size || '',
         color: color?.name || '',
+        name: item.name,
       };
     },
     handleAddToCart(payload) {
       try {
         this.isAddingToCart = true;
         if (!payload.id || !payload.size || !payload.color) {
-          console.error('Slider: Invalid cart payload', payload);
-          alert('Please select a valid size and color.');
+          toast.error('Please select a valid size and color.', {
+                timeout: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+            });
           return;
         }
-        console.log('Slider: Emitting add-to-cart', payload);
         this.$emit('add-to-cart', payload);
       } catch (error) {
-        console.error('Slider: Error in handleAddToCart', error);
-        alert('Failed to add to cart. Please try again.');
+        toast.error('Failed to add to cart, please try again!', {
+                timeout: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+            });
       } finally {
         setTimeout(() => {
           this.isAddingToCart = false;
