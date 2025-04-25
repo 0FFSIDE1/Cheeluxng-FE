@@ -9,14 +9,14 @@
     <div class="absolute inset-0 bg-gradient-to-t from-white/40 to-transparent"></div>
     
     <!-- Content -->
-    <div class="absolute inset-0 flex justify-center items-center text-white text-center z-30 px-4 sm:px-6 md:px-8">
+    <div class="absolute inset-0 flex justify-center items-center text-gray-50 text-center z-30 px-4 sm:px-6 md:px-8">
       <div class="@container flex flex-col justify-center items-center w-full max-w-4xl bg-gray-800/20 rounded-full p-6 sm:p-8 md:p-12 shadow-2xl">
         <h2
           class="prose prose-invert text-base sm:text-lg md:text-xl lg:text-2xl leading-relaxed drop-shadow-md text-balance px-2 sm:px-4"
         >
           Discover high-performance gym and sportswear designed to fuel your passion and elevate your workouts. Our gear is crafted for comfort, durability, and style.
         </h2>
-        <p class="mt-4 sm:mt-6 text-base sm:text-lg md:text-xl lg:text-2xl drop-shadow-sm font-semibold">
+        <p class="mt-4 text-gray-50 sm:mt-6 text-base sm:text-lg md:text-xl lg:text-2xl drop-shadow-sm font-semibold">
           Gear Up, Push Limits, Conquer Goals.
         </p>
         <button
@@ -38,6 +38,7 @@
     :items="productStore.sections.newArrivals"
     :visibleItems="2"
     @add-to-cart="handleCartAdd"
+    to="/explore"
   />
 
   <!-- POPULAR SELLING SECTION -->
@@ -68,7 +69,7 @@
         <div class="flex flex-wrap gap-4 justify-center">
           <button
             class="btn btn-sm rounded-full transition-all"
-            :class="{ 'btn-primary': activeFilter === 'All', 'btn-ghost hover:bg-gray-200': activeFilter !== 'All' }"
+            :class="{ 'btn-dark': activeFilter === 'All', 'btn-ghost hover:bg-gray-200': activeFilter !== 'All' }"
             @click="activeFilter = 'All'"
             aria-label="Show all products"
             :aria-pressed="activeFilter === 'All'"
@@ -77,7 +78,7 @@
           </button>
           <button
             class="btn btn-sm rounded-full transition-all"
-            :class="{ 'btn-primary': activeFilter === 'Women', 'btn-ghost hover:bg-gray-200': activeFilter !== 'Women' }"
+            :class="{ 'btn-secondary': activeFilter === 'Women', 'btn-ghost hover:bg-gray-200': activeFilter !== 'Women' }"
             @click="activeFilter = 'Women'"
             aria-label="Filter by Women's products"
             :aria-pressed="activeFilter === 'Women'"
@@ -97,7 +98,7 @@
       </div>
       <!-- Slider -->
       <div class="mt-4">
-        <Slider title="None" :items="filteredItems" :visibleItems="4" @add-to-cart="handleCartAdd" />
+        <Slider title="None" :items="filteredItems" :visibleItems="4" @add-to-cart="handleCartAdd" to="/explore"/>
       </div>
     </div>
   </section>
@@ -110,34 +111,33 @@
     @add-to-cart="handleCartAdd"
   />
 
-  <!-- ACCESSORIES SECTION -->
-  <section class="bg-pink-100 py-14">
+   <!-- ACCESSORIES SECTION -->
+   <section class="bg-pink-100 py-14">
     <div class="h-full mx-4 md:mx-12 flex flex-col p-8">
       <h2 class="text-gray-800 text-balance flex justify-center text-3xl md:text-3xl mb-8">ACCESSORIES</h2>
-
       <div class="accessoriesdiv grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 mt-6">
-        <!-- Accessory Card -->
-        <div class="relative group bg-slate-100 rounded-3xl shadow-xl shadow-orange-200 overflow-hidden">
-          <img src="/images/product/0S1A2589-Edit.jpeg" class="object-cover h-full w-full rounded-3xl transition-transform duration-500 group-hover:scale-105" alt="Classic Hat">
-          <div class="absolute inset-0 bg-black bg-opacity-60 flex flex-col items-center justify-center text-white text-center p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl">
-            <p class="text-lg font-semibold mb-2">Classic Hats</p>
-            <button class="mt-2 px-4 py-2 bg-white text-black rounded-full hover:bg-orange-300 transition">View</button>
-          </div>
-        </div>
-
-        <div class="relative group bg-slate-100 rounded-3xl shadow-xl shadow-orange-200 overflow-hidden">
-          <img src="/images/product/0S1A2556-Edit.jpeg" class="object-cover h-full w-full rounded-3xl transition-transform duration-500 group-hover:scale-105" alt="Stylish Bag">
-          <div class="absolute inset-0 bg-black bg-opacity-60 flex flex-col items-center justify-center text-white text-center p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl">
-            <p class="text-lg font-semibold mb-2">Stylish Bags and Others</p>
-            <button class="mt-2 px-4 py-2 bg-white text-black rounded-full hover:bg-orange-300 transition">View</button>
-          </div>
-        </div>
-
-        <div class="relative group bg-slate-100 rounded-3xl shadow-xl shadow-orange-200 overflow-hidden">
-          <img src="/images/product/0S1A2650-Edit.jpeg" class="object-cover h-full w-full rounded-3xl transition-transform duration-500 group-hover:scale-105" alt="Bottle">
-          <div class="absolute inset-0 bg-black bg-opacity-60 flex flex-col items-center justify-center text-white text-center p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl">
-            <p class="text-lg font-semibold mb-2">Bottles</p>
-            <button class="mt-2 px-4 py-2 bg-white text-black rounded-full hover:bg-orange-300 transition">View</button>
+        <div
+          v-for="accessory in accessories"
+          :key="accessory.category"
+          class="relative group bg-slate-100 rounded-3xl shadow-xl shadow-orange-200 overflow-hidden"
+        >
+          <img
+            :src="accessory.image"
+            :alt="accessory.name"
+            class="object-cover h-full w-full rounded-3xl transition-transform duration-500 group-hover:scale-105"
+            loading="lazy"
+          />
+          <div
+            class="absolute inset-0 bg-black bg-opacity-60 flex flex-col items-center justify-center text-white text-center p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl"
+          >
+            <p class="text-lg text-gray-50 font-semibold mb-2">{{ accessory.name }}</p>
+            <button
+              class="cartBtn"
+              @click="navigateToCategory(accessory.category)"
+              :aria-label="`View ${accessory.category} category`"
+            >
+              View
+            </button>
           </div>
         </div>
       </div>
@@ -208,6 +208,8 @@
     </div>
     
   </section>
+   <!-- NEWSLETTER SECTION -->
+   <NewsletterSubscribe/>
 
   <!-- LADIES COMFORT SECTION -->
   <section class="p-10 bg-gradient-to-r from-pink-50 to-gray-300">
@@ -235,26 +237,99 @@
   <!-- WOMEN SECTION -->
   <section class="bg-gradient-to-r from-rose-100 to-rose-200 py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-12">
-      <h2 class="text-3xl font-semibold text-gray-900 mb-4">POPULAR LADIES SETS</h2>
-      <div class="flex gap-4 mb-6">
-        <button class="bg-slate-950 text-white px-4 py-2 rounded-full shadow-md">SHORTS</button>
-        <button class="bg-white text-slate-950 px-4 py-2 rounded-full shadow-md hover:bg-slate-950 hover:text-white">SETS</button>
+      <div>
+        <!-- Title -->
+        <h2 class="text-3xl font-semibold text-gray-900 mb-4">POPULAR LADIES</h2>
+
+        <!-- Filter Buttons -->
+        <div class="flex gap-4 mb-6">
+          <button
+            class="px-4 py-2 rounded-full shadow-md transition-all"
+            :class="{
+              'bg-slate-950 text-white': WomenactiveFilter === 'Shorts',
+              'bg-white text-slate-950 hover:bg-slate-950 hover:text-white': WomenactiveFilter !== 'Shorts'
+            }"
+            @click="WomenactiveFilter = 'Shorts'"
+            aria-label="Filter by Shorts"
+            :aria-pressed="WomenactiveFilter === 'Shorts'"
+          >
+            SHORTS
+          </button>
+
+          <button
+            class="px-4 py-2 rounded-full shadow-md transition-all"
+            :class="{
+              'bg-slate-950 text-white': WomenactiveFilter === 'Sets',
+              'bg-white text-slate-950 hover:bg-slate-950 hover:text-white': WomenactiveFilter !== 'Sets'
+            }"
+            @click="WomenactiveFilter = 'Sets'"
+            aria-label="Filter by Sets"
+            :aria-pressed="WomenactiveFilter === 'Sets'"
+          >
+            SETS
+          </button>
+        </div>
       </div>
-      <Slider :items="productStore.categories.women" :visibleItems="5" @add-to-cart="handleCartAdd"/>
+
+      <!-- Filtered Products Slider -->
+      <Slider
+        :items="filteredProduct"
+        :visibleItems="5"
+        @add-to-cart="handleCartAdd"
+        to="/women"
+      />
     </div>
   </section>
 
   <!-- MEN SECTION -->
   <section class="bg-gradient-to-r from-gray-300 to-blue-100 py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-12">
-      <h2 class="text-3xl font-semibold text-gray-900 mb-4">POPULAR MEN</h2>
-      <div class="flex gap-4 mb-6">
-        <button class="bg-slate-950 text-white px-4 py-2 rounded-full shadow-md">SHORTS</button>
-        <button class="bg-white text-slate-950 px-4 py-2 rounded-full shadow-md hover:bg-slate-950 hover:text-white">SETS</button>
+      <div>
+        <!-- Title -->
+        <h2 class="text-3xl font-semibold text-gray-900 mb-4">POPULAR MEN</h2>
+
+        <!-- Filter Buttons -->
+        <div class="flex gap-4 mb-6">
+          <button
+            class="px-4 py-2 rounded-full shadow-md transition-all"
+            :class="{
+              'bg-slate-950 text-white': menactiveFilter === 'Shorts',
+              'bg-white text-slate-950 hover:bg-slate-950 hover:text-white': menactiveFilter !== 'Shorts'
+            }"
+            @click="menactiveFilter = 'Shorts'"
+            aria-label="Filter by Shorts"
+            :aria-pressed="menactiveFilter === 'Shorts'"
+          >
+            SHORTS
+          </button>
+
+          <button
+            class="px-4 py-2 rounded-full shadow-md transition-all"
+            :class="{
+              'bg-slate-950 text-white': menactiveFilter === 'Sets',
+              'bg-white text-slate-950 hover:bg-slate-950 hover:text-white': menactiveFilter !== 'Sets'
+            }"
+            @click="menactiveFilter = 'Sets'"
+            aria-label="Filter by Sets"
+            :aria-pressed="menactiveFilter === 'Sets'"
+          >
+            SETS
+          </button>
+        </div>
       </div>
-      <Slider :items="productStore.categories.men" :visibleItems="5" @add-to-cart="handleCartAdd"/>
+
+      <!-- Filtered Products Slider -->
+      <Slider
+        :items="filteredMenProduct"
+        :visibleItems="5"
+        @add-to-cart="handleCartAdd"
+        to="/men"
+      />
     </div>
   </section>
+
+   <!-- CUSTOMER FEEDBACK SECTION -->
+   <CustomerFeedback />
 </template>
 
 <script setup>
@@ -267,6 +342,8 @@ import { useCartStore } from '../store/cartStore';
 import { onMounted, ref, computed } from "vue";
 import { useRouter } from 'vue-router';
 import { useToast } from 'vue-toastification';
+import NewsletterSubscribe from '../components/Subscribe.vue'
+import CustomerFeedback from "../components/CustomerReviews.vue";
 
 // Stores
 const productStore = useProductStore();
@@ -276,6 +353,32 @@ const toast = useToast();
 // Hero Image
 const heroImage = ref('src/assets/hero.jpeg');
 
+// Accessories Data
+const accessories = ref([
+  {
+    category: 'hats',
+    name: 'Classic Hats',
+    image: '/images/product/0S1A2589-Edit.jpeg',
+  },
+  {
+    category: 'bags',
+    name: 'Stylish Bags and Others',
+    image: '/images/product/0S1A2556-Edit.jpeg',
+  },
+  {
+    category: 'bottles',
+    name: 'Bottles',
+    image: '/images/product/0S1A2650-Edit.jpeg',
+  },
+]);
+
+// Navigation
+function navigateToCategory(category) {
+  console.log('Home: Navigating to explore with category', { category });
+  router.push({ path: '/explore', query: { category } });
+}
+
+
 // Filtering for Popular Selling
 const activeFilter = ref('All');
 const filteredItems = computed(() => {
@@ -284,6 +387,21 @@ const filteredItems = computed(() => {
     (item) => item.category === activeFilter.value
   );
 });
+
+const WomenactiveFilter = ref('Shorts');
+const filteredProduct = computed(() => {
+  return productStore.categories.women.filter((item)=> 
+    item.product_type === WomenactiveFilter.value
+  );
+});
+
+const menactiveFilter = ref('Sets')
+const filteredMenProduct = computed(() => {
+  return productStore.categories.men.filter((item) => 
+    item.product_type === menactiveFilter.value
+  );
+});
+
 
 // Product Showcase Data
 const mainProduct = ref(null);
@@ -385,6 +503,7 @@ function getCartPayload(productId) {
   }
   return payload;
 }
+
 
 // Router for Navigation
 const router = useRouter();
