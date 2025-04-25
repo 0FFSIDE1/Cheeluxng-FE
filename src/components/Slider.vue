@@ -134,8 +134,8 @@
       <!-- View More Button -->
       <div class="flex justify-center items-center mt-8">
         <button
-          class="btn btn-primary md:w-1/6 px-6 py-3 uppercase tracking-wide animate-pulse hover:scale-105 transition-transform"
-          @click="$router.push('/collections/sportswear')"
+          class="btn btn-secondary md:w-1/6 px-6 py-3 uppercase tracking-wide animate-pulse hover:scale-105 transition-transform"
+          @click="$router.push(to)"
           aria-label="View more products"
         >
           View More
@@ -157,6 +157,7 @@ export default {
   props: {
     title: String,
     details: String,
+    to: String,
     items: { type: Array, required: true },
     visibleItems: { type: Number, default: 2 },
   },
