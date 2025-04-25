@@ -174,15 +174,7 @@
                 @update:color="selectColor(item.id, $event)"
                 class="mt-3"
               />
-              <!-- Error Message -->
-              <p
-                v-if="errors[item.id] && !canAddToCart(item.id)"
-                class="text-red-600 text-xs mt-2"
-                role="alert"
-                :id="`error-${item.id}`"
-              >
-                Please select a size and color.
-              </p>
+          
               <!-- Add to Cart Button -->
               <div class="relative group mt-3">
                 <AddToCartBtn
@@ -274,10 +266,12 @@ import { useProductStore } from '../store/productStore';
 import { useCartStore } from '../store/cartStore';
 import { onMounted, ref, computed } from "vue";
 import { useRouter } from 'vue-router';
+import { useToast } from 'vue-toastification';
 
 // Stores
 const productStore = useProductStore();
 const cartStore = useCartStore();
+const toast = useToast();
 
 // Hero Image
 const heroImage = ref('src/assets/hero.jpeg');
@@ -299,75 +293,73 @@ const secondaryProduct = ref(null);
 const selectedSizes = ref({});
 const selectedColors = ref({});
 const isAddingToCart = ref({});
-const errors = ref({});
-
 
 // Load Products
 onMounted(() => {
   productStore.loadAllProducts().then(() => {
-    console.log('Home: Loaded bestSellers', productStore.sections.bestSellers);
     if (productStore.sections.bestSellers.length) {
       mainProduct.value = productStore.sections.bestSellers[0];
       secondaryProduct.value = productStore.sections.bestSellers[1] || null;
-      console.log('Home: Assigned secondaryProduct', secondaryProduct.value);
     }
   });
 });
 
 // Cart Handling
 function handleCartAdd(payload) {
-  console.log('Home: Received add-to-cart payload', payload);
   if (!payload || !payload.id || !payload.size || !payload.color) {
     console.error('Home: Invalid cart item', payload);
-    showToast.value = true;
-    toastMessage.value = 'Invalid cart item. Missing details.';
-    setTimeout(() => (showToast.value = false), 3000);
+    toast.error('Invalid cart item. Missing details.', {
+                timeout: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+            });
     return;
   }
   try {
     cartStore.addProductToCart(payload.id, payload);
-    // showToast.value = true;
-    // toastMessage.value = `${payload.size} ${payload.color} item added to cart!`;
-    // setTimeout(() => (showToast.value = false), 3000);
-    console.log('Home: Added to cart', payload);
+    toast.success(`${payload.name} ${payload.color} ${payload.size} added to cart `, {
+                timeout: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+            });
+    
   } catch (err) {
     console.error('Home: Cart store error', err);
-    // showToast.value = true;
-    // toastMessage.value = 'Failed to add item to cart. Please try again.';
-    // setTimeout(() => (showToast.value = false), 3000);
+    toast.error('Cart store error', err, {
+                timeout: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+            });
+    
   }
 }
 
 // CHICKY SETS Methods
 function selectSize(productId, { sizeIndex }) {
-  console.log('Home: Size selected for CHICKY SETS', { productId, sizeIndex });
   selectedSizes.value[productId] = sizeIndex;
   selectedColors.value[productId] = null; // Reset color
-  errors.value[productId] = false;
 }
 
 function selectColor(productId, { colorIndex }) {
-  console.log('Home: Color selected for CHICKY SETS', { productId, colorIndex });
   selectedColors.value[productId] = colorIndex;
-  errors.value[productId] = false;
 }
 
 function canAddToCart(productId) {
   const item = productStore.categories.womenSet.find((i) => i.id === productId);
   if (!item || !item.available_options) {
-    console.log('Home: Cannot add to cart - missing item/options', { item });
     return false;
   }
   const sizeIndex = selectedSizes.value[productId];
   const colorIndex = selectedColors.value[productId];
   if (sizeIndex == null || colorIndex == null) {
-    console.log('Home: Cannot add to cart - missing selections', { sizeIndex, colorIndex });
     return false;
   }
   const size = item.available_options[sizeIndex];
   const color = size?.colors?.[colorIndex];
   const isValid = size && color && color.instock;
-  console.log('Home: Can add to cart', isValid, { item, size, color });
   return isValid;
 }
 
@@ -377,9 +369,9 @@ function getCartPayload(productId) {
     id: item?.id || '',
     size: '',
     color: '',
+    name: item?.name || ''
   };
   if (!item || !item.available_options) {
-    console.log('Home: Invalid payload - missing item/options', { item });
     return payload;
   }
   const sizeIndex = selectedSizes.value[productId];
@@ -391,7 +383,6 @@ function getCartPayload(productId) {
       payload.color = size.colors[colorIndex].name || '';
     }
   }
-  console.log('Home: Generated payload for CHICKY SETS', payload);
   return payload;
 }
 
