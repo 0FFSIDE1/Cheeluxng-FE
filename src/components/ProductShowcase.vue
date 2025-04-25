@@ -66,8 +66,8 @@
       </div>
 
       <button
-        class="btn btn-primary btn-sm px-6 py-2 rounded-full uppercase tracking-wide animate-pulse hover:scale-105 transition-transform"
-        @click="$router.push('/collections/sportswear')"
+        class="btn btn-secondary btn-sm px-6 py-2 rounded-full uppercase tracking-wide animate-pulse hover:scale-105 transition-transform"
+        @click="$router.push('/explore')"
         aria-label="View sportswear collection"
       >
         View Collection
