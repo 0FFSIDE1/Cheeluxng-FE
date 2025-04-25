@@ -11,7 +11,7 @@
   h2 {
     @apply text-lg; /* Your existing h2 style, keeping text-lg */
   }
-  p, div, span, a, button, input, label {
+  p, a, button, input, label {
     @apply font-lato text-gray-950 dark:text-gray-900;
   }
 }
