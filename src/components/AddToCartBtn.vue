@@ -1,7 +1,7 @@
 <!-- src/components/AddToCartBtn.vue -->
 <template>
     <button
-      class="btn btn-primary px-6 py-2 rounded-full transition-all w-full"
+      class="btn btn-dark px-6 py-2 rounded-full transition-all w-full"
       :disabled="isAddingToCart || isDisabled"
       @click="handleAddToCart"
       aria-label="Add to cart"
@@ -12,6 +12,9 @@
   </template>
   
   <script>
+  import { useToast } from 'vue-toastification';
+
+  const toast = useToast();
   export default {
     name: 'AddToCartBtn',
     props: {
@@ -31,14 +34,17 @@
     },
     methods: {
       handleAddToCart() {
-        console.log('AddToCartBtn: Handling click with payload', this.payload);
+
         if (!this.payload || !this.payload.id || !this.payload.size || !this.payload.color) {
-          console.error('AddToCartBtn: Invalid payload', this.payload);
+            toast.error('Invalid Payload', {
+                timeout: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+            })
           return;
         }
-        console.log('AddToCartBtn: Emitting add-to-cart', this.payload);
         this.$emit('add-to-cart', this.payload);
-        console.log('AddToCartBtn: add-to-cart emitted');
       },
     },
   };
