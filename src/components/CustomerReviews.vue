@@ -1,6 +1,6 @@
 <!-- src/components/CustomerFeedback.vue -->
 <template>
-    <section class="bg-pink-100 py-12">
+    <section class="bg-gradient-to-r from-gray-400 to-blue-200 py-12">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-12">
         <h2 class="text-3xl text-gray-950 mb-8 text-center">What Our Customers Say about Us! 🌟</h2>
         <div
