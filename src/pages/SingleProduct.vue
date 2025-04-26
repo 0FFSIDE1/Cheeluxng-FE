@@ -10,7 +10,13 @@
         Back to Explore
       </router-link>
     </div>
-    <div v-else class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div v-else class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-6">
+    <button
+    @click="goBack"
+    class="inline-flex items-center my-4 px-4 py-2 bg-white text-gray-900 rounded-lg shadow hover:bg-gray-500 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-primary"
+     >
+    ← Back
+    </button>
       <!-- Product Details -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <!-- Image Gallery -->
@@ -114,6 +120,10 @@ const loading = ref(true);
 const error = ref('');
 const isAddingToCart = ref(false);
 const errorMessage = ref('');
+
+const goBack = () => {
+  router.back();
+};
 
 // Fetch product
 onMounted(async () => {
