@@ -1,7 +1,7 @@
 <!-- src/components/Footer.vue -->
 <template>
     <footer
-      class="bg-gradient-to-r from-slate-900 to-gray-800 text-gray-100 py-12"
+      class="bg-gradient-to-r from-black to-gray-700 text-gray-100 py-12"
       role="contentinfo"
       aria-label="Cheeluxng Footer"
     >

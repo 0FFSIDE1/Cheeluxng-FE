@@ -54,10 +54,7 @@
             :key="index"
             class="snap-start flex-shrink-0 @sm:w-1/2 @md:w-1/3 @lg:w-[calc(100%/visibleItems)]"
           >
-            <div
-              class="card shadow-xl flex flex-col items-center h-full bg-white rounded-lg group cursor-pointer"
-              @click="$router.push(`/product/${item.id}`)"
-            >
+            <div class="card shadow-xl flex flex-col items-center h-full bg-white rounded-lg group cursor-pointer">
               <div class="relative w-80 h-80 overflow-hidden rounded-t-lg">
                 
                 <!-- Shimmer Placeholder -->
@@ -77,6 +74,7 @@
                   }"
                   loading="lazy"
                   @load="onImageLoad(index)"
+                  @click="$router.push(`/product/${item.id}`)"
                 />
 
                 <!-- Second Image -->
@@ -196,22 +194,40 @@ export default {
       selectedColors: [],
       isAddingToCart: false,
       isLoading: false,
-      loadedImages: [], // 💡 added here
+      loadedImages: [],
     };
   },
   watch: {
     items(newItems) {
       this.selectedSizes = newItems.map(() => null);
       this.selectedColors = newItems.map(() => null);
-      this.loadedImages = newItems.map(() => false); // 💡 added here
+      this.loadedImages = newItems.map(() => false);
       this.isLoading = false;
+
+      this.$nextTick(() => {
+        const imgElements = this.$refs.slider.querySelectorAll('img');
+        imgElements.forEach((img, idx) => {
+          if (img.complete && img.naturalWidth !== 0) {
+            this.loadedImages[idx] = true;
+          }
+        });
+      });
     },
   },
   mounted() {
     if (this.items.length) {
       this.selectedSizes = this.items.map(() => null);
       this.selectedColors = this.items.map(() => null);
-      this.loadedImages = this.items.map(() => false); // 💡 added here
+      this.loadedImages = this.items.map(() => false);
+
+      this.$nextTick(() => {
+        const imgElements = this.$refs.slider.querySelectorAll('img');
+        imgElements.forEach((img, idx) => {
+          if (img.complete && img.naturalWidth !== 0) {
+            this.loadedImages[idx] = true;
+          }
+        });
+      });
     } else {
       this.isLoading = true;
     }
@@ -294,8 +310,8 @@ export default {
       }, 500);
     },
     onImageLoad(index) {
-  this.loadedImages[index] = true;
-}
+      this.loadedImages[index] = true;
+    }
   },
 };
 </script>

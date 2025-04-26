@@ -4,7 +4,7 @@
     <button
       v-if="isMobile"
       @click="toggleFilterModal"
-      class="fixed bottom-4 right-4 bg-blue-500 text-white p-4 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+      class="fixed bottom-4 left-4 bg-blue-500 text-white p-4 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
     >
       Filters
     </button>
