@@ -1,6 +1,6 @@
 // stores/productStore.js
 import { defineStore } from 'pinia';
-import { fetchAllProducts } from '../services/product/Products';
+import { fetchAllProducts, fetchAllProductsById } from '../services/product/Products';
 
 export const useProductStore = defineStore('product', {
   state: () => ({
@@ -17,7 +17,8 @@ export const useProductStore = defineStore('product', {
       womenSet: [],
       caps: [],
       socks: [],
-      bags: []
+      bags: [],
+      ladiesComfort: [],
     },
     sections: {
       bestSellers: [],
@@ -46,6 +47,7 @@ export const useProductStore = defineStore('product', {
           { key: 'categories.caps', params: { category: 'Accessories', product_type: 'Caps' } },
           { key: 'categories.socks', params: { category: 'Accessories', product_type: 'Socks' } },
           { key: 'categories.bags', params: { category: 'Accessories', product_type: 'Bags' } },
+          { key: 'categories.ladiesComfort', params: { category: 'Women', section: 'Ladies Comfort' } },
         ];
 
         const responses = await Promise.all(
@@ -77,5 +79,21 @@ export const useProductStore = defineStore('product', {
         this.loading = false;
       }
     },
+
+    async loadProductById(id) {
+      this.loading = true;
+      try {
+        const response = await fetchAllProductsById(id);
+        console.log(response.data)
+        return response.data;
+        
+      } catch (err) {
+        console.error('ProductStore: Failed to load product', err);
+        return null;
+      } finally {
+        this.loading = false;
+      }
+    },
   },
+  
 });
