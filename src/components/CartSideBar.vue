@@ -3,7 +3,7 @@
     <transition name="slide">
       <div
         v-if="model"
-        class="fixed w-72 top-0 right-0 md:w-[700px] h-full bg-white shadow-lg z-[1000] flex flex-col prose prose-sm md:prose-base max-w-none"
+        class="fixed w-72 top-0 right-0 md:w-[700px] h-full bg-gradient-to-r from-pink-50 to-gray-300 shadow-lg z-[1000] flex flex-col prose prose-sm md:prose-base max-w-none"
       >
         <div class="p-4 border-b flex justify-between items-center mx-3">
           <h2 class="text-lg font-bold text-gray-950">Cart Summary</h2>
@@ -72,7 +72,7 @@
         </div>
 
         <div class="p-4 border-t">
-          <button class="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+          <button class="w-full bg-gray-950 text-white px-4 py-2 rounded hover:bg-orange-400">
             Proceed to Checkout
           </button>
         </div>
