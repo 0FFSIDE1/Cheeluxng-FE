@@ -2,6 +2,7 @@
 <template>
   <!-- HERO SECTION -->
   <section
+  data-aos="zoom-in"
     class="relative min-h-screen bg-center bg-no-repeat bg-cover overflow-hidden"
     :style="{ backgroundImage: `url(${heroImage})` }"
   >
@@ -112,9 +113,12 @@
   />
 
    <!-- ACCESSORIES SECTION -->
-   <section class="bg-pink-100 py-14">
-    <div class="h-full mx-4 md:mx-12 flex flex-col p-8">
+   <section  data-aos="zoom-in" class="bg-pink-100 py-14">
+    <div class="h-full md:mx-12 flex flex-col p-8">
       <h2 class="text-gray-800 text-balance flex justify-center text-3xl md:text-3xl mb-8">ACCESSORIES</h2>
+      <p class="text-gray-800 text-lg p-2 text-balance flex justify-center mb-8">
+        From sleek gym-ready essentials to cozy off-duty pieces, these must-have accessories add the perfect finishing touch to any outfit. Don’t miss out—explore our new arrivals and upgrade your style today!
+      </p>
       <div class="accessoriesdiv grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 mt-6">
         <div
           v-for="accessory in accessories"
@@ -161,7 +165,7 @@
               loading="lazy"
             />
             <div class="bg-pink-200 rounded p-4 mt-4 w-full text-center">
-              <h3 class="text-lg font-semibold">{{ item.name }}</h3>
+              <h3 class="text-lg text-gray-950 font-semibold">{{ item.name }}</h3>
               <p>₦{{ item.price }}</p>
               <!-- Product Options Selector -->
               <ProductOptionsSelector
@@ -212,7 +216,7 @@
    <NewsletterSubscribe/>
 
   <!-- LADIES COMFORT SECTION -->
-  <section class="p-10 bg-gradient-to-r from-pink-50 to-gray-300">
+  <section data-aos="zoom-in" class="p-10 bg-gradient-to-r from-pink-50 to-gray-300">
     <div class="max-w-7xl mx-auto text-center px-4 sm:px-6 md:px-12">
       <h2 class="text-3xl font-semibold text-gray-900 mb-4 font-montserrat">
         LADIES COMFORT 🌟
@@ -265,7 +269,7 @@
   </section>
 
   <!-- WOMEN SECTION -->
-  <section class="bg-gradient-to-r from-rose-100 to-rose-200 py-12">
+  <section data-aos="zoom-in" class="bg-gradient-to-r from-rose-100 to-rose-200 py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-12">
       <div>
         <!-- Title -->
@@ -312,7 +316,7 @@
   </section>
 
   <!-- MEN SECTION -->
-  <section class="bg-gradient-to-r from-gray-300 to-blue-100 py-12">
+  <section data-aos="zoom-in" class="bg-gradient-to-r from-gray-300 to-blue-100 py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-12">
       <div>
         <!-- Title -->
