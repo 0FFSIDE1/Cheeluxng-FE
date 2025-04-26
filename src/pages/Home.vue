@@ -199,7 +199,7 @@
       <div class="flex justify-center mt-10">
         <button
           class="bg-slate-950 text-white px-6 py-3 rounded-full hover:bg-white hover:text-slate-950 transition shadow-md"
-          @click="$router.push('/collections/womens-sets')"
+          @click="$router.push('/women')"
           aria-label="View more women’s sets"
         >
           VIEW MORE
@@ -214,22 +214,52 @@
   <!-- LADIES COMFORT SECTION -->
   <section class="p-10 bg-gradient-to-r from-pink-50 to-gray-300">
     <div class="max-w-7xl mx-auto text-center px-4 sm:px-6 md:px-12">
-      <h2 class="text-3xl font-semibold text-gray-900 mb-4">LADIES COMFORT 🌟</h2>
-      <p class="text-lg mb-10 text-gray-700">From high-intensity workouts to cozy days at home, our versatile designs ensure you look stylish and feel confident wherever you go.</p>
+      <h2 class="text-3xl font-semibold text-gray-900 mb-4 font-montserrat">
+        LADIES COMFORT 🌟
+      </h2>
+      <p class="text-lg mb-10 text-gray-700 font-lato">
+        From high-intensity workouts to cozy days at home, our versatile designs ensure you look
+        stylish and feel confident wherever you go.
+      </p>
       <div class="flex flex-wrap justify-center gap-6">
-        <template v-for="i in 4" :key="i">
-          <div :class="['relative group bg-pink-200 shadow-md p-2 overflow-hidden transition', i % 2 === 0 ? 'rounded-3xl h-96' : 'rounded-full h-80']" style="width: 16rem;">
-            <img :src="`/images/product/image0000${i}.jpeg`" class="object-cover w-full h-full rounded-inherit transition-transform duration-500 group-hover:scale-105" alt="Ladies Comfort Product">
-            <div class="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-inherit p-4">
-              <div class="text-center">
-                <button class="px-4 py-2 bg-white text-black rounded-full hover:bg-pink-300 transition">View</button>
-              </div>
+        <div
+          v-for="(product, index) in productStore.categories.ladiesComfort.slice(0, 4)"
+          :key="product.id"
+          :class="[
+            'relative group bg-pink-200 shadow-md p-2 overflow-hidden transition',
+            index % 2 === 0 ? 'rounded-3xl h-96' : 'rounded-full h-80',
+          ]"
+          style="width: 16rem;"
+        >
+          <img
+            :src="product.cover_image || '/images/product/placeholder.jpg'"
+            :alt="`Image of ${product.name}`"
+            class="object-cover w-full h-full rounded-inherit transition-transform duration-500 group-hover:scale-105"
+            loading="lazy"
+          />
+          <div
+            class="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-inherit p-4"
+          >
+            <div class="text-center">
+              <router-link
+                :to="`/product/${product.id}`"
+                class="px-4 py-2 bg-white text-black rounded-full hover:bg-pink-300 transition font-montserrat"
+                :aria-label="`View ${product.name}`"
+              >
+                View
+              </router-link>
             </div>
           </div>
-        </template>
+        </div>
       </div>
       <div class="mt-12">
-        <button class="bg-slate-950 text-white px-6 py-3 rounded-full hover:bg-white hover:text-slate-950 transition shadow-md">VIEW MORE</button>
+        <router-link
+          to="/women"
+          class="bg-slate-950 text-white px-6 py-3 rounded-full hover:bg-white hover:text-slate-950 transition shadow-md font-montserrat"
+          aria-label="View more Ladies Comfort products"
+        >
+          VIEW MORE
+        </router-link>
       </div>
     </div>
   </section>
