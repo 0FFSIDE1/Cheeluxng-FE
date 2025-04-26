@@ -13,6 +13,7 @@
     "@tailwindcss/forms": "^0.5.10",
     "@tailwindcss/typography": "^0.5.16",
     "@vue/cli-service": "^5.0.8",
+    "aos": "^2.3.4",
     "axios": "^1.8.4",
     "daisyui": "^5.0.28",
     "js-cookie": "^3.0.5",
