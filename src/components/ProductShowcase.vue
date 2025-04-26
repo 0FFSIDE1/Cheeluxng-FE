@@ -7,6 +7,9 @@
       >
         {{ title }}
       </h2>
+      <p class="text-gray-800 text-lg text-balance flex justify-center mb-8">
+        Loved by everyone, these are our most popular picks! From comfy loungewear to workout essentials, these pieces are made to keep you looking great and feeling even better. Don’t miss out—shop now and see what everyone’s talking about!
+      </p>
 
       <!-- Main Product -->
       <div v-if="mainProduct" class="relative flex justify-center w-full max-w-[700px]">
