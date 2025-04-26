@@ -18,12 +18,12 @@
           <img
             :src="mainImage"
             :alt="`Main image of ${product.name}`"
-            class="w-full h-auto rounded-3xl shadow-md object-cover"
+            class="w-full h-[600px] rounded-3xl shadow-md object-cover"
             loading="lazy"
           />
           <div class="flex gap-2 overflow-x-auto">
             <img
-              v-for="(image, index) in product.images"
+              v-for="(image, index) in thumbnailImages"
               :key="index"
               :src="image"
               :alt="`Thumbnail ${index + 1} of ${product.name}`"
@@ -35,17 +35,18 @@
           </div>
         </div>
         <!-- Product Info -->
-        <div class="bg-white rounded-3xl shadow-md p-6 flex flex-col gap-4">
+        <div class="bg-white rounded-3xl shadow-md p-6 flex flex-col items-center gap-4">
           <h1 class="text-3xl font-montserrat text-gray-950">{{ product.name }}</h1>
           <p class="text-2xl font-lato text-gray-950">${{ product.price.toFixed(2) }}</p>
           <p class="text-base font-lato text-gray-700">{{ product.description }}</p>
           <!-- Variant Selection -->
           <ProductOptionsSelector
-            :options="product.available_options"
-            :selected-size="selectedSize"
-            :selected-color="selectedColor"
-            @select-size="selectSize"
-            @select-color="selectColor"
+          :productId="product.id"
+          :availableOptions="product.available_options"
+          :selected-size="selectedSize"
+          :selected-color="selectedColor"
+          @update:size="selectSize"
+          @update:color="selectColor"
           />
           <!-- Quantity -->
           <div class="flex items-center gap-4">
@@ -61,6 +62,7 @@
           </div>
           <!-- Add to Cart -->
           <AddToCartBtn
+            :payload="cartPayload"
             :disabled="!canAddToCart"
             :is-adding="isAddingToCart"
             @add-to-cart="handleAddToCart"
@@ -76,11 +78,14 @@
           </p>
         </div>
       </div>
-      <!-- Optional: Product Reviews -->
-      <CustomerFeedback :product-id="product.id" class="mt-12" />
+      <div class="mt-12">
+        <PopularSelling background="bg-pink-100"/>
+      </div>
+      
+      <NewsletterSubscribe/>
     </div>
-    <Footer />
   </div>
+ 
 </template>
 
 <script setup>
@@ -90,9 +95,9 @@ import { useProductStore } from '../store/productStore';
 import { useCartStore } from '../store/cartStore';
 import { useToast } from 'vue-toastification';
 import AddToCartBtn from '../components/AddToCartBtn.vue';
-import ProductOptionsSelector from '../components/ProductOptionsSelector.vue';
-import CustomerFeedback from '../components/CustomerFeedback.vue';
-import Footer from '../components/Footer.vue';
+import ProductOptionsSelector from '../components/productOptions.vue';
+import NewsletterSubscribe from '../components/Subscribe.vue'
+import PopularSelling from '../components/PopularSelling.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -100,7 +105,7 @@ const productStore = useProductStore();
 const cartStore = useCartStore();
 const toast = useToast();
 
-const product = ref(null);
+const product = ref(null); // Changed from [] to null for single object
 const mainImage = ref('');
 const selectedSize = ref(null);
 const selectedColor = ref(null);
@@ -116,11 +121,12 @@ onMounted(async () => {
     const productId = route.params.id;
     console.log('Product: Fetching product', { productId });
     const response = await productStore.loadProductById(productId);
+    console.log('Product: API response', response);
     if (!response) {
       throw new Error('Product not found');
     }
     product.value = response;
-    mainImage.value = product.value.images[0] || '/images/placeholder.jpg';
+    mainImage.value = product.value.cover_image  || '/images/placeholder.jpg';
     console.log('Product: Loaded product', product.value);
   } catch (err) {
     console.error('Product: Failed to load product', err);
@@ -130,6 +136,28 @@ onMounted(async () => {
     loading.value = false;
   }
 });
+const thumbnailImages = computed(() => {
+  if (!product.value) return [];
+
+  const cover = product.value.cover_image;
+  const optionImages = product.value.available_options?.flatMap(option =>
+    option.colors
+      .map(color => color.image_url)
+      .filter(url => !!url && url !== '{}' && url !== 'null')
+  ) || [];
+
+  const uniqueImages = Array.from(new Set(optionImages)); // remove duplicates
+
+  if (uniqueImages.length === 0 && cover) {
+    return [cover];
+  }
+
+  // Always include cover image first if it exists and not already in the list
+  return cover && !uniqueImages.includes(cover)
+    ? [cover, ...uniqueImages]
+    : uniqueImages;
+});
+
 
 // Variant selection
 const selectSize = ({ sizeIndex }) => {
@@ -145,19 +173,8 @@ const selectColor = ({ colorIndex }) => {
   errorMessage.value = '';
 };
 
-// Cart validation
-const canAddToCart = computed(() => {
-  if (!product.value || !product.value.available_options) return false;
-  const sizeIndex = selectedSize.value;
-  const colorIndex = selectedColor.value;
-  if (sizeIndex == null || colorIndex == null) return false;
-  const size = product.value.available_options[sizeIndex];
-  const color = size?.colors?.[colorIndex];
-  return size && color && color.instock && quantity.value > 0;
-});
-
 // Cart payload
-const getCartPayload = () => {
+const cartPayload = computed(() => {
   const payload = {
     id: product.value?.id || '',
     size: '',
@@ -176,7 +193,18 @@ const getCartPayload = () => {
   }
   console.log('Product: Generated cart payload', payload);
   return payload;
-};
+});
+
+// Cart validation
+const canAddToCart = computed(() => {
+  if (!product.value || !product.value.available_options) return false;
+  const sizeIndex = selectedSize.value;
+  const colorIndex = selectedColor.value;
+  if (sizeIndex == null || colorIndex == null) return false;
+  const size = product.value.available_options[sizeIndex];
+  const color = size?.colors?.[colorIndex];
+  return size && color && color.instock && quantity.value > 0;
+});
 
 // Add to cart
 const handleAddToCart = async () => {
@@ -187,7 +215,7 @@ const handleAddToCart = async () => {
   }
   isAddingToCart.value = true;
   try {
-    const payload = getCartPayload();
+    const payload = cartPayload.value;
     await cartStore.addProductToCart(payload.id, payload);
     console.log('Product: Added to cart', payload);
     toast.success(`${payload.size} ${payload.color} ${product.value.name} added to cart!`);
