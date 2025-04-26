@@ -15,22 +15,16 @@
     <!-- Slider Content -->
     <div v-else>
       <!-- Centered Title and Description -->
-       <div v-if="title && title !== 'None'">
+      <div v-if="title && title !== 'None'">
         <div class="flex flex-col justify-center items-center min-h-[10vh] mb-6 px-4 sm:px-6 md:px-8">
-        <h2
-          class="prose prose-lg text-gray-900 text-xl sm:text-2xl md:text-3xl font-semibold max-w-prose mx-auto animate-fade-in"
-        >
-          {{ title }}
-        </h2>
-        <p
-          class="prose text-gray-700 text-base sm:text-lg md:text-xl mt-2 max-w-prose mx-auto animate-fade-in animate-delay-200"
-        >
-          {{ details }}
-        </p>
+          <h2 class="prose prose-lg text-gray-900 text-xl sm:text-2xl md:text-3xl font-semibold max-w-prose mx-auto animate-fade-in">
+            {{ title }}
+          </h2>
+          <p class="prose text-gray-700 text-base sm:text-lg md:text-xl mt-2 max-w-prose mx-auto animate-fade-in animate-delay-200">
+            {{ details }}
+          </p>
+        </div>
       </div>
-
-       </div>
-      
 
       <div class="relative">
         <!-- Back Button -->
@@ -60,13 +54,44 @@
             :key="index"
             class="snap-start flex-shrink-0 @sm:w-1/2 @md:w-1/3 @lg:w-[calc(100%/visibleItems)]"
           >
-            <div class="card shadow-xl flex flex-col items-center h-full bg-white rounded-lg animate-scale">
-              <img
-                :src="item.photo_1"
-                :alt="item.name"
-                class="object-cover w-80 h-80 rounded-t-lg hover:scale-105 transition-transform"
-                loading="lazy"
-              />
+            <div
+              class="card shadow-xl flex flex-col items-center h-full bg-white rounded-lg group cursor-pointer"
+              @click="$router.push(`/product/${item.id}`)"
+            >
+              <div class="relative w-80 h-80 overflow-hidden rounded-t-lg">
+                
+                <!-- Shimmer Placeholder -->
+                <div
+                  v-if="!loadedImages[index]"
+                  class="absolute inset-0 bg-gray-200 animate-pulse"
+                ></div>
+
+                <!-- First Image -->
+                <img
+                  :src="item.photo_1"
+                  :alt="item.name"
+                  class="object-cover w-full h-full absolute inset-0 transition-transform duration-500 ease-in-out group-hover:scale-110"
+                  :class="{
+                    'opacity-0': !loadedImages[index],
+                    'opacity-100 group-hover:opacity-0': loadedImages[index]
+                  }"
+                  loading="lazy"
+                  @load="onImageLoad(index)"
+                />
+
+                <!-- Second Image -->
+                <img
+                  :src="item.photo_2 || item.photo_1"
+                  :alt="item.name + ' second image'"
+                  class="object-cover w-full h-full absolute inset-0 scale-105 transition-transform duration-500 ease-in-out"
+                  :class="{
+                    'opacity-0': !loadedImages[index],
+                    'opacity-0 group-hover:opacity-100': loadedImages[index]
+                  }"
+                  loading="lazy"
+                />
+              </div>
+
               <div class="card-body p-4">
                 <h3 class="text-gray-600 text-base sm:text-lg font-semibold">{{ item.name }}</h3>
                 <p class="text-gray-500 text-sm sm:text-base">₦{{ item.price }}</p>
@@ -171,12 +196,14 @@ export default {
       selectedColors: [],
       isAddingToCart: false,
       isLoading: false,
+      loadedImages: [], // 💡 added here
     };
   },
   watch: {
     items(newItems) {
       this.selectedSizes = newItems.map(() => null);
       this.selectedColors = newItems.map(() => null);
+      this.loadedImages = newItems.map(() => false); // 💡 added here
       this.isLoading = false;
     },
   },
@@ -184,6 +211,7 @@ export default {
     if (this.items.length) {
       this.selectedSizes = this.items.map(() => null);
       this.selectedColors = this.items.map(() => null);
+      this.loadedImages = this.items.map(() => false); // 💡 added here
     } else {
       this.isLoading = true;
     }
@@ -197,12 +225,7 @@ export default {
         this.currentIndex = Math.max(this.currentIndex - 1, 0);
       } catch (error) {
         console.error('Error in scrollBack:', error);
-        toast.error('Error in scrollBack:', error, {
-                timeout: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-            })
+        toast.error('Error scrolling back.');
       }
     },
     scrollForward() {
@@ -216,63 +239,42 @@ export default {
       }
     },
     startDrag(event) {
-      try {
-        this.isDragging = true;
-        this.startX = event.pageX || event.touches[0].pageX;
-        this.scrollLeft = this.$refs.slider.scrollLeft;
-      } catch (error) {
-        console.error('Error in startDrag:', error);
-      }
+      this.isDragging = true;
+      this.startX = event.pageX || event.touches[0].pageX;
+      this.scrollLeft = this.$refs.slider.scrollLeft;
     },
     onDrag(event) {
       if (!this.isDragging) return;
-      try {
-        event.preventDefault();
-        const x = event.pageX || event.touches[0].pageX;
-        const walk = x - this.startX;
-        this.$refs.slider.scrollLeft = this.scrollLeft - walk;
-      } catch (error) {
-        console.error('Error in onDrag:', error);
-      }
+      event.preventDefault();
+      const x = event.pageX || event.touches[0].pageX;
+      const walk = x - this.startX;
+      this.$refs.slider.scrollLeft = this.scrollLeft - walk;
     },
     endDrag() {
       this.isDragging = false;
     },
     selectSize(index, sIndex) {
-      try {
-        this.selectedSizes[index] = sIndex;
-        this.selectedColors[index] = null;
-      } catch (error) {
-        console.error('Error in selectSize:', error);
-      }
+      this.selectedSizes[index] = sIndex;
+      this.selectedColors[index] = null;
     },
     selectColor(index, cIndex) {
-      try {
-        if (this.selectedSizes[index] !== null) {
-          this.selectedColors[index] = cIndex;
-        }
-      } catch (error) {
-        console.error('Error in selectColor:', error);
+      if (this.selectedSizes[index] !== null) {
+        this.selectedColors[index] = cIndex;
       }
     },
     canAddToCart(index) {
       const sizeIndex = this.selectedSizes[index];
       const colorIndex = this.selectedColors[index];
-      if (sizeIndex == null || colorIndex == null) {
-        return false;
-      }
+      if (sizeIndex == null || colorIndex == null) return false;
       const item = this.items[index];
       const size = item?.available_options?.[sizeIndex];
       const color = size?.colors?.[colorIndex];
-      const isValid = size && color && color.instock;
-      return isValid;
+      return size && color && color.instock;
     },
     getCartPayload(index) {
       const item = this.items[index];
-      const sizeIndex = this.selectedSizes[index];
-      const colorIndex = this.selectedColors[index];
-      const size = item?.available_options?.[sizeIndex];
-      const color = size?.colors?.[colorIndex];
+      const size = item?.available_options?.[this.selectedSizes[index]];
+      const color = size?.colors?.[this.selectedColors[index]];
       return {
         id: item.id,
         size: size?.size || '',
@@ -281,31 +283,19 @@ export default {
       };
     },
     handleAddToCart(payload) {
-      try {
-        this.isAddingToCart = true;
-        if (!payload.id || !payload.size || !payload.color) {
-          toast.error('Please select a valid size and color.', {
-                timeout: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-            });
-          return;
-        }
-        this.$emit('add-to-cart', payload);
-      } catch (error) {
-        toast.error('Failed to add to cart, please try again!', {
-                timeout: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-            });
-      } finally {
-        setTimeout(() => {
-          this.isAddingToCart = false;
-        }, 500);
+      this.isAddingToCart = true;
+      if (!payload.id || !payload.size || !payload.color) {
+        toast.error('Please select size and color!');
+        return;
       }
+      this.$emit('add-to-cart', payload);
+      setTimeout(() => {
+        this.isAddingToCart = false;
+      }, 500);
     },
+    onImageLoad(index) {
+  this.loadedImages[index] = true;
+}
   },
 };
 </script>
