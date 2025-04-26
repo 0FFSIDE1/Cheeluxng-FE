@@ -43,7 +43,7 @@
   />
 
   <!-- POPULAR SELLING SECTION -->
-  <section class="w-full bg-gradient-to-b from-slate-200 to-slate-100 py-8 @container">
+  <section data-aos="zoom-in" class="w-full bg-gradient-to-b from-slate-200 to-slate-100 py-8 @container">
     <!-- Loading State -->
     <div v-if="productStore.loading" class="flex justify-center items-center h-32">
       <div class="animate-spin rounded-full h-10 w-10 border-t-4 border-b-4 border-primary"></div>
@@ -149,7 +149,7 @@
   </section>
 
   <!-- CHICKY SETS SECTION -->
-  <section class="bg-fuchsia-100 py-12">
+  <section data-aos="zoom-in" class="bg-fuchsia-100 py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-12">
       <h2 class="text-3xl font-semibold text-center mb-4 text-gray-950">CHICKY SETS 🌟</h2>
       <p class="text-lg mb-10 text-gray-700 text-balance text-center">
