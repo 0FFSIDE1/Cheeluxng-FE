@@ -385,7 +385,7 @@ const cartStore = useCartStore();
 const toast = useToast();
 
 // Hero Image
-const heroImage = ref('src/assets/hero.jpeg');
+const heroImage = ref('@/assets/hero.jpeg');
 
 // Accessories Data
 const accessories = ref([
