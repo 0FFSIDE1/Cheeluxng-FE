@@ -368,16 +368,16 @@
 
 <script setup>
 import Slider from "../components/Slider.vue";
-import ProductShowcase from "../components/ProductShowcase.vue";
-import AddToCartBtn from "../components/AddToCartBtn.vue";
-import ProductOptionsSelector from "../components/productOptions.vue";
-import { useProductStore } from '../store/productStore';
-import { useCartStore } from '../store/cartStore';
+import ProductShowcase from "@/components/ProductShowcase.vue";
+import AddToCartBtn from "@/components/AddToCartBtn.vue";
+import ProductOptionsSelector from "@/components/productOptions.vue";
+import { useProductStore } from '@/store/productStore';
+import { useCartStore } from '@/store/cartStore';
 import { onMounted, ref, computed } from "vue";
 import { useRouter } from 'vue-router';
 import { useToast } from 'vue-toastification';
-import NewsletterSubscribe from '../components/Subscribe.vue'
-import CustomerFeedback from "../components/CustomerReviews.vue";
+import NewsletterSubscribe from '@/components/Subscribe.vue'
+import CustomerFeedback from "@/components/CustomerReviews.vue";
 
 // Stores
 const productStore = useProductStore();

@@ -10,6 +10,13 @@ export default defineConfig({
       algorithm: 'gzip',
       ext: '.gz',
       threshold: 10240,
+      deleteOriginFile: false, // keep original files
+    }),
+    viteCompression({
+      algorithm: 'brotliCompress',
+      ext: '.br',
+      threshold: 10240,
+      deleteOriginFile: false,
     }),
   ],
   resolve: {
@@ -19,20 +26,19 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist',
-    sourcemap: false, // optional for production
+    sourcemap: false, // disable sourcemaps to protect code
+    minify: 'esbuild', // fast and efficient minification
     rollupOptions: {
       output: {
-        manualChunks: {
-          vendor: ['vue'],
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            return 'vendor'
+          }
         }
       }
-    }
+    },
+    assetsInlineLimit: 4096, // smaller assets are inlined (optional tweak)
+    cssCodeSplit: true, // default true: splits CSS for better caching
   },
-  base: '/',
-  server: {
-    port: 5173,
-    allowedHosts: [],
-    host: true,
-  },
-  
+  base: '/', // update if you are deploying to a subfolder
 })
