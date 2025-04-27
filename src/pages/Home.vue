@@ -378,6 +378,7 @@ import { useRouter } from 'vue-router';
 import { useToast } from 'vue-toastification';
 import NewsletterSubscribe from '@/components/Subscribe.vue'
 import CustomerFeedback from "@/components/CustomerReviews.vue";
+import ImageUrl from '@/assets/hero.jpeg'
 
 // Stores
 const productStore = useProductStore();
@@ -385,7 +386,7 @@ const cartStore = useCartStore();
 const toast = useToast();
 
 // Hero Image
-const heroImage = ref('@/assets/hero.jpeg');
+const heroImage = ref(ImageUrl);
 
 // Accessories Data
 const accessories = ref([
