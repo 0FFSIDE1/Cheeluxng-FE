@@ -38,8 +38,6 @@ import ProductGrid from '@/components/ProductGrid.vue';
 import { useRoute } from 'vue-router';
 import { useProductStore } from '@/store/productStore'
 
-
-
 export default {
   name: 'ProductsPage',
   components: {
