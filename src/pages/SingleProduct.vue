@@ -97,13 +97,13 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { useProductStore } from '../store/productStore';
-import { useCartStore } from '../store/cartStore';
+import { useProductStore } from '@/store/productStore';
+import { useCartStore } from '@/store/cartStore';
 import { useToast } from 'vue-toastification';
-import AddToCartBtn from '../components/AddToCartBtn.vue';
-import ProductOptionsSelector from '../components/productOptions.vue';
-import NewsletterSubscribe from '../components/Subscribe.vue'
-import PopularSelling from '../components/PopularSelling.vue';
+import AddToCartBtn from '@/components/AddToCartBtn.vue';
+import ProductOptionsSelector from '@/components/productOptions.vue';
+import NewsletterSubscribe from '@/components/Subscribe.vue'
+import PopularSelling from '@/components/PopularSelling.vue';
 
 const route = useRoute();
 const router = useRouter();

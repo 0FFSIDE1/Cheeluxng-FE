@@ -1,4 +1,4 @@
-import api from '../services/axios';
+import api from '@/services/axios';
 import Cookies from 'js-cookie';
 
 export const fetchCsrfToken = async () => {

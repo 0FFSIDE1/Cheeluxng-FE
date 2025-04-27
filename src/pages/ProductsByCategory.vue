@@ -33,10 +33,10 @@
 
 <script>
 import { computed, watch } from 'vue';
-import FilterComponent from '../components/Filter.vue';
-import ProductGrid from '../components/ProductGrid.vue';
+import FilterComponent from '@/components/Filter.vue';
+import ProductGrid from '@/components/ProductGrid.vue';
 import { useRoute } from 'vue-router';
-import { useProductStore } from '../store/productStore'
+import { useProductStore } from '@/store/productStore'
 
 
 
