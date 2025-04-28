@@ -54,9 +54,9 @@ export default {
   data() {
     return {
       images: [
-        '/src/assets/product6.jpeg',
-        '/src/assets/image00001.jpeg',
-        '/src/assets/image00002.jpeg',
+        '@/assets/product6.jpeg',
+        '@/assets/image00001.jpeg',
+        '@/assets/image00002.jpeg',
       ],
       transitions: ['fade-in', 'scale-in', 'slide-in'],
       currentSlide: 0,
