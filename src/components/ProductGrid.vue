@@ -10,6 +10,7 @@
           :src="product.cover_image"
           :alt="product.name"
           class="w-full h-56 object-cover rounded-md mb-2"
+           @click="$router.push(`/product/${product.id}`)"
         />
         <h3 class="text-lg font-semibold text-gray-800">{{ product.name }}</h3>
         <p class="text-gray-600">${{ product.price }}</p>
