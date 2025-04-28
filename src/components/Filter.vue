@@ -19,7 +19,7 @@
           <h3 class="text-lg font-semibold text-gray-900">Filter</h3>
           <button @click="toggleFilterModal" class="text-gray-500 hover:text-gray-700">&times;</button>
         </div>
-        <div class="flex flex-wrap gap-4 items-center">
+        <div class="flex flex-col flex-wrap gap-4 md:flex-row items-center">
           <!-- Name Input -->
           <div class="flex-1">
             <input
