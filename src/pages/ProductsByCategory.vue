@@ -37,7 +37,9 @@ import FilterComponent from '@/components/Filter.vue';
 import ProductGrid from '@/components/ProductGrid.vue';
 import { useRoute } from 'vue-router';
 import { useProductStore } from '@/store/productStore'
-
+import Img1 from '@/assets/product6.jpeg'
+import Img2 from '@/assets/image00001.jpeg'
+import Img3 from '@/assets/image00002.jpeg'
 export default {
   name: 'ProductsPage',
   components: {
@@ -54,9 +56,9 @@ export default {
   data() {
     return {
       images: [
-        '@/assets/product6.jpeg',
-        '@/assets/image00001.jpeg',
-        '@/assets/image00002.jpeg',
+Img1,
+Img2,
+Img3
       ],
       transitions: ['fade-in', 'scale-in', 'slide-in'],
       currentSlide: 0,
