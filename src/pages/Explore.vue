@@ -3,9 +3,9 @@
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h1 class="text-3xl text-center font-bold text-gray-900 mb-8">Explore Our Latest Collections 🛍️</h1>
         <p class="prose text-gray-700 text-base sm:text-lg md:text-xl my-8 max-w-prose mx-auto animate-fade-in animate-delay-200">
-            Welcome to our Explore section — your destination for discovering the freshest arrivals and best-selling favorites! ✨ Whether you're upgrading your activewear, searching for cozy loungewear, or finding the perfect statement piece, we've curated a collection that brings comfort, quality, and style together.
+            Your destination for discovering the freshest arrivals and best-selling favorites! ✨ Whether you're upgrading your activewear, searching for cozy loungewear, or finding the perfect statement piece, we've curated a collection that brings comfort, quality, and style together.
 
-            Browse a wide range of categories, including shorts, sleeves, and stylish sets designed for every lifestyle. Our collection is made to move with you — whether you’re hitting the gym, working from home, or heading out for casual weekends
+            Browse a wide range of categories, including shorts, sleeves, and stylish sets designed for every lifestyle — whether you’re hitting the gym, working from home, or heading out for casual weekends.
         </p>
   
         <!-- Filter Section -->
