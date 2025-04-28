@@ -53,7 +53,7 @@
   <script setup>
   import { ref } from 'vue';
   import { useToast } from 'vue-toastification'; 
-  import api from '../services/axios'; 
+  import api from '@/services/axios'; 
   
   const toast = useToast();
   
