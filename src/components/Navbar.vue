@@ -27,7 +27,7 @@
         </button>
 
         <!-- Logo -->
-        <img src="../assets/blacklogo.png" alt="logo" class="h-52 object-contain" />
+        <img src="@/assets/blacklogo.png" alt="logo" class="h-34 w-44 object-center" />
       </div>
 
       <!-- Desktop Navigation -->
@@ -60,7 +60,7 @@
           />
         </div>
         <button @click="toggleCart" class="relative">
-          <img src="../assets/cheeluxCartLogo.png" alt="cart" class="w-6 h-6" />
+          <img src="@/assets/cheeluxCartLogo.png" alt="cart" class="w-6 h-6" />
         </button>
       </div>
     </div>
