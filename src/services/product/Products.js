@@ -1,4 +1,4 @@
-import api from "../axios";
+import api from "@/axios";
 
 export const fetchAllProducts = (params = {}) => api.get('products', { params }); 
 export const fetchAllProductsById = async (id) => {
