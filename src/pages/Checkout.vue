@@ -162,6 +162,7 @@ import { useCustomerStore } from '@/store/customerStore';
 import NewsletterSubscribe from '@/components/Subscribe.vue';
 import { useCartStore } from '@/store/cartStore';
 import { useToast } from 'vue-toastification';
+import api from '@/services/axios';
 
 const toast = useToast();
 const customerStore = useCustomerStore();
@@ -198,8 +199,6 @@ const availableCoupons = {
 
 // Load customer info and cart items on page mount
 onMounted(async () => {
-  console.log('Initial customerStore.info:', customerStore.info); // Debug: Check persisted data
-  // Autofill form with persisted data immediately
   if (customerStore.info?.full_name) {
     Object.assign(form, {
       full_name: customerStore.info.full_name || '',
@@ -209,13 +208,9 @@ onMounted(async () => {
       city: customerStore.info.city || '',
       country: customerStore.info.country || 'Nigeria',
     });
-    console.log('Form populated with persisted data:', form);
   }
-
   // Fetch customer info from API
   await customerStore.GetCustomerInfo();
-  console.log('After GetCustomerInfo, customerStore.info:', customerStore.info);
-
   // Update form with fetched data if available
   if (customerStore.info?.full_name) {
     Object.assign(form, {
@@ -226,13 +221,10 @@ onMounted(async () => {
       city: customerStore.info.city || '',
       country: customerStore.info.country || 'Nigeria',
     });
-    console.log('Form updated with fetched data:', form);
   }
-
   // Fetch cart items
   await cartStore.fetchCart();
 });
-
 // Save or update form
 const handleSubmit = async () => {
   // Validate required fields
@@ -245,7 +237,6 @@ const handleSubmit = async () => {
     });
     return;
   }
-
   // Prepare payload
   const payload = {
     full_name: form.full_name,
@@ -255,7 +246,6 @@ const handleSubmit = async () => {
     city: form.city,
     country: form.country,
   };
-
   try {
     await customerStore.CustomerRecord(payload);
     if (!customerStore.error) {
@@ -304,36 +294,47 @@ const applyCoupon = () => {
 };
 
 // Pay now
-const payNow = () => {
+const payNow = async () => {
   if (!form.full_name || !form.email || !form.phone || !form.address || !form.city || !form.country) {
-    toast.error('Please fill in your information first!', {
-      timeout: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-    });
+    toast.error('Please fill in your information first!', { timeout: 3000 });
     return;
   }
+
   if (cartItems.value.length === 0) {
-    toast.error('Your cart is empty!', {
-      timeout: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-    });
+    toast.error('Your cart is empty!', { timeout: 3000 });
     return;
   }
-  toast.success('Payment Successful! 🎉', {
-    timeout: 3000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-  });
-  console.log('Order confirmed', {
-    customer: { ...form },
-    order: cartItems.value,
-    discount: discount.value,
-  });
+
+  try {
+    // 1. Initiate Payment from Backend
+    const response = await api.post('payment/init', {
+      email: form.email,
+      amount: cartStore.totalAmount, // Ensure you send total amount
+    });
+    console.log(response.data)
+    if (response.data.success) {
+      const handler = PaystackPop.setup({
+        key: response.data.paystack_public_key,
+        email: form.email,
+        amount: response.data.amount_value, // Paystack expects amount in kobo
+        ref: response.data.ref,
+        callback: function (response) {
+          toast.success('Payment successful!', { timeout: 3000 });
+          // Optionally redirect user or verify payment from backend
+        },
+        onClose: function () {
+          toast.info('Payment window closed.', { timeout: 3000 });
+        },
+      });
+
+      handler.openIframe();
+    } else {
+      toast.error('Failed to initiate payment!', { timeout: 3000 });
+    }
+  } catch (err) {
+    console.error(err);
+    toast.error('An error occurred during payment initiation.', { timeout: 3000 });
+  }
 };
 </script>
 
