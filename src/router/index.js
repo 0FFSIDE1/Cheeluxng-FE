@@ -4,7 +4,7 @@ const routes = [
   { path: '/', component: () => import('@/pages/Home.vue') },
   { path: '/:category', name:'ProductsByCategory', component: () => import('@/pages/ProductsByCategory.vue'), props: route => ({ category: route.params.category }) },
   { path: '/explore', name:'Explore', component: () => import('@/pages/Explore.vue') },
-  { path: '/product/:id', component: () => import('@/pages/SingleProduct.vue') },
+  { path: '/product/:id', name: 'ProductDetail', component: () => import('@/pages/SingleProduct.vue') },
   { path: '/checkout', component: () => import('@/pages/Checkout.vue') },
 
 ]

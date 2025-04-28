@@ -56,7 +56,6 @@
           >
             <div class="card shadow-xl flex flex-col items-center h-full bg-white rounded-lg group cursor-pointer">
               <div class="relative w-80 h-80 overflow-hidden rounded-t-lg">
-                
                 <!-- Shimmer Placeholder -->
                 <div
                   v-if="!loadedImages[index]"
@@ -74,7 +73,7 @@
                   }"
                   loading="lazy"
                   @load="onImageLoad(index)"
-                  @click="$router.push(`/product/${item.id}`)"
+                  @click="goToProduct(item.id)"
                 />
 
                 <!-- Second Image -->
@@ -86,6 +85,7 @@
                     'opacity-0': !loadedImages[index],
                     'opacity-0 group-hover:opacity-100': loadedImages[index]
                   }"
+                  @click="goToProduct(item.id)"
                   loading="lazy"
                 />
               </div>
@@ -171,6 +171,8 @@
 <script>
 import AddToCartBtn from './AddToCartBtn.vue';
 import { useToast } from 'vue-toastification';
+import { useRouter } from 'vue-router';
+
 const toast = useToast();
 
 export default {
@@ -196,6 +198,10 @@ export default {
       isLoading: false,
       loadedImages: [],
     };
+  },
+  setup() {
+    const router = useRouter();
+    return { router };
   },
   watch: {
     items(newItems) {
@@ -311,7 +317,20 @@ export default {
     },
     onImageLoad(index) {
       this.loadedImages[index] = true;
-    }
+    },
+    goToProduct(id) {
+      console.log('Navigating to product ID:', id); // Debug
+      if (!id) {
+        toast.error('Product ID is missing!');
+        return;
+      }
+      try {
+        this.router.push({ name: 'ProductDetail', params: { id } });
+      } catch (error) {
+        console.error('Router push error:', error);
+        toast.error('Failed to navigate to product page.');
+      }
+    },
   },
 };
 </script>
