@@ -72,7 +72,7 @@
         </div>
 
         <div class="p-4 border-t">
-          <button class="w-full bg-gray-950 text-white px-4 py-2 rounded hover:bg-orange-400">
+          <button @click="$router.push('/checkout')" class="w-full bg-gray-950 text-white px-4 py-2 rounded hover:bg-orange-400">
             Proceed to Checkout
           </button>
         </div>
