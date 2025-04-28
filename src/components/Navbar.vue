@@ -27,7 +27,7 @@
         </button>
 
         <!-- Logo -->
-        <img src="@/assets/blacklogo.png" alt="logo" class="h-34 w-44 object-center" />
+        <img src="@/assets/blacklogo.png" alt="logo" class="h-52 w-40 object-contain" />
       </div>
 
       <!-- Desktop Navigation -->
