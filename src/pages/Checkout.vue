@@ -306,24 +306,43 @@ const payNow = async () => {
   }
 
   try {
-    // 1. Initiate Payment from Backend
     const response = await api.post('payment/init', {
       email: form.email,
-      amount: cartStore.totalAmount, // Ensure you send total amount
+      amount: cartStore.totalAmount, // amount in Kobo
     });
-    console.log(response.data)
+
+    console.log('Payment Init Response:', response.data);
+
     if (response.data.success) {
-      const handler = PaystackPop.setup({
+      const handler = window.PaystackPop.setup({
         key: response.data.paystack_public_key,
         email: form.email,
-        amount: response.data.amount_value, // Paystack expects amount in kobo
+        amount: response.data.amount_value, // already in Kobo
         ref: response.data.ref,
-        callback: function (response) {
-          toast.success('Payment successful!', { timeout: 3000 });
-          // Optionally redirect user or verify payment from backend
+        currency: 'NGN',
+
+        callback: function (paystackResponse) {
+          (async () => {
+            try {
+              const verifyRes = await api.get('payment/verify', {
+                reference: paystackResponse.reference,
+              });
+
+              if (verifyRes.data.status === 'success') {
+                toast.success('Payment successful and verified!');
+                // await cartStore.clearCart();
+              } else {
+                toast.error('Payment verification failed.');
+              }
+            } catch (error) {
+              console.error('Verification error:', error);
+              toast.error('Error verifying payment.');
+            }
+          })();
         },
-        onClose: function () {
-          toast.info('Payment window closed.', { timeout: 3000 });
+
+        onClose: () => {
+          toast.info('Payment popup closed.');
         },
       });
 
@@ -331,11 +350,12 @@ const payNow = async () => {
     } else {
       toast.error('Failed to initiate payment!', { timeout: 3000 });
     }
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error('Payment init error:', error);
     toast.error('An error occurred during payment initiation.', { timeout: 3000 });
   }
 };
+
 </script>
 
 <style scoped>
