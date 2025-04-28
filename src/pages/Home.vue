@@ -459,7 +459,6 @@ onMounted(() => {
 // Cart Handling
 function handleCartAdd(payload) {
   if (!payload || !payload.id || !payload.size || !payload.color) {
-    console.error('Home: Invalid cart item', payload);
     toast.error('Invalid cart item. Missing details.', {
                 timeout: 3000,
                 hideProgressBar: false,
