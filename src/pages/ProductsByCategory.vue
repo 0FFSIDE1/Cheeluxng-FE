@@ -1,11 +1,10 @@
-<!-- views/ProductsPage.vue -->
 <template>
   <div :class="categoryBgClass">
     <!-- Slideshow and other page content here -->
     <section class="text-center py-10">
-      <div class="slideshow-container h-[60vh] md:h-[70vh]">
+      <div class="slideshow-container h-[30vh] md:h-[50vh]">
         <div
-          v-for="(image, index) in images"
+          v-for="(image, index) in slideshowImages"
           :key="index"
           class="slide"
           :class="{ active: currentSlide === index }"
@@ -24,7 +23,7 @@
         <h2 class="text-gray-900 text-center md:hidden">Explore ✨</h2>
       </div>
       <div class="mt-8">
-        <FilterComponent  v-model:filters="userFilters" />
+        <FilterComponent v-model:filters="userFilters" />
       </div>
       <ProductGrid :selectedFilters="computedFilters" />
     </div>
@@ -32,14 +31,35 @@
 </template>
 
 <script>
-import { computed, watch } from 'vue';
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
+import { useProductStore } from '@/store/productStore';
+
 import FilterComponent from '@/components/Filter.vue';
 import ProductGrid from '@/components/ProductGrid.vue';
-import { useRoute } from 'vue-router';
-import { useProductStore } from '@/store/productStore'
-import Img1 from '@/assets/product6.jpeg'
-import Img2 from '@/assets/image00001.jpeg'
-import Img3 from '@/assets/image00002.jpeg'
+
+// Import Men Images
+import ImgMen1 from '@/assets/men1.jpeg';
+import ImgMen2 from '@/assets/men2.jpeg';
+import ImgMen3 from '@/assets/men3.jpeg';
+
+// Import Women Images
+import ImgWomen1 from '@/assets/women1.jpeg';
+import ImgWomen2 from '@/assets/women2.jpeg';
+import ImgWomen3 from '@/assets/women3.jpeg';
+
+// Import Accessories Images
+import ImgAccessories1 from '@/assets/accessory1.jpeg';
+import ImgAccessories2 from '@/assets/accessory2.jpeg';
+import ImgAccessories3 from '@/assets/accessory3.jpeg';
+
+// Category to images map
+const categoryImageMap = {
+  men: [ImgMen1, ImgMen2, ImgMen3],
+  women: [ImgWomen1, ImgWomen2, ImgWomen3],
+  accessories: [ImgAccessories1, ImgAccessories2, ImgAccessories3],
+};
+
 export default {
   name: 'ProductsPage',
   components: {
@@ -47,7 +67,6 @@ export default {
     ProductGrid,
   },
   props: {
-    // coming from route props
     category: {
       type: String,
       default: 'men'
@@ -55,15 +74,9 @@ export default {
   },
   data() {
     return {
-      images: [
-Img1,
-Img2,
-Img3
-      ],
       transitions: ['fade-in', 'scale-in', 'slide-in'],
       currentSlide: 0,
       titleTransition: 'fade-in',
-      // Hold user-applied filters (from FilterComponent)
       userFilters: {
         name: '',
         type: null,
@@ -73,72 +86,68 @@ Img3
     };
   },
   computed: {
-    // Merge route category with user filters
     computedFilters() {
+      const searchQuery = this.$route.query.search || '';
       return {
         ...this.userFilters,
-        category: this.currentCategory.toLowerCase() // ensure matching with product data
+        category: this.currentCategory.toLowerCase(),
+        name: searchQuery || this.userFilters.name
       };
     },
-    // Determine current category either from prop or route param
     currentCategory() {
       return this.category || (this.$route.params.category || 'men');
     },
-    categoryBgClass() {
-    const map = {
-      men: 'bg-blue-100',
-      women: 'bg-rose-100',
-      accessories: 'bg-yellow-100',
-    };
-    return map[this.currentCategory.toLowerCase()] || 'bg-white';
-  },
     currentCategoryTitle() {
       return this.currentCategory.charAt(0).toUpperCase() + this.currentCategory.slice(1);
     },
-    computedFilters() {
-  const searchQuery = this.$route.query.search || '';
-  return {
-    ...this.userFilters,
-    category: this.currentCategory.toLowerCase(),
-    name: searchQuery || this.userFilters.name
-  };
-}
-  },
-  setup() {
-    const route = useRoute();
-    return { route };
+    categoryBgClass() {
+      const map = {
+        men: 'bg-blue-100',
+        women: 'bg-rose-100',
+        accessories: 'bg-yellow-100',
+      };
+      return map[this.currentCategory.toLowerCase()] || 'bg-white';
+    },
+    slideshowImages() {
+      return categoryImageMap[this.currentCategory.toLowerCase()] || [];
+    }
   },
   methods: {
     nextSlide() {
+      if (!this.slideshowImages.length) return;
       const randomTransition = this.transitions[Math.floor(Math.random() * this.transitions.length)];
-      const nextTransition = this.transitions[(this.currentSlide + 1) % this.transitions.length];
-      this.currentSlide = (this.currentSlide + 1) % this.images.length;
+      this.currentSlide = (this.currentSlide + 1) % this.slideshowImages.length;
       this.titleTransition = randomTransition;
+    },
+    preloadImages() {
+      this.slideshowImages.forEach(src => {
+        const img = new Image();
+        img.src = src;
+      });
     }
   },
   mounted() {
     const productStore = useProductStore();
-    if (!productStore.allProducts.lenght){
+    if (!productStore.allProducts.length) {
       productStore.loadAllProducts();
     }
-    this.images.forEach(src => {
-      const img = new Image();
-      img.src = src;
-    });
+    this.preloadImages();
     setInterval(this.nextSlide, 5000);
   },
   watch: {
-    // If the route param changes, update the filters if needed.
     '$route.params.category'(newCat) {
-      // You can further react to category change here if needed.
-      // For example, you could reset certain filters.
+      this.preloadImages(); // preload new category images when category changes
+      this.currentSlide = 0; // Reset to first slide when changing category
     }
+  },
+  setup() {
+    const route = useRoute();
+    return { route };
   }
 };
 </script>
 
 <style scoped>
-/* Your current styles for slideshow and transitions */
 .slideshow-container {
   position: relative;
   overflow: hidden;

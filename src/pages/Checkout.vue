@@ -90,14 +90,14 @@
         </div>
 
         <!-- Coupon Section -->
-        <div class="mt-6">
-          <label class="block mb-2 text-center font-medium text-gray-700">Coupon Code</label>
+        <div class="mt-8">
+         
           <div class="flex flex-col md:flex-row gap-2">
             <input
               v-model="couponCode"
               type="text"
-              placeholder="Enter coupon code"
-              class="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+              placeholder="Enter Discount Code"
+              class="flex-1 px-4 py-2 border text-center rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
             />
             <button
               @click="applyCoupon"
@@ -128,14 +128,14 @@
             <span>-${{ discount.toFixed(2) }}</span>
           </div>
 
-          <div class="flex justify-between font-medium text-gray-700">
+          <!-- <div class="flex justify-between font-medium text-gray-700">
             <span>Shipping</span>
             <span>$10.00</span>
-          </div>
+          </div> -->
 
           <div class="flex justify-between font-bold text-gray-900 text-lg mt-2">
             <span>Total</span>
-            <span>${{ (subtotal - discount + 10).toFixed(2) }}</span>
+            <span>${{ (subtotal - discount).toFixed(2) }}</span>
           </div>
         </div>
 
@@ -324,15 +324,26 @@ const payNow = async () => {
         callback: function (paystackResponse) {
           (async () => {
             try {
-              const verifyRes = await api.get('payment/verify', {
+              const verifyRes = await api.post('payment/verify', {
                 reference: paystackResponse.reference,
               });
 
-              if (verifyRes.data.status === 'success') {
-                toast.success('Payment successful and verified!');
-                // await cartStore.clearCart();
+              if (verifyRes.data.success) {
+                try{
+                    const createOrder = await api.post('order/create-order')
+                    if (createOrder.data.success){
+                      toast.success(verifyRes.data.message);
+                    }else{
+                      toast.error(verifyRes.data.message);
+                    }
+                }catch (error){
+                  console.error('Order error:', error);
+                  toast.error('Error creating order.');
+
+                }
+                
               } else {
-                toast.error('Payment verification failed.');
+                toast.error(verifyRes.data.message);
               }
             } catch (error) {
               console.error('Verification error:', error);
