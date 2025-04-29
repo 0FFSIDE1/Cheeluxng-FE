@@ -469,17 +469,19 @@ function handleCartAdd(payload) {
     return;
   }
   try {
-    cartStore.addProductToCart(payload.id, payload);
+    cartStore.addProductToCart(payload.id, payload)
+if (!cartStore.error){
     toast.success(`${payload.name} ${payload.color} ${payload.size} added to cart `, {
                 timeout: 3000,
                 hideProgressBar: false,
                 closeOnClick: true,
                 pauseOnHover: true,
             });
+}
     
   } catch (err) {
     console.error('Home: Cart store error', err);
-    toast.error('Cart store error', err, {
+    toast.error(cartStore.error, err, {
                 timeout: 3000,
                 hideProgressBar: false,
                 closeOnClick: true,
