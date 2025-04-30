@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { fetchCsrfToken } from '@/plugins/csrf';
+import { fetchCsrfToken } from '../plugins/csrf';
 
 const baseURL = import.meta.env.VITE_API_URL;
 
