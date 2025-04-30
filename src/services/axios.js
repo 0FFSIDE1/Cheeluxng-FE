@@ -1,53 +1,60 @@
 import axios from 'axios';
-import { fetchCsrfToken } from '../plugins/csrf';
 
 const baseURL = import.meta.env.VITE_API_URL;
 
 const api = axios.create({
   baseURL,
-  withCredentials: true,
+  withCredentials: true, // Necessary for cross-origin cookies
   headers: {
     'Content-Type': 'application/json',
-
   },
 });
 
-
-
-/// Add request interceptor to include CSRF token for non-GET requests
-api.interceptors.request.use(async (config) => {
-  if (['post', 'put', 'patch', 'delete'].includes(config.method.toLowerCase())) {
-    let csrfToken = getCookie('csrftoken');
-    if (csrfToken === 'None') {
-      // Fetch CSRF token if not found
-      response = await api.get('get-csrf-token');
-      csrfToken = response
-      console.log(response)
-      console.log(csrfToken)
-    }
-    if (csrfToken) {
-      config.headers['X-CSRFToken'] = csrfToken;
-    } else {
-      console.warn('CSRF token not available');
-    }
-  }
-  return config;
-}, (error) => Promise.reject(error));
-
 // Helper function to get CSRF token from cookies
 function getCookie(name) {
-  let cookieValue = 'None';
+  let cookieValue = null;
   if (document.cookie && document.cookie !== '') {
     const cookies = document.cookie.split(';');
-    for (let i = 0; i < cookies.length; i++) {
-      const cookie = cookies[i].trim();
-      if (cookie.substring(0, name.length + 1) === `${name}=`) {
-        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+    for (let cookie of cookies) {
+      cookie = cookie.trim();
+      if (cookie.startsWith(name + '=')) {
+        cookieValue = decodeURIComponent(cookie.slice(name.length + 1));
         break;
       }
     }
   }
   return cookieValue;
 }
+
+// Interceptor to attach CSRF token to unsafe methods
+api.interceptors.request.use(
+  async (config) => {
+    const method = config.method?.toLowerCase();
+
+    if (['post', 'put', 'patch', 'delete'].includes(method)) {
+      let csrfToken = getCookie('csrftoken');
+
+      if (!csrfToken || csrfToken === 'None') {
+        // Try to fetch CSRF token from Django endpoint
+        try {
+          await api.get('get-csrf-token');
+          csrfToken = getCookie('csrftoken'); // re-read cookie after fetch
+          console.log('Fetched new CSRF token:', csrfToken);
+        } catch (err) {
+          console.error('Failed to fetch CSRF token:', err);
+        }
+      }
+
+      if (csrfToken && csrfToken !== 'None') {
+        config.headers['X-CSRFToken'] = csrfToken;
+      } else {
+        console.warn('CSRF token not available for request.');
+      }
+    }
+
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
 export default api;
