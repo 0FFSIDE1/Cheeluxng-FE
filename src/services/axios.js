@@ -18,7 +18,6 @@ const api = axios.create({
 api.interceptors.request.use(async (config) => {
   if (['post', 'put', 'patch', 'delete'].includes(config.method.toLowerCase())) {
     let csrfToken = getCookie('csrftoken');
-    console.log(csrfToken)
     if (!csrfToken) {
       // Fetch CSRF token if not found
       response = await fetchCsrfToken();
