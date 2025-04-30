@@ -42,67 +42,7 @@
     to="/explore"
   />
 
-  <!-- POPULAR SELLING SECTION -->
-  <section data-aos="zoom-in" class="w-full bg-gradient-to-b from-slate-200 to-slate-100 py-8 @container">
-    <!-- Loading State -->
-    <div v-if="productStore.loading" class="flex justify-center items-center h-32">
-      <div class="animate-spin rounded-full h-10 w-10 border-t-4 border-b-4 border-primary"></div>
-    </div>
-
-    <!-- Empty State -->
-    <div v-else-if="!filteredItems.length" class="prose text-center text-gray-600 mx-auto">
-      <h2 class="text-xl font-semibold">No Best Sellers Available</h2>
-      <p>Check back soon for our top picks!</p>
-    </div>
-
-    <!-- Content -->
-    <div v-else class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-      <div class="flex flex-col gap-4">
-        <!-- Centered Title -->
-        <div class="w-full flex justify-center">
-          <h2
-            class="prose prose-lg text-gray-900 text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold leading-snug animate-fade-in"
-          >
-            POPULAR SELLING
-          </h2>
-        </div>
-        <!-- Filter Buttons -->
-        <div class="flex flex-wrap gap-4 justify-center">
-          <button
-            class="btn btn-sm rounded-full transition-all"
-            :class="{ 'btn-dark': activeFilter === 'All', 'btn-ghost hover:bg-gray-200': activeFilter !== 'All' }"
-            @click="activeFilter = 'All'"
-            aria-label="Show all products"
-            :aria-pressed="activeFilter === 'All'"
-          >
-            All
-          </button>
-          <button
-            class="btn btn-sm rounded-full transition-all"
-            :class="{ 'btn-secondary': activeFilter === 'Women', 'btn-ghost hover:bg-gray-200': activeFilter !== 'Women' }"
-            @click="activeFilter = 'Women'"
-            aria-label="Filter by Women's products"
-            :aria-pressed="activeFilter === 'Women'"
-          >
-            Women
-          </button>
-          <button
-            class="btn btn-sm rounded-full transition-all"
-            :class="{ 'btn-primary': activeFilter === 'Men', 'btn-ghost hover:bg-gray-200': activeFilter !== 'Men' }"
-            @click="activeFilter = 'Men'"
-            aria-label="Filter by Men's products"
-            :aria-pressed="activeFilter === 'Men'"
-          >
-            Men
-          </button>
-        </div>
-      </div>
-      <!-- Slider -->
-      
-        <Slider title="None" :items="filteredItems" :visibleItems="1" @add-to-cart="handleCartAdd" to="/explore"/>
-      
-    </div>
-  </section>
+  <PopularSelling background="bg-pink-100"/>
 
   <!-- FAST SELLING SECTION -->
   <ProductShowcase
@@ -379,6 +319,7 @@ import { useToast } from 'vue-toastification';
 import NewsletterSubscribe from '@/components/Subscribe.vue'
 import CustomerFeedback from "@/components/CustomerReviews.vue";
 import ImageUrl from '@/assets/hero.jpeg'
+import PopularSelling from '@/components/PopularSelling.vue';
 
 // Stores
 const productStore = useProductStore();
