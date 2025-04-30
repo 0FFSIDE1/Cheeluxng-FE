@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { fetchCsrfToken } from '@/plugins/csrf';
 
 const baseURL = import.meta.env.VITE_API_URL;
 
@@ -12,13 +13,22 @@ const api = axios.create({
 });
 
 
+
 /// Add request interceptor to include CSRF token for non-GET requests
-api.interceptors.request.use((config) => {
+api.interceptors.request.use(async (config) => {
   if (['post', 'put', 'patch', 'delete'].includes(config.method.toLowerCase())) {
-    const csrfToken = getCookie('csrftoken');
+    let csrfToken = getCookie('csrftoken');
     console.log(csrfToken)
+    if (!csrfToken) {
+      // Fetch CSRF token if not found
+      response = await fetchCsrfToken();
+      csrfToken = response.data.csrfToken
+      console.log(csrfToken)
+    }
     if (csrfToken) {
       config.headers['X-CSRFToken'] = csrfToken;
+    } else {
+      console.warn('CSRF token not available');
     }
   }
   return config;
