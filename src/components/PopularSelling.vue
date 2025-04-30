@@ -19,7 +19,7 @@
       </div>
   
       <!-- Content -->
-      <div v-else class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+      <div v-else class="max-w-7xl mx-auto px-4 sm:px-6 md:px-4">
         <div class="flex flex-col gap-4">
           <!-- Centered Title -->
           <div class="w-full flex justify-center">
