@@ -7,40 +7,26 @@ const api = axios.create({
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
+    'X-CSRFToken': getCookie('csrftoken'),
   },
 });
 
-// Interceptor to attach CSRF token to unsafe requests
-api.interceptors.request.use(
-  (config) => {
-    const method = config.method?.toLowerCase();
-    const csrfToken = getCookie('csrftoken');
-    console.log(csrfToken, method)
 
-    if (csrfToken && method && ['post', 'put', 'patch', 'delete'].includes(method)) {
-      config.headers['X-CSRFToken'] = csrfToken;
-      console.log(`Attached CSRF token to ${method.toUpperCase()} request:`, csrfToken);
-    }
-
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
-
-// Utility function to read cookie value
+// Helper function to get CSRF token from cookies
 function getCookie(name) {
   let cookieValue = null;
   if (document.cookie && document.cookie !== '') {
     const cookies = document.cookie.split(';');
-    for (let cookie of cookies) {
-      cookie = cookie.trim();
-      if (cookie.startsWith(name + '=')) {
-        cookieValue = decodeURIComponent(cookie.slice(name.length + 1));
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
         break;
       }
     }
   }
   return cookieValue;
 }
+
 
 export default api;
