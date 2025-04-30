@@ -23,6 +23,7 @@ api.interceptors.request.use(async (config) => {
       // Fetch CSRF token if not found
       response = await api.get('get-csrf-token');
       csrfToken = response
+      console.log(response)
       console.log(csrfToken)
     }
     if (csrfToken) {
