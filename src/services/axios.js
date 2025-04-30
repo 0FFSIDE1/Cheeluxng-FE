@@ -37,7 +37,7 @@ api.interceptors.request.use(
       if (!csrfToken || csrfToken === 'None') {
         // Try to fetch CSRF token from Django endpoint
         try {
-          response = await api.get('get-csrf-token');
+          const response = await api.get('get-csrf-token');
           console.log(response)
           csrfToken = getCookie('csrftoken'); // re-read cookie after fetch
           console.log('Fetched new CSRF token:', csrfToken);
