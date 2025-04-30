@@ -4,7 +4,7 @@ import Cookies from 'js-cookie';
 export const fetchCsrfToken = async () => {
   if (!Cookies.get('csrftoken')) {
     try {
-      const response = await api.get('/get-csrf-token'); // ensure this endpoint matches your Django route
+      const response = await api.get('get-csrf-token'); // ensure this endpoint matches your Django route
       console.log('CSRF token fetched:', Cookies.get('csrftoken'));
       return response;
     } catch (error) {
@@ -17,7 +17,6 @@ export default {
   install: async (app) => {
     // Fetch CSRF token on app start
     await fetchCsrfToken();
-
     // Make csrf utility available globally
     app.config.globalProperties.$csrf = {
       fetch: fetchCsrfToken,
