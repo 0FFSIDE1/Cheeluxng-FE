@@ -30,7 +30,7 @@
       <div class="flex flex-col gap-6">
         <!-- Centered Title -->
         <h2
-          class="prose text-center text-lg @sm:text-xl @md:text-2xl @lg:text-3xl font-semibold font-montserrat leading-snug animate-fade-in"
+          class="prose text-center text-gray-950 text-lg @sm:text-xl @md:text-2xl @lg:text-3xl font-semibold font-montserrat leading-snug animate-fade-in"
         >
           {{ title }}
         </h2>
