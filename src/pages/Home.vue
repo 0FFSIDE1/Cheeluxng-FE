@@ -56,7 +56,7 @@
    <section  data-aos="zoom-in" class="bg-pink-100 py-14">
     <div class="h-full md:mx-12 flex flex-col p-8">
       <h2 class="text-gray-800 text-balance flex justify-center text-3xl md:text-3xl mb-8">ACCESSORIES</h2>
-      <p class="text-gray-800 text-lg p-2 text-balance flex justify-center mb-8">
+      <p class="text-gray-800 text-lg p-2 text-balance flex justify-center items-center mb-8">
         From sleek gym-ready essentials to cozy off-duty pieces, these must-have accessories add the perfect finishing touch to any outfit. Don’t miss out—explore our new arrivals and upgrade your style today!
       </p>
       <div class="accessoriesdiv grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 mt-6">
@@ -411,15 +411,12 @@ function handleCartAdd(payload) {
   }
   try {
     cartStore.addProductToCart(payload.id, payload)
-if (!cartStore.error){
     toast.success(`${payload.name} ${payload.color} ${payload.size} added to cart `, {
                 timeout: 3000,
                 hideProgressBar: false,
                 closeOnClick: true,
                 pauseOnHover: true,
             });
-}
-    
   } catch (err) {
     console.error('Home: Cart store error', err);
     toast.error(cartStore.error, err, {
