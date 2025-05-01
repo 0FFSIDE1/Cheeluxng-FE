@@ -1,10 +1,9 @@
 import axios from 'axios';
 
 
-const Env = import.meta.env.ENVIRONMENT;
-
+const env = import.meta.env.ENVIRONMENT;
 const baseURL =
-  Env === 'Production'
+  env == 'Production' && import.meta.env.VITE_API_URL
     ? import.meta.env.VITE_API_URL
     : 'http://localhost:8000/api/v1/';
 
