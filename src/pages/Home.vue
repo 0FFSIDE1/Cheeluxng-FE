@@ -414,14 +414,14 @@ function navigateToCategory(category) {
 }
 
 
-// Filtering for Popular Selling
-const activeFilter = ref('All');
-const filteredItems = computed(() => {
-  if (activeFilter.value === 'All') return productStore.sections.bestSellers;
-  return productStore.sections.bestSellers.filter(
-    (item) => item.category === activeFilter.value
-  );
-});
+// // Filtering for Popular Selling
+// const activeFilter = ref('All');
+// const filteredItems = computed(() => {
+//   if (activeFilter.value === 'All') return productStore.sections.bestSellers;
+//   return productStore.sections.bestSellers.filter(
+//     (item) => item.category === activeFilter.value
+//   );
+// });
 
 const WomenactiveFilter = ref('Shorts');
 const filteredProduct = computed(() => {
