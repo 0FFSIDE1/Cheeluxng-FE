@@ -18,12 +18,15 @@
 </template>
 
 <script setup>
+import { useRoute } from 'vue-router'
 import DefaultLayout from './layouts/DefaultLayout.vue'
 import Preloader from './components/Preloader.vue';
 import { ref, onMounted} from 'vue';
 import ScrollToTop from './components/ScrollToTopBtn.vue';
 
 const loading = ref(true);
+const route = useRoute()
+
 
 onMounted(() => {
   setTimeout(() => {
