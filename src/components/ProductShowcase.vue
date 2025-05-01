@@ -1,13 +1,13 @@
 <!-- src/components/ProductShowcase.vue -->
 <template>
   <section class="my-6 mx-4 h-full @container">
-    <div class="flex justify-center items-center flex-col gap-6 relative">
+    <div class="flex justify-center items-center text-center flex-col gap-6 relative">
       <h2
         class="prose prose-lg text-gray-900 text-2xl sm:text-3xl text-center max-w-prose mx-auto animate-fade-in"
       >
         {{ title }}
       </h2>
-      <p class="text-gray-800 text-lg text-balance flex justify-center mb-8">
+      <p class="text-gray-800 text-lg p-4 flex justify-center items-center  mb-8">
         Loved by everyone, these are our most popular picks! From comfy loungewear to workout essentials, these pieces are made to keep you looking great and feeling even better. Don’t miss out—shop now and see what everyone’s talking about!
       </p>
 
