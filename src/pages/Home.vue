@@ -37,7 +37,7 @@
     title="NEW ARRIVALS ✨"
     details="Fresh styles are here! Explore our latest collection of activewear and loungewear, designed to keep you comfortable and stylish. From gym days to chill days, these new arrivals are perfect for every mood. Don’t wait—grab your favorites before they’re gone!"
     :items="productStore.sections.newArrivals"
-    :visibleItems="2"
+    :visibleItems="{ xs: 1, sm: 2, md: 3, lg: 4 }"
     @add-to-cart="handleCartAdd"
     to="/explore"
   />
@@ -54,9 +54,9 @@
 
    <!-- ACCESSORIES SECTION -->
    <section  data-aos="zoom-in" class="bg-pink-100 py-14">
-    <div class="h-full md:mx-12 flex flex-col p-8">
+    <div class="h-full md:mx-12 text-center flex flex-col p-8">
       <h2 class="text-gray-800 text-balance flex justify-center text-3xl md:text-3xl mb-8">ACCESSORIES</h2>
-      <p class="text-gray-800 text-lg p-2 text-balance flex justify-center items-center mb-8">
+      <p class="text-gray-900 text-lg p-4 text-balance flex justify-center items-center mb-8">
         From sleek gym-ready essentials to cozy off-duty pieces, these must-have accessories add the perfect finishing touch to any outfit. Don’t miss out—explore our new arrivals and upgrade your style today!
       </p>
       <div class="accessoriesdiv grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 mt-6">
@@ -90,9 +90,9 @@
 
   <!-- CHICKY SETS SECTION -->
   <section data-aos="zoom-in" class="bg-fuchsia-100 py-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-12">
+    <div class="max-w-7xl text-center mx-auto px-4 sm:px-6 md:px-12">
       <h2 class="text-3xl font-semibold text-center mb-4 text-gray-950">CHICKY SETS 🌟</h2>
-      <p class="text-lg mb-10 text-gray-700 text-balance text-center">
+      <p class="text-lg mb-10 text-gray-900 p-4 text-balance flex justify-center items-center">
         From high-performance workouts to relaxing weekends at home, CHEELUXNG’s women’s activewear collection blends comfort, versatility, and modern style. Whether you’re hitting the gym, running errands, or lounging in style, our trend-forward designs empower you to look confident and feel your best—anywhere, anytime.
       </p>
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
@@ -158,7 +158,7 @@
   <!-- LADIES COMFORT SECTION -->
   <section data-aos="zoom-in" class="p-10 bg-gradient-to-r from-pink-50 to-gray-300">
     <div class="max-w-7xl mx-auto text-center px-4 sm:px-6 md:px-12">
-      <h2 class="text-3xl font-semibold text-gray-900 mb-4 font-montserrat">
+      <h2 class="text-2xl font-semibold text-gray-900 mb-4 font-montserrat">
         LADIES COMFORT 🌟
       </h2>
       <p class="text-lg mb-10 text-gray-700 font-lato">
@@ -248,7 +248,7 @@
       <!-- Filtered Products Slider -->
       <Slider
         :items="filteredProduct"
-        :visibleItems="5"
+        :visibleItems="{ xs: 1, sm: 2, md: 3, lg: 4 }"
         @add-to-cart="handleCartAdd"
         to="/women"
       />
@@ -295,7 +295,7 @@
       <!-- Filtered Products Slider -->
       <Slider
         :items="filteredMenProduct"
-        :visibleItems="5"
+        :visibleItems="{ xs: 1, sm: 2, md: 3, lg: 4 }"
         @add-to-cart="handleCartAdd"
         to="/men"
       />
@@ -307,7 +307,7 @@
 </template>
 
 <script setup>
-import Slider from "../components/Slider.vue";
+import Slider from "@/components/Slider.vue";
 import ProductShowcase from "@/components/ProductShowcase.vue";
 import AddToCartBtn from "@/components/AddToCartBtn.vue";
 import ProductOptionsSelector from "@/components/productOptions.vue";
@@ -328,6 +328,7 @@ const toast = useToast();
 
 // Hero Image
 const heroImage = ref(ImageUrl);
+
 
 // Accessories Data
 const accessories = ref([
@@ -350,7 +351,6 @@ const accessories = ref([
 
 // Navigation
 function navigateToCategory(category) {
-  console.log('Home: Navigating to explore with category', { category });
   router.push({ path: '/explore', query: { category } });
 }
 
