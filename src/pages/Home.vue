@@ -37,72 +37,12 @@
     title="NEW ARRIVALS ✨"
     details="Fresh styles are here! Explore our latest collection of activewear and loungewear, designed to keep you comfortable and stylish. From gym days to chill days, these new arrivals are perfect for every mood. Don’t wait—grab your favorites before they’re gone!"
     :items="productStore.sections.newArrivals"
-    :visibleItems="2"
+    :visibleItems="{ xs: 1, sm: 2, md: 3, lg: 4 }"
     @add-to-cart="handleCartAdd"
     to="/explore"
   />
 
-  <!-- POPULAR SELLING SECTION -->
-  <section data-aos="zoom-in" class="w-full bg-gradient-to-b from-slate-200 to-slate-100 py-8 @container">
-    <!-- Loading State -->
-    <div v-if="productStore.loading" class="flex justify-center items-center h-32">
-      <div class="animate-spin rounded-full h-10 w-10 border-t-4 border-b-4 border-primary"></div>
-    </div>
-
-    <!-- Empty State -->
-    <div v-else-if="!filteredItems.length" class="prose text-center text-gray-600 mx-auto">
-      <h2 class="text-xl font-semibold">No Best Sellers Available</h2>
-      <p>Check back soon for our top picks!</p>
-    </div>
-
-    <!-- Content -->
-    <div v-else class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-      <div class="flex flex-col gap-4">
-        <!-- Centered Title -->
-        <div class="w-full flex justify-center">
-          <h2
-            class="prose prose-lg text-gray-900 text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold leading-snug animate-fade-in"
-          >
-            POPULAR SELLING
-          </h2>
-        </div>
-        <!-- Filter Buttons -->
-        <div class="flex flex-wrap gap-4 justify-center">
-          <button
-            class="btn btn-sm rounded-full transition-all"
-            :class="{ 'btn-dark': activeFilter === 'All', 'btn-ghost hover:bg-gray-200': activeFilter !== 'All' }"
-            @click="activeFilter = 'All'"
-            aria-label="Show all products"
-            :aria-pressed="activeFilter === 'All'"
-          >
-            All
-          </button>
-          <button
-            class="btn btn-sm rounded-full transition-all"
-            :class="{ 'btn-secondary': activeFilter === 'Women', 'btn-ghost hover:bg-gray-200': activeFilter !== 'Women' }"
-            @click="activeFilter = 'Women'"
-            aria-label="Filter by Women's products"
-            :aria-pressed="activeFilter === 'Women'"
-          >
-            Women
-          </button>
-          <button
-            class="btn btn-sm rounded-full transition-all"
-            :class="{ 'btn-primary': activeFilter === 'Men', 'btn-ghost hover:bg-gray-200': activeFilter !== 'Men' }"
-            @click="activeFilter = 'Men'"
-            aria-label="Filter by Men's products"
-            :aria-pressed="activeFilter === 'Men'"
-          >
-            Men
-          </button>
-        </div>
-      </div>
-      <!-- Slider -->
-      <div class="mt-4">
-        <Slider title="None" :items="filteredItems" :visibleItems="4" @add-to-cart="handleCartAdd" to="/explore"/>
-      </div>
-    </div>
-  </section>
+  <PopularSelling background="bg-pink-100"/>
 
   <!-- FAST SELLING SECTION -->
   <ProductShowcase
@@ -114,9 +54,9 @@
 
    <!-- ACCESSORIES SECTION -->
    <section  data-aos="zoom-in" class="bg-pink-100 py-14">
-    <div class="h-full md:mx-12 flex flex-col p-8">
+    <div class="h-full md:mx-12 text-center flex flex-col p-8">
       <h2 class="text-gray-800 text-balance flex justify-center text-3xl md:text-3xl mb-8">ACCESSORIES</h2>
-      <p class="text-gray-800 text-lg p-2 text-balance flex justify-center mb-8">
+      <p class="text-gray-900 text-lg p-4 text-balance flex justify-center items-center mb-8">
         From sleek gym-ready essentials to cozy off-duty pieces, these must-have accessories add the perfect finishing touch to any outfit. Don’t miss out—explore our new arrivals and upgrade your style today!
       </p>
       <div class="accessoriesdiv grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 mt-6">
@@ -150,9 +90,9 @@
 
   <!-- CHICKY SETS SECTION -->
   <section data-aos="zoom-in" class="bg-fuchsia-100 py-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-12">
+    <div class="max-w-7xl text-center mx-auto px-4 sm:px-6 md:px-12">
       <h2 class="text-3xl font-semibold text-center mb-4 text-gray-950">CHICKY SETS 🌟</h2>
-      <p class="text-lg mb-10 text-gray-700 text-balance text-center">
+      <p class="text-lg mb-10 text-gray-900 p-4 text-balance flex justify-center items-center">
         From high-performance workouts to relaxing weekends at home, CHEELUXNG’s women’s activewear collection blends comfort, versatility, and modern style. Whether you’re hitting the gym, running errands, or lounging in style, our trend-forward designs empower you to look confident and feel your best—anywhere, anytime.
       </p>
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
@@ -218,7 +158,7 @@
   <!-- LADIES COMFORT SECTION -->
   <section data-aos="zoom-in" class="p-10 bg-gradient-to-r from-pink-50 to-gray-300">
     <div class="max-w-7xl mx-auto text-center px-4 sm:px-6 md:px-12">
-      <h2 class="text-3xl font-semibold text-gray-900 mb-4 font-montserrat">
+      <h2 class="text-2xl font-semibold text-gray-900 mb-4 font-montserrat">
         LADIES COMFORT 🌟
       </h2>
       <p class="text-lg mb-10 text-gray-700 font-lato">
@@ -308,7 +248,7 @@
       <!-- Filtered Products Slider -->
       <Slider
         :items="filteredProduct"
-        :visibleItems="5"
+        :visibleItems="{ xs: 1, sm: 2, md: 3, lg: 4 }"
         @add-to-cart="handleCartAdd"
         to="/women"
       />
@@ -355,7 +295,7 @@
       <!-- Filtered Products Slider -->
       <Slider
         :items="filteredMenProduct"
-        :visibleItems="5"
+        :visibleItems="{ xs: 1, sm: 2, md: 3, lg: 4 }"
         @add-to-cart="handleCartAdd"
         to="/men"
       />
@@ -367,7 +307,7 @@
 </template>
 
 <script setup>
-import Slider from "../components/Slider.vue";
+import Slider from "@/components/Slider.vue";
 import ProductShowcase from "@/components/ProductShowcase.vue";
 import AddToCartBtn from "@/components/AddToCartBtn.vue";
 import ProductOptionsSelector from "@/components/productOptions.vue";
@@ -379,6 +319,7 @@ import { useToast } from 'vue-toastification';
 import NewsletterSubscribe from '@/components/Subscribe.vue'
 import CustomerFeedback from "@/components/CustomerReviews.vue";
 import ImageUrl from '@/assets/hero.jpeg'
+import PopularSelling from '@/components/PopularSelling.vue';
 
 // Stores
 const productStore = useProductStore();
@@ -387,6 +328,7 @@ const toast = useToast();
 
 // Hero Image
 const heroImage = ref(ImageUrl);
+
 
 // Accessories Data
 const accessories = ref([
@@ -409,7 +351,6 @@ const accessories = ref([
 
 // Navigation
 function navigateToCategory(category) {
-  console.log('Home: Navigating to explore with category', { category });
   router.push({ path: '/explore', query: { category } });
 }
 
@@ -469,17 +410,16 @@ function handleCartAdd(payload) {
     return;
   }
   try {
-    cartStore.addProductToCart(payload.id, payload);
+    cartStore.addProductToCart(payload.id, payload)
     toast.success(`${payload.name} ${payload.color} ${payload.size} added to cart `, {
                 timeout: 3000,
                 hideProgressBar: false,
                 closeOnClick: true,
                 pauseOnHover: true,
             });
-    
   } catch (err) {
     console.error('Home: Cart store error', err);
-    toast.error('Cart store error', err, {
+    toast.error(cartStore.error, err, {
                 timeout: 3000,
                 hideProgressBar: false,
                 closeOnClick: true,

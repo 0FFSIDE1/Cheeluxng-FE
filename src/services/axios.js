@@ -1,32 +1,23 @@
 import axios from 'axios';
 
-const baseURL = import.meta.env.VITE_API_URL;
 
+const Env = import.meta.env.ENVIRONMENT;
+// if (Env === 'Production'){
+//   var baseURL = import.meta.env.VITE_API_URL;
+// } else{
+//   var baseURL = 'http://localhost:8000/api/v1/'
+// }
+
+const baseURL = import.meta.env.VITE_API_URL;
 const api = axios.create({
   baseURL,
-  withCredentials: true,
+  withCredentials: true, // Necessary for cross-origin cookies
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// Interceptor to attach CSRF token to unsafe requests
-api.interceptors.request.use(
-  (config) => {
-    const method = config.method?.toLowerCase();
-    const csrfToken = getCookie('csrftoken');
-
-    if (csrfToken && method && ['post', 'put', 'patch', 'delete'].includes(method)) {
-      config.headers['X-CSRFToken'] = csrfToken;
-      console.log(`Attached CSRF token to ${method.toUpperCase()} request:`, csrfToken);
-    }
-
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
-
-// Utility function to read cookie value
+// Helper function to get CSRF token from cookies
 function getCookie(name) {
   let cookieValue = null;
   if (document.cookie && document.cookie !== '') {
@@ -42,4 +33,30 @@ function getCookie(name) {
   return cookieValue;
 }
 
+// Interceptor to attach CSRF token to unsafe methods
+api.interceptors.request.use(
+  async (config) => {
+    const method = config.method?.toLowerCase();
+
+    if (['post', 'put', 'patch', 'delete'].includes(method)) {
+      let csrfToken = getCookie('csrftoken');
+      if (!csrfToken || csrfToken === 'None') {
+        // Try to fetch CSRF token from backend
+        try {
+          var response = await api.get('get-csrf-token');
+          csrfToken = response.data.csrfToken
+        } catch (err) {
+          console.error('Failed to fetch CSRF token:', err);
+        }
+      }
+      if (csrfToken && csrfToken !== 'None') {
+        config.headers['X-CSRFToken'] = csrfToken;
+      } else {
+        console.warn('CSRF token not available for request.');
+      }
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 export default api;

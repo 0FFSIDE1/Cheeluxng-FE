@@ -27,7 +27,10 @@
         </button>
 
         <!-- Logo -->
-        <img src="@/assets/blacklogo.png" alt="logo" class="h-52 object-contain" />
+         <div class="flex justify-center mr-4 items-center h-24">
+          <img src="@/assets/blacklogo.png" alt="logo" class="object-contain" />
+         </div>
+       
       </div>
 
       <!-- Desktop Navigation -->

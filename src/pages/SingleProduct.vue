@@ -1,6 +1,6 @@
 <!-- src/views/Product.vue -->
 <template>
-  <div class="bg-pink-100 py-12 min-h-screen">
+  <div class="bg-pink-100 py-8 min-h-screen">
     <div v-if="loading" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
       <p class="text-lg font-lato text-gray-950">Loading product...</p>
     </div>
@@ -13,7 +13,7 @@
     <div v-else class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-6">
     <button
     @click="goBack"
-    class="inline-flex items-center my-4 px-4 py-2 bg-white text-gray-900 rounded-lg shadow hover:bg-gray-500 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-primary"
+    class="inline-flex items-center px-4 py-2 bg-white text-gray-900 rounded-lg shadow hover:bg-gray-900 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-primary"
      >
     ← Back
     </button>

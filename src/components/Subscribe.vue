@@ -3,9 +3,9 @@
       <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-12">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 items-center">
           <!-- Text Content -->
-          <div>
-            <h2 class="text-3xl text-gray-950 mb-4">{{ title }}</h2>
-            <p class="text-lg text-gray-700">{{ description }}</p>
+          <div class="text-center">
+            <h2 class="text-3xl text-gray-950 mb-4 ">{{ title }}</h2>
+            <p class="text-lg text-gray-700 text-balance flex justify-center items-center">{{ description }}</p>
           </div>
   
           <!-- Form -->
@@ -61,7 +61,7 @@
   defineProps({
     title: {
       type: String,
-      default: 'Subscribe to Our Newsletter 🌟',
+      default: 'Stay Updated!🌟',
     },
     description: {
       type: String,
