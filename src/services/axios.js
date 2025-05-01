@@ -2,12 +2,13 @@ import axios from 'axios';
 
 
 const Env = import.meta.env.ENVIRONMENT;
-if (Env === 'Production'){
-  var baseURL = import.meta.env.VITE_API_URL;
-} else{
-  var baseURL = 'http://localhost:8000/api/v1/'
-}
+// if (Env === 'Production'){
+//   var baseURL = import.meta.env.VITE_API_URL;
+// } else{
+//   var baseURL = 'http://localhost:8000/api/v1/'
+// }
 
+const baseURL = import.meta.env.VITE_API_URL;
 const api = axios.create({
   baseURL,
   withCredentials: true, // Necessary for cross-origin cookies
