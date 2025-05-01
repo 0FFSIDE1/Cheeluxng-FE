@@ -1,8 +1,15 @@
 <template>
   <div>
-    <Preloader v-if="loading"/>
+    <Preloader v-if="loading" />
     <DefaultLayout v-else>
-      <router-view />
+      <keep-alive>
+        <router-view v-slot="{ Component }" v-if="$route.meta.keepAlive">
+          <component :is="Component" />
+        </router-view>
+      </keep-alive>
+
+      <router-view v-if="!$route.meta.keepAlive" />
+      
       <ScrollToTop />
     </DefaultLayout>
   </div>
