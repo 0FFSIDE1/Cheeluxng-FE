@@ -61,7 +61,7 @@
   defineProps({
     title: {
       type: String,
-      default: 'Subscribe For More 🌟',
+      default: 'Stay Updated!🌟',
     },
     description: {
       type: String,
