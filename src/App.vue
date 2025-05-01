@@ -8,8 +8,10 @@
         </router-view>
       </keep-alive>
 
-      <router-view v-if="!$route.meta.keepAlive" />
-      
+      <router-view v-else v-slot="{ Component }">
+        <component :is="Component" />
+      </router-view>
+
       <ScrollToTop />
     </DefaultLayout>
   </div>
