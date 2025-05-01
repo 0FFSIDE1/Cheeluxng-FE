@@ -184,7 +184,10 @@ export default {
     details: String,
     to: String,
     items: { type: Array, required: true },
-    visibleItems: { type: Number, default: 2 },
+    visibleItems: {
+    type: Object,
+    default: () => ({ xs: 1, sm: 2, md: 3, lg: 4 }),
+  },
   },
   data() {
     return {
