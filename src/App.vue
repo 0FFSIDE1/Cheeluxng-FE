@@ -2,14 +2,11 @@
   <div>
     <Preloader v-if="loading" />
     <DefaultLayout v-else>
-      <keep-alive>
-        <router-view v-slot="{ Component }" v-if="$route.meta.keepAlive">
+      <router-view v-slot="{ Component }">
+        <keep-alive v-if="$route.meta.keepAlive">
           <component :is="Component" />
-        </router-view>
-      </keep-alive>
-
-      <router-view v-else v-slot="{ Component }">
-        <component :is="Component" />
+        </keep-alive>
+        <component v-else :is="Component" />
       </router-view>
 
       <ScrollToTop />
