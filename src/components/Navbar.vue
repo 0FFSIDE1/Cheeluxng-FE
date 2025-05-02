@@ -53,7 +53,7 @@
 
       <!-- Search & Cart -->
       <div class="flex items-center gap-4">
-        <div class="hidden  lg:ml-8 xl:block w-80">
+        <div class="hidden  lg:ml-8 md:block w-80">
           <input
             v-model="searchQuery"
             @keyup.enter="goToSearch"
