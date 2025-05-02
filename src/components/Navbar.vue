@@ -1,12 +1,12 @@
 <template>
   <nav class="bg-white shadow-md h-24 w-full sticky top-0 z-50">
-    <div class="container mx-auto px-4 flex justify-between items-center h-full">
+    <div class="container mx-auto px-2 flex justify-between items-center h-full">
       <!-- Logo & Hamburger -->
       <div class="flex items-center gap-4">
         <!-- Hamburger (Mobile) -->
         <button
           @click="menuOpen = !menuOpen"
-          class="md:hidden text-gray-700 focus:outline-none transition-transform duration-300"
+          class=" text-gray-700 lg:hidden focus:outline-none transition-transform duration-300"
         >
           <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
@@ -27,7 +27,7 @@
         </button>
 
         <!-- Logo -->
-         <div class="flex justify-center mr-4 items-center h-24">
+         <div class="flex justify-center mr-8 items-center h-24">
           <img src="@/assets/blacklogo.png" alt="logo" class="object-contain" />
          </div>
        
@@ -53,7 +53,7 @@
 
       <!-- Search & Cart -->
       <div class="flex items-center gap-4">
-        <div class="hidden md:block w-80">
+        <div class="hidden  lg:ml-8 xl:block w-80">
           <input
             v-model="searchQuery"
             @keyup.enter="goToSearch"

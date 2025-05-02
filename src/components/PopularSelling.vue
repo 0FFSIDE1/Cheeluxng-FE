@@ -1,7 +1,7 @@
 <!-- src/components/PopularSelling.vue -->
 <template>
   <section
-    class="w-full py-8 @container"
+    class="w-full py-8"
     :class="background || 'bg-gradient-to-b from-slate-200 to-slate-100'"
   >
     <!-- Loading State -->
