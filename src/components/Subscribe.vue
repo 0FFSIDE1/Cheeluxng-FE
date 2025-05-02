@@ -3,14 +3,14 @@
       <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-12">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 items-center">
           <!-- Text Content -->
-          <div class="text-center">
+          <div class="text-center pt-4">
             <h2 class="text-3xl text-gray-950 mb-4 ">{{ title }}</h2>
             <p class="text-lg text-gray-700 text-balance flex justify-center items-center">{{ description }}</p>
           </div>
   
           <!-- Form -->
-          <div class="bg-white rounded-3xl p-6 shadow-md">
-            <form @submit.prevent="handleSubmit" class="flex flex-col sm:flex-row gap-3">
+          <div class="bg-white rounded-3xl p-6 shadow-md mb-3">
+            <form @submit.prevent="handleSubmit" class="flex md:flex-col flex-col gap-3">
               <div class="flex-1">
                 <label for="newsletter-email" class="sr-only">Email Address</label>
                 <input
@@ -18,7 +18,7 @@
                   v-model="email"
                   type="email"
                   placeholder="Enter your email"
-                  class="w-full p-2 border text-gray-900 border-gray-300 rounded-lg text-base focus:ring-2 focus:ring-primary focus:border-transparent"
+                  class="w-full p-2 text-center border text-gray-900 border-gray-300 rounded-lg text-base focus:ring-2 focus:ring-primary focus:border-transparent"
                   :aria-describedby="emailError ? 'newsletter-error' : null"
                   aria-label="Enter your email to subscribe to our newsletter"
                   required
