@@ -17,7 +17,7 @@
             <div
               v-for="review in reviews"
               :key="`original-${review.id}`"
-              class="min-w-[20rem] mx-3 bg-white rounded-3xl shadow-md p-6 flex flex-col items-center text-center"
+              class="min-w-[20rem] mx-3 bg-gradient-to-r from-pink-50 to-gray-300 rounded-3xl shadow-md p-6 flex flex-col items-center text-center"
             >
               <p class="text-lg font-semibold text-gray-950">{{ review.name }}</p>
               <p class="text-sm text-gray-700 mt-1">Purchased: {{ review.product }}</p>
