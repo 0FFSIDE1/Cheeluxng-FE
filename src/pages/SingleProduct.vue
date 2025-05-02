@@ -129,15 +129,12 @@ const goBack = () => {
 onMounted(async () => {
   try {
     const productId = route.params.id;
-    console.log('Product: Fetching product', { productId });
     const response = await productStore.loadProductById(productId);
-    console.log('Product: API response', response);
     if (!response) {
       throw new Error('Product not found');
     }
     product.value = response;
     mainImage.value = product.value.cover_image  || '/images/placeholder.jpg';
-    console.log('Product: Loaded product', product.value);
   } catch (err) {
     console.error('Product: Failed to load product', err);
     error.value = 'Failed to load product. Please try again.';
@@ -148,26 +145,22 @@ onMounted(async () => {
 });
 const thumbnailImages = computed(() => {
   if (!product.value) return [];
-
   const cover = product.value.cover_image;
   const optionImages = product.value.available_options?.flatMap(option =>
     option.colors
       .map(color => color.image_url)
       .filter(url => !!url && url !== '{}' && url !== 'null')
   ) || [];
-
   const uniqueImages = Array.from(new Set(optionImages)); // remove duplicates
 
   if (uniqueImages.length === 0 && cover) {
     return [cover];
   }
-
   // Always include cover image first if it exists and not already in the list
   return cover && !uniqueImages.includes(cover)
     ? [cover, ...uniqueImages]
     : uniqueImages;
 });
-
 
 // Variant selection
 const selectSize = ({ sizeIndex }) => {
@@ -201,7 +194,6 @@ const cartPayload = computed(() => {
       payload.color = size.colors[colorIndex].name || '';
     }
   }
-  console.log('Product: Generated cart payload', payload);
   return payload;
 });
 
@@ -227,7 +219,6 @@ const handleAddToCart = async () => {
   try {
     const payload = cartPayload.value;
     await cartStore.addProductToCart(payload.id, payload);
-    console.log('Product: Added to cart', payload);
     toast.success(`${payload.size} ${payload.color} ${product.value.name} added to cart!`);
     selectedSize.value = null;
     selectedColor.value = null;
