@@ -1,7 +1,7 @@
 <!-- src/components/PopularSelling.vue -->
 <template>
   <section
-    class="w-full py-8 md:py-12 @container"
+    class="w-full py-8 @container"
     :class="background || 'bg-gradient-to-b from-slate-200 to-slate-100'"
   >
     <!-- Loading State -->
@@ -116,10 +116,8 @@ const loading = computed(() => {
 // Fetch products if no items are provided
 onMounted(async () => {
   if (props.items.length === 0) {
-    console.log('PopularSelling: Fetching products');
     try {
       await productStore.loadAllProducts();
-      console.log('PopularSelling: Products loaded', productStore.sections.bestSellers);
     } catch (err) {
       console.error('PopularSelling: Failed to load products', err);
     }
@@ -128,7 +126,6 @@ onMounted(async () => {
 
 // Handle cart addition
 const handleCartAdd = (payload) => {
-  console.log('PopularSelling: Adding to cart', payload);
   cartStore.addProductToCart(payload.id, payload);
   emit('add-to-cart', payload);
 };
