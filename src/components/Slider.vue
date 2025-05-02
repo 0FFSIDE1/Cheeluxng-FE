@@ -214,7 +214,7 @@ export default {
       this.isLoading = false;
 
       this.$nextTick(() => {
-        const imgElements = this.$refs.slider.querySelectorAll('img');
+        const imgElements = this.$refs.slider?.querySelectorAll('img') || [];
         imgElements.forEach((img, idx) => {
           if (img.complete && img.naturalWidth !== 0) {
             this.loadedImages[idx] = true;
@@ -228,9 +228,10 @@ export default {
       this.selectedSizes = this.items.map(() => null);
       this.selectedColors = this.items.map(() => null);
       this.loadedImages = this.items.map(() => false);
+      this.isLoading = false;
 
       this.$nextTick(() => {
-        const imgElements = this.$refs.slider.querySelectorAll('img');
+        const imgElements = this.$refs.slider?.querySelectorAll('img') || [];
         imgElements.forEach((img, idx) => {
           if (img.complete && img.naturalWidth !== 0) {
             this.loadedImages[idx] = true;
@@ -249,7 +250,6 @@ export default {
         slider.scrollLeft -= itemWidth;
         this.currentIndex = Math.max(this.currentIndex - 1, 0);
       } catch (error) {
-        console.error('Error in scrollBack:', error);
         toast.error('Error scrolling back.');
       }
     },
@@ -260,7 +260,7 @@ export default {
         slider.scrollLeft += itemWidth;
         this.currentIndex = Math.min(this.currentIndex + 1, this.items.length - this.visibleItems);
       } catch (error) {
-        console.error('Error in scrollForward:', error);
+        toast.error('Error scrolling forward.');
       }
     },
     startDrag(event) {
@@ -270,13 +270,15 @@ export default {
     },
     onDrag(event) {
       if (!this.isDragging) return;
-      event.preventDefault();
       const x = event.pageX || event.touches[0].pageX;
       const walk = x - this.startX;
       this.$refs.slider.scrollLeft = this.scrollLeft - walk;
     },
     endDrag() {
       this.isDragging = false;
+    },
+    onImageLoad(index) {
+      this.loadedImages[index] = true;
     },
     selectSize(index, sIndex) {
       this.selectedSizes[index] = sIndex;
@@ -292,9 +294,7 @@ export default {
       const colorIndex = this.selectedColors[index];
       if (sizeIndex == null || colorIndex == null) return false;
       const item = this.items[index];
-      const size = item?.available_options?.[sizeIndex];
-      const color = size?.colors?.[colorIndex];
-      return size && color && color.instock;
+      return item.available_options[sizeIndex].colors[colorIndex].instock;
     },
     getCartPayload(index) {
       const item = this.items[index];
@@ -337,7 +337,6 @@ export default {
   },
 };
 </script>
-
 <style scoped>
 .item-container::-webkit-scrollbar {
   display: none;
