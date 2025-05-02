@@ -23,7 +23,7 @@
         <!-- Secondary Product -->
         <div
           v-if="hasSecondary"
-          class="hidden md:block absolute bottom-0 right-0 md:right-[-80px] h-auto max-h-[400px] w-full max-w-[280px] bg-slate-100 rounded-lg p-3 shadow-lg animate-fade-in animate-delay-200"
+          class="hidden md:block absolute bottom-0 right-0 md:right-[-45px] h-auto max-h-[400px] w-full max-w-[280px] bg-slate-100 rounded-lg p-3 shadow-lg animate-fade-in animate-delay-200"
         >
           <img
             :src="secondaryProduct.photo_2"
