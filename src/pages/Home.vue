@@ -53,7 +53,7 @@
   />
 
    <!-- ACCESSORIES SECTION -->
-   <section  data-aos="zoom-in" class="bg-pink-100 py-14">
+   <section  data-aos="zoom-in" class="bg-pink-100">
     <div class="h-full md:mx-12 text-center flex flex-col p-8">
       <h2 class="text-gray-800 text-balance flex justify-center text-3xl md:text-3xl mb-8">ACCESSORIES</h2>
       <p class="text-gray-900 text-lg p-4 text-balance flex justify-center items-center mb-8">
@@ -89,11 +89,11 @@
   </section>
 
   <!-- CHICKY SETS SECTION -->
-  <section data-aos="zoom-in" class="bg-fuchsia-100 py-12">
+  <section data-aos="zoom-in" class="bg-fuchsia-100 pt-12">
     <div class="max-w-7xl text-center mx-auto px-4 sm:px-6 md:px-12">
       <h2 class="text-3xl font-semibold text-center mb-4 text-gray-950">CHICKY SETS 🌟</h2>
       <p class="text-lg mb-10 text-gray-900 p-4 text-balance flex justify-center items-center">
-        From high-performance workouts to relaxing weekends at home, CHEELUXNG’s women’s activewear collection blends comfort, versatility, and modern style. Whether you’re hitting the gym, running errands, or lounging in style, our trend-forward designs empower you to look confident and feel your best—anywhere, anytime.
+        Whether you’re hitting the gym, running errands, or lounging in style, our trend-forward designs empower you to look confident and feel your best—anywhere, anytime.
       </p>
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
         <template v-for="item in productStore.categories.womenSet" :key="item.id">
@@ -142,7 +142,7 @@
       </div>
       <div class="flex justify-center mt-10">
         <button
-          class="bg-slate-950 text-white px-6 py-3 rounded-full hover:bg-white hover:text-slate-950 transition shadow-md"
+          class="bg-slate-950 text-white px-6 py-3 mb-6 rounded-full hover:bg-white hover:text-slate-950 transition shadow-md"
           @click="$router.push('/women')"
           aria-label="View more women’s sets"
         >
