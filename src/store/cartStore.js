@@ -7,7 +7,7 @@ export const useCartStore = defineStore('cartstore', {
         totalAmount: 0,
         loading: false,
         error: null,
-        message: null,
+        message: '',
     }),
     actions: {
         async fetchCart() {
@@ -29,20 +29,23 @@ export const useCartStore = defineStore('cartstore', {
             }
         },
 
-        async addProductToCart(itemId, payload) {
+        async addProductToCart(payload) {
             this.loading = true;
             this.error = null;
             try {
               console.log(`cartstore: ${payload}`)
-              const response = await addToItemCart(itemId, payload);
+              const response = await addToItemCart(payload);
               if (response.data.success) {
                 this.message = response.data.message
                 await this.fetchCart(); // refresh cart state
+                return { success: true, message: this.message };
               } else {
                 this.error = response.data.message;
+                return { success: false, message: this.message };
               }
             } catch (err) {
               this.error = err.response?.data?.message || "Failed to add item to cart.";
+              return { success: false, message: this.error };
             } finally {
               this.loading = false;
             }
