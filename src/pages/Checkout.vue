@@ -96,13 +96,16 @@
             <input
               v-model="couponCode"
               type="text"
-              placeholder="Enter Discount Code"
+              placeholder="Enter Promo Code"
               class="flex-1 px-4 py-2 border text-center rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+              @input="validateInput"
             />
             <button
               @click="applyCoupon"
+              :disabled="!isValid"
               class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
-            >
+              :class="{ 'opacity-50 cursor-not-allowed': !isValid }"
+              >
               Apply
             </button>
           </div>
@@ -118,14 +121,14 @@
 
         <!-- Price Summary -->
         <div v-if="cartItems.length > 0" class="border-t mt-6 pt-4 space-y-2">
-          <!-- <div class="flex justify-between font-medium text-gray-700">
+          <div class="flex justify-between font-medium text-gray-700">
             <span>Subtotal</span>
-            <span>${{ subtotal.toFixed(2) }}</span>
-          </div> -->
+            <span>₦ {{ subtotal.toFixed(2) }}</span>
+          </div>
 
           <div v-if="discount > 0" class="flex justify-between font-medium text-green-600">
             <span>Discount</span>
-            <span>-${{ discount.toFixed(2) }}</span>
+            <span>-{{ discount }}%</span>
           </div>
 
           <!-- <div class="flex justify-between font-medium text-gray-700">
@@ -135,7 +138,7 @@
 
           <div class="flex justify-between font-bold text-gray-900 text-lg mt-2">
             <span>Total</span>
-            <span>${{ (subtotal - discount).toFixed(2) }}</span>
+            <span>₦ {{ total }}</span>
           </div>
         </div>
 
@@ -167,6 +170,13 @@ import api from '@/services/axios';
 const toast = useToast();
 const customerStore = useCustomerStore();
 const cartStore = useCartStore();
+const showError = ref(false);
+
+const isValid = computed(() => couponCode.value.trim().length >= 10);
+
+const validateInput = () => {
+  showError.value = couponCode.value.length > 0 && !isValid.value;
+};
 
 // Form data
 const form = reactive({
@@ -189,13 +199,7 @@ const couponCode = ref('');
 const discount = ref(0);
 const couponMessage = ref('');
 const couponApplied = ref(false);
-
-// Available coupons
-const availableCoupons = {
-  SPORT10: 10, // $10 off
-  FREESHIP: 10, // simulate free shipping
-  SAVE20: 20, // $20 off
-};
+const total = computed(() => subtotal.value - (subtotal.value * (discount.value / 100)));
 
 // Load customer info and cart items on page mount
 onMounted(async () => {
@@ -280,17 +284,31 @@ const saveButtonText = computed(() => {
 });
 
 // Apply coupon
-const applyCoupon = () => {
+const applyCoupon = async () => {
   const code = couponCode.value.trim().toUpperCase();
-  if (availableCoupons[code]) {
-    discount.value = availableCoupons[code];
-    couponMessage.value = `Coupon applied successfully! 🎉`;
-    couponApplied.value = true;
-  } else {
-    discount.value = 0;
-    couponMessage.value = `Invalid coupon code. ❌`;
+  if (isValid.value){
+    try {
+    const response = await api.post('coupon/apply-coupon', {
+      code: code,
+    })
+    if (response.data.success){
+      couponApplied.value = true;
+      couponMessage.value = response.data.message
+      discount.value = response.data.discount
+      toast.success(response.data.message)
+    }else{
+      couponApplied.value = false;
+      toast.error(response.data.message)
+    }
+    
+  }catch(error){
     couponApplied.value = false;
+    couponMessage.value = error.response?.data?.message.code[0] || 'Failed to apply coupon. Please try again.';
+    toast.error(couponMessage.value);
+    console.error('Error applying coupon:', error);
   }
+  }
+  
 };
 
 // Pay now
