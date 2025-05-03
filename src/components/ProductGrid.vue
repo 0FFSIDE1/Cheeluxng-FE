@@ -152,13 +152,13 @@ export default {
       }
 
       const payload = {
-        id: product.id,
+        id: product.item_id,
         size: sizeObj.size,
         color: colorObj.name,
-        name: product.name,
+        quantity: 1,
       };
-      cartStore.addProductToCart(product.id, payload);
-      toast.success(`Added ${payload.size} / ${payload.color} ${payload.name} to cart!`);
+      const response = await cartStore.addProductToCart(payload);
+      toast.success(response.message);
     };
 
     return {
