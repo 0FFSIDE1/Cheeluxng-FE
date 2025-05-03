@@ -132,7 +132,7 @@ export default {
       }
     };
 
-    const addToCart = (index) => {
+    const addToCart = async (index) => {
       const product = visibleProducts.value[index];
       const options = selectedOptions.value[product.id];
 
@@ -152,7 +152,7 @@ export default {
       }
 
       const payload = {
-        id: product.item_id,
+        id: product.id,
         size: sizeObj.size,
         color: colorObj.name,
         quantity: 1,
