@@ -187,7 +187,7 @@ export default {
             })
           return;
         }
-        cartStore.addProductToCart(payload.id, payload);
+        cartStore.addProductToCart(payload);
         toast.success(`${this.secondaryProduct.name} added to cart!`, {
                 timeout: 3000,
                 hideProgressBar: false,
