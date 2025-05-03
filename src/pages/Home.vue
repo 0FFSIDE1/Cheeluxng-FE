@@ -355,15 +355,6 @@ function navigateToCategory(category) {
 }
 
 
-// // Filtering for Popular Selling
-// const activeFilter = ref('All');
-// const filteredItems = computed(() => {
-//   if (activeFilter.value === 'All') return productStore.sections.bestSellers;
-//   return productStore.sections.bestSellers.filter(
-//     (item) => item.category === activeFilter.value
-//   );
-// });
-
 const WomenactiveFilter = ref('Shorts');
 const filteredProduct = computed(() => {
   return productStore.categories.women.filter((item)=> 
@@ -411,7 +402,7 @@ function handleCartAdd(payload) {
   }
   try {
     cartStore.addProductToCart(payload.id, payload)
-    toast.success(`${payload.name} ${payload.color} ${payload.size} added to cart `, {
+    toast.success(cartStore.message, {
                 timeout: 3000,
                 hideProgressBar: false,
                 closeOnClick: true,

@@ -7,6 +7,7 @@ export const useCartStore = defineStore('cartstore', {
         totalAmount: 0,
         loading: false,
         error: null,
+        message: null,
     }),
     actions: {
         async fetchCart() {
@@ -35,6 +36,7 @@ export const useCartStore = defineStore('cartstore', {
               console.log(`cartstore: ${payload}`)
               const response = await addToItemCart(itemId, payload);
               if (response.data.success) {
+                this.message = response.data.message
                 await this.fetchCart(); // refresh cart state
               } else {
                 this.error = response.data.message;
