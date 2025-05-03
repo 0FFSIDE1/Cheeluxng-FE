@@ -218,8 +218,13 @@ const handleAddToCart = async () => {
   isAddingToCart.value = true;
   try {
     const payload = cartPayload.value;
-    await cartStore.addProductToCart(payload.id, payload);
-    toast.success(`${payload.size} ${payload.color} ${product.value.name} added to cart!`);
+    const response = await cartStore.addProductToCart(payload);
+    if (response.success){
+      toast.success(response.message);
+
+    }else{
+      toast.error(response.message);
+    }
     selectedSize.value = null;
     selectedColor.value = null;
     quantity.value = 1;
