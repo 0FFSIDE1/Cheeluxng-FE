@@ -43,12 +43,15 @@ export const useCustomerStore = defineStore('customerstore', {
         const response = await CreateCustomer(payload);
         if (response.data.success) {
           this.info = { ...payload, id: response.data.id || this.info.id };
+          return { success: true, message: response.data.message };
         } else {
           this.error = response.data.message || 'Failed to create customer record';
+          return { success: false, message: response.data.message };
         }
       } catch (err) {
         this.error = err.response?.data?.message || 'Failed to create customer record';
         console.error('Error creating customer:', err);
+       
       } finally {
         this.loading = false;
       }

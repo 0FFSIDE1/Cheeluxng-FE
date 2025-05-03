@@ -247,16 +247,16 @@ const handleSubmit = async () => {
     country: form.country,
   };
   try {
-    await customerStore.CustomerRecord(payload);
-    if (!customerStore.error) {
-      toast.success('Customer information saved successfully!', {
+    const response = await customerStore.CustomerRecord(payload);
+    if (response.success) {
+      toast.success(response.message, {
         timeout: 3000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
       });
     } else {
-      toast.error(customerStore.error, {
+      toast.error(response.message, {
         timeout: 3000,
         hideProgressBar: false,
         closeOnClick: true,
@@ -330,7 +330,9 @@ const payNow = async () => {
 
               if (verifyRes.data.success) {
                 try{
-                    const createOrder = await api.post('order/create-order')
+                    const createOrder = await api.post('order/create-order', {
+                      email: form.email,
+                    })
                     if (createOrder.data.success){
                       toast.success(verifyRes.data.message);
                     }else{
