@@ -126,7 +126,7 @@ onMounted(async () => {
 
 // Handle cart addition
 const handleCartAdd = (payload) => {
-  cartStore.addProductToCart(payload.id, payload);
+  cartStore.addProductToCart(payload);
   emit('add-to-cart', payload);
 };
 </script>
