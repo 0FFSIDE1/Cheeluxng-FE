@@ -304,8 +304,9 @@ export default {
         id: item.id,
         size: size?.size || '',
         color: color?.name || '',
-        name: item.name,
+        quantity: 1,
       };
+      
     },
     handleAddToCart(payload) {
       this.isAddingToCart = true;
@@ -322,7 +323,6 @@ export default {
       this.loadedImages[index] = true;
     },
     goToProduct(id) {
-      console.log('Navigating to product ID:', id); // Debug
       if (!id) {
         toast.error('Product ID is missing!');
         return;
