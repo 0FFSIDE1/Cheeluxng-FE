@@ -86,7 +86,7 @@
               <p class="text-sm text-gray-600">Qty: {{ item.quantity }}</p>
             </div>
           </div>
-          <div class="font-semibold text-sm text-gray-900">${{ (item.price * item.quantity).toFixed(2) }}</div>
+          <div class="font-semibold text-sm text-gray-900">₦ {{ (item.price * item.quantity).toFixed(2) }}</div>
         </div>
 
         <!-- Coupon Section -->
@@ -118,10 +118,10 @@
 
         <!-- Price Summary -->
         <div v-if="cartItems.length > 0" class="border-t mt-6 pt-4 space-y-2">
-          <div class="flex justify-between font-medium text-gray-700">
+          <!-- <div class="flex justify-between font-medium text-gray-700">
             <span>Subtotal</span>
             <span>${{ subtotal.toFixed(2) }}</span>
-          </div>
+          </div> -->
 
           <div v-if="discount > 0" class="flex justify-between font-medium text-green-600">
             <span>Discount</span>
