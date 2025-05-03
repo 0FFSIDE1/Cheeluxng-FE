@@ -390,7 +390,7 @@ onMounted(() => {
 });
 
 // Cart Handling
-function handleCartAdd(payload) {
+async function handleCartAdd(payload) {
   if (!payload || !payload.id || !payload.size || !payload.color) {
     toast.error('Invalid cart item. Missing details.', {
                 timeout: 3000,
@@ -401,16 +401,17 @@ function handleCartAdd(payload) {
     return;
   }
   try {
-    cartStore.addProductToCart(payload.id, payload)
-    toast.success(cartStore.message, {
-                timeout: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-            });
+    console.log('Home', payload)
+    const response = await cartStore.addProductToCart(payload)
+    if (response.success){
+      toast.success(response.message);
+    } else {
+      toast.error(response.message);
+    }
+    
   } catch (err) {
     console.error('Home: Cart store error', err);
-    toast.error(cartStore.error, err, {
+    toast.error(response.message, err, {
                 timeout: 3000,
                 hideProgressBar: false,
                 closeOnClick: true,
@@ -452,8 +453,9 @@ function getCartPayload(productId) {
     id: item?.id || '',
     size: '',
     color: '',
-    name: item?.name || ''
+    quantity: '',
   };
+  console.log(payload.id)
   if (!item || !item.available_options) {
     return payload;
   }
