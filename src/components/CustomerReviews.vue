@@ -73,7 +73,6 @@
   onMounted(async () => {
     try {
       const response = await api.get('reviews'); // Replace with your actual endpoint
-      console.log(response)
       reviews.value = response.data.map((r) => ({
         id: r.id,
         name: r.name,
