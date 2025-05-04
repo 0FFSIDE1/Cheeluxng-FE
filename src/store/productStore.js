@@ -71,7 +71,6 @@ export const useProductStore = defineStore('product', {
 
         // Convert set back to array of objects
         this.allProducts = Array.from(allProductsSet).map(p => JSON.parse(p));
-        console.log("all products", this.allProducts)
       } catch (err) {
         console.error('Product loading failed', err);
         this.error = 'Failed to load products';
@@ -84,7 +83,6 @@ export const useProductStore = defineStore('product', {
       this.loading = true;
       try {
         const response = await fetchAllProductsById(id);
-        console.log(response.data)
         return response.data;
         
       } catch (err) {
