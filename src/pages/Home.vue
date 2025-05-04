@@ -453,9 +453,8 @@ function getCartPayload(productId) {
     id: item?.id || '',
     size: '',
     color: '',
-    quantity: '',
+    quantity: 1,
   };
-  console.log(payload.id)
   if (!item || !item.available_options) {
     return payload;
   }
