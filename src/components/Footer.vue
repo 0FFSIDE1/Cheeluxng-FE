@@ -175,7 +175,7 @@
   
   function handleNewsletterSubscribe(email) {
     console.log('Footer: Newsletter subscription received', { email });
-    // Add API call (e.g., Mailchimp, Shopify) or analytics tracking
+    
   }
   </script>
   
