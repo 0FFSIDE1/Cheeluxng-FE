@@ -346,12 +346,12 @@ const payNow = async () => {
 
         callback: function (paystackResponse) {
           (async () => {
-            
+            isPlacingOrder.value = true; // show preloader
             try {
               const verifyRes = await api.post('payment/verify', {
                 reference: paystackResponse.reference,
               });
-              isPlacingOrder.value = true; // show preloader
+              
               if (verifyRes.data.success) {
                 try{
                     const createOrder = await api.post('order/create-order', {
