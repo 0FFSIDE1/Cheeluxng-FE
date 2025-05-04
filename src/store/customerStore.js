@@ -24,7 +24,6 @@ export const useCustomerStore = defineStore('customerstore', {
         const response = await fetchCustomerDetails();
         if (response && Object.keys(response).length) {
           this.info = { ...this.info, ...response }; // Merge with existing info
-          console.log('Customer info fetched:', this.info);
         } else {
           console.log('No customer data from API, using persisted info:', this.info);
         }
