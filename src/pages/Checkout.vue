@@ -346,7 +346,6 @@ const payNow = async () => {
               const verifyRes = await api.post('payment/verify', {
                 reference: paystackResponse.reference,
               });
-
               if (verifyRes.data.success) {
                 try{
                     const createOrder = await api.post('order/create-order', {
@@ -363,7 +362,6 @@ const payNow = async () => {
                   toast.error('Error creating order.');
 
                 }
-                
               } else {
                 toast.error(verifyRes.data.message);
               }
