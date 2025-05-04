@@ -1,4 +1,5 @@
 <template>
+  <Preloader v-if="isPlacingOrder" />
   <div class="min-h-screen bg-gradient-to-r from-pink-50 to-gray-300 py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-7xl mx-auto flex flex-col lg:flex-row gap-8">
       <!-- Customer Information -->
@@ -66,6 +67,17 @@
         </form>
       </div>
 
+<!-- Success Popup -->
+<div v-if="showSuccessPopup" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+  <div class="bg-white rounded-lg p-6 shadow-2xl max-w-md text-center">
+    <h2 class="text-2xl font-bold mb-4 text-green-600">Order Successful!🎉</h2>
+    <p class="text-gray-900 my-4">Thank you for your purchase. We’ll contact you shortly with the details.</p>
+    <button aria-details="success" @click="showSuccessPopup = false" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+      Close
+    </button>
+  </div>
+</div>
+
       <!-- Order Summary -->
       <div class="flex-1 bg-white p-8 rounded-lg shadow-md h-fit sticky top-24">
         <h2 class="text-2xl font-bold mb-6 text-gray-900">Order Summary</h2>
@@ -130,18 +142,11 @@
             <span>Discount</span>
             <span>-{{ discount }}%</span>
           </div>
-
-          <!-- <div class="flex justify-between font-medium text-gray-700">
-            <span>Shipping</span>
-            <span>$10.00</span>
-          </div> -->
-
           <div class="flex justify-between font-bold text-gray-900 text-lg mt-2">
             <span>Total</span>
-            <span>₦ {{ total }}</span>
+            <span>₦ {{ total.toFixed(2) }}</span>
           </div>
         </div>
-
         <button
           @click="payNow"
           :disabled="cartItems.length === 0 || customerStore.loading"
@@ -166,12 +171,14 @@ import NewsletterSubscribe from '@/components/Subscribe.vue';
 import { useCartStore } from '@/store/cartStore';
 import { useToast } from 'vue-toastification';
 import api from '@/services/axios';
+import Preloader from '@/components/Preloader.vue';
 
 const toast = useToast();
 const customerStore = useCustomerStore();
 const cartStore = useCartStore();
 const showError = ref(false);
-
+const isPlacingOrder = ref(false);
+const showSuccessPopup = ref(false);
 const isValid = computed(() => couponCode.value.trim().length >= 10);
 
 const validateInput = () => {
@@ -326,12 +333,9 @@ const payNow = async () => {
   try {
     const response = await api.post('payment/init', {
       email: form.email,
-      amount: cartStore.totalAmount, // amount in Kobo
+      amount: total.value, // amount in Kobo
     });
     const pay_id = response.data.pay_id;
-
-    console.log('Payment Init Response:', response.data);
-
     if (response.data.success) {
       const handler = window.PaystackPop.setup({
         key: response.data.paystack_public_key,
@@ -347,20 +351,23 @@ const payNow = async () => {
                 reference: paystackResponse.reference,
               });
               if (verifyRes.data.success) {
+                isPlacingOrder.value = true; // show preloader
                 try{
                     const createOrder = await api.post('order/create-order', {
                       email: form.email,
                       pay_id: pay_id,
                     })
                     if (createOrder.data.success){
-                      toast.success(verifyRes.data.message);
+                      showSuccessPopup.value = true; // show success div
+                      await cartStore.fetchCart()
                     }else{
                       toast.error(verifyRes.data.message);
                     }
                 }catch (error){
                   console.error('Order error:', error);
                   toast.error('Error creating order.');
-
+                } finally{
+                  isPlacingOrder.value = false;
                 }
               } else {
                 toast.error(verifyRes.data.message);
@@ -384,9 +391,4 @@ const payNow = async () => {
     toast.error('An error occurred during payment initiation.', { timeout: 3000 });
   }
 };
-
 </script>
-
-<style scoped>
-/* Optional custom styling */
-</style>
