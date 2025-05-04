@@ -164,14 +164,12 @@ const thumbnailImages = computed(() => {
 
 // Variant selection
 const selectSize = ({ sizeIndex }) => {
-  console.log('Product: Size selected', { sizeIndex });
   selectedSize.value = sizeIndex;
   selectedColor.value = null; // Reset color when size changes
   errorMessage.value = '';
 };
 
 const selectColor = ({ colorIndex }) => {
-  console.log('Product: Color selected', { colorIndex });
   selectedColor.value = colorIndex;
   errorMessage.value = '';
 };
