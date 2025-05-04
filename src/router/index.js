@@ -1,4 +1,3 @@
-import { components } from 'daisyui/imports';
 import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
