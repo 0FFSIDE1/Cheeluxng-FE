@@ -67,7 +67,7 @@
           </transition-group>
 
           <div v-if="cartStore.cartItems.length" class="mt-6  text-gray-950 font-bold text-lg text-right">
-            Total: ${{ cartStore.totalAmount }}
+            Total: ${{ cartStore.totalAmount.toFixed(2) }}
           </div>
         </div>
 

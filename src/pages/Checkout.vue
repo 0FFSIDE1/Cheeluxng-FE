@@ -331,12 +331,14 @@ const payNow = async () => {
   }
 
   try {
+    isPlacingOrder.value = true; // show preloader
     const response = await api.post('payment/init', {
       email: form.email,
       amount: total.value, // amount in Kobo
     });
     const pay_id = response.data.pay_id;
     if (response.data.success) {
+      isPlacingOrder.value = false; // hide preloader
       const handler = window.PaystackPop.setup({
         key: response.data.paystack_public_key,
         email: form.email,
@@ -386,10 +388,12 @@ const payNow = async () => {
       handler.openIframe();
     } else {
       toast.error('Failed to initiate payment!', { timeout: 3000 });
+      isPlacingOrder.value = false;
     }
   } catch (error) {
     console.error('Payment init error:', error);
     toast.error('An error occurred during payment initiation.', { timeout: 3000 });
+    isPlacingOrder.value = false;
   }
 };
 </script>
