@@ -328,6 +328,7 @@ const payNow = async () => {
       email: form.email,
       amount: cartStore.totalAmount, // amount in Kobo
     });
+    const pay_id = response.data.pay_id;
 
     console.log('Payment Init Response:', response.data);
 
@@ -350,6 +351,7 @@ const payNow = async () => {
                 try{
                     const createOrder = await api.post('order/create-order', {
                       email: form.email,
+                      pay_id: pay_id,
                     })
                     if (createOrder.data.success){
                       toast.success(verifyRes.data.message);
