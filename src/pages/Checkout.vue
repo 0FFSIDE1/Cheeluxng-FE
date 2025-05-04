@@ -371,12 +371,10 @@ const payNow = async () => {
             }
           })();
         },
-
         onClose: () => {
           toast.info('Payment popup closed.');
         },
       });
-
       handler.openIframe();
     } else {
       toast.error('Failed to initiate payment!', { timeout: 3000 });
